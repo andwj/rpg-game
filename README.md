@@ -8,13 +8,13 @@ It will run in the browser, via HTML5/canvas and javascript.
 
 The license is the GNU GPL v3 (or any later version).
 
-Planned stuff which will set it apart from NetHack:
+Planned stuff which will set it apart from other rogue-likes:
 
 *  try to avoid "yet another stupid death" syndrome
 *  better NPC characters, chatting, trading of items
-*  more interesting layouts of dungeons
 *  no separate levels, the dungeon is one large playfield (e.g. 50 tiles across but 1000 tiles high)
-*  smaller in scope, less monsters, less items, less stats to worry about
+*  more interesting layouts of dungeons
+*  ability to type complex commands, like in text adventures
 *  no need to identify objects
 
 
@@ -25,7 +25,7 @@ Main tileset was made by Jerom (user of OpenGameArt.org), which is licensed
 under the CC-BY-SA 3.0 license.
 Link: http://opengameart.org/content/32x32-fantasy-tileset
 
-The tileset was colorized (no mean feat) by PriorBlue (user of OpenGameArt.org).
+The tileset was colorized (no mean feat!) by PriorBlue (user of OpenGameArt.org).
 Link: http://opengameart.org/content/recolor-all-the-items
 
 I have merely repacked the tiles into two separate tilesets.
