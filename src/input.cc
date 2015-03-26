@@ -22,12 +22,6 @@
 
 #include "headers.h"
 
-#include "main.h"
-#include "m_input.h"
-#include "m_lua.h"
-
-#include "r_sprite.h"
-
 
 #define WHEEL_ZOOM_FACTOR  1.26
 #define   KEY_ZOOM_FACTOR  1.26
@@ -45,6 +39,9 @@ int Input_RawKey(int event)
 
 	int key = Fl::event_key();
 
+	fprintf(stderr, "Input_RawKey : 0x%04x\n", key);
+
+#if 0
 	//
 	// handle keys which can be held down
 	//
@@ -71,8 +68,8 @@ int Input_RawKey(int event)
 	// handle all other keys
 	//
 
-#if 0  // DEBUG
-	fprintf(stderr, "Input_RawKey : %d\n", key);
+#if 1  // DEBUG
+	fprintf(stderr, "Input_RawKey : 0x%04x\n", key);
 #endif
 
 	switch (key)
@@ -156,6 +153,7 @@ int Input_RawKey(int event)
 			main_win->text_box->Scroll(-1.5);
 			return 1;
 	}
+#endif
 
 	return 0;
 }
@@ -163,6 +161,7 @@ int Input_RawKey(int event)
 
 int Input_RawButton(int event)
 {
+#if 0
 	int button = Fl::event_button();
 
 	if (button == 3)   /* FIXME: option */
@@ -198,6 +197,7 @@ int Input_RawButton(int event)
 
 if (event == FL_PUSH)
 	fprintf(stderr, "Input_RawButton : %d\n", Fl::event_button());
+#endif
 
 	return 1;
 }
@@ -214,58 +214,10 @@ int Input_RawWheel(int event)
 		if (delta > 0)
 			factor = 1.0 / factor;
 
-		main_win->map->Zoom(factor, Fl::event_x(), Fl::event_y());
+///		main_win->map->Zoom(factor, Fl::event_x(), Fl::event_y());
 	}
 
 	return 1;
-}
-
-
-// FIXME : RENAME
-static void R_CheckSprite_Highlight(int mx, int my)
-{
-
-// FIXME: TEST CRUD
-/*
-drag_x = mouse_x;
-drag_y = mouse_y;
-if (dragging_sprite) main_win->redraw();
-*/
-
-	UI_Map * map = main_win->map;
-
-	if (mx < map->x() || mx >= map->x() + map->w() ||
-		my < map->y() || my >= map->y() + map->h())
-	{
-		// pointer outside of map window
-		main_win->Action_Clear();
-		return;
-	}
-
-	RE_Sprite *sp = R_FindSpriteUnderCursor(mx, my);
-
-	if (! sp)
-	{
-		main_win->Action_Clear();
-		return;
-	}
-
-	main_win->Action_Set(ACT_Highlight, sp);
-}
-
-
-static void R_CheckSprite_Drag(int mx, int my)
-{
-	// check for slot in the Stats panel
-	int where = main_win->panel->stat_box->MouseOverSlot(mx, my);
-
-	// TODO : where |= CheckOtherDropPlaces()
-
-	// limit to places where object is allowed to go
-	where &= main_win->act_sprite->drag_to;
-
-	main_win->act_target = where;
-	main_win->redraw();
 }
 
 
@@ -273,6 +225,8 @@ int Input_RawMouse(int event)
 {
 	int mouse_x = Fl::event_x();
 	int mouse_y = Fl::event_y();
+
+#if 0
 
 	int delta_x = mouse_x - main_win->act_mouse_x;
 	int delta_y = mouse_y - main_win->act_mouse_y;
@@ -313,6 +267,7 @@ int Input_RawMouse(int event)
 		main_win->act_mouse_x = mouse_x;
 		main_win->act_mouse_y = mouse_y;
 	}
+#endif
 
 	// we never eat mouse motion events
 	return 0;
