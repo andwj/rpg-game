@@ -153,15 +153,6 @@ void Main_InitFLTK()
 {
 	Fl::visual(FL_DOUBLE | FL_RGB);
 
-	if (true)
-	{
-		Fl::background (200, 184, 168);
-		Fl::background2(255, 255, 255);
-		Fl::foreground (0, 0, 0);
-	}
-
-	Fl::scheme("plastic");
-
 	screen_w = Fl::w();
 	screen_h = Fl::h();
 
@@ -184,7 +175,7 @@ void Main_OpenWindow()
  	Fl::add_handler(Main_key_handler);
 
 
-	main_win = new UI_Window(PROG_TITLE " v" PROG_VERSION);
+	main_win = new UI_Window(800, 500, PROG_TITLE " v" PROG_VERSION);
 
 
 	// show window (pass some dummy arguments)
@@ -196,13 +187,10 @@ void Main_OpenWindow()
 		main_win->show(1 /* argc */, argv);
 	}
 
-	// kill the bright background of the FLTK "plastic" scheme
-	{
-		delete Fl::scheme_bg_;
-		Fl::scheme_bg_ = NULL;
+	Fl::wait(0.1);
+	Fl::wait(0.1);
 
-		main_win->image(NULL);
-	}
+	main_win->CreateCanvas();
 }
 
 

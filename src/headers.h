@@ -54,8 +54,8 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Image.H>
-#include <FL/Fl_Double_Window.H>
 #include <FL/Fl_Widget.H>
+#include <FL/Fl_Window.H>
 
 #include <FL/fl_ask.H>
 #include <FL/fl_draw.H>

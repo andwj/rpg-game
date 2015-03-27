@@ -29,10 +29,6 @@
 #endif
 
 
-#define WINDOW_W  690
-#define WINDOW_H  475
-
-
 UI_Window *main_win;
 
 int screen_w;
@@ -45,10 +41,11 @@ static void quit_Callback(Fl_Widget *w, void *data)
 }
 
 
-UI_Window::UI_Window(const char *title) :
-	Fl_Double_Window(WINDOW_W, WINDOW_H, title)
+UI_Window::UI_Window(int W, int H, const char *title) :
+	Fl_Window(W, H, title),
+	canvas(), canvas_ready(false)
 {
-	size_range(WINDOW_W, WINDOW_H, WINDOW_W, WINDOW_H);
+	size_range(W, H, W, H);
 
 	callback((Fl_Callback *) quit_Callback);
 
@@ -62,6 +59,74 @@ UI_Window::UI_Window(const char *title) :
 
 UI_Window::~UI_Window()
 { }
+
+
+void UI_Window::CreateCanvas()
+{
+	canvas = fl_create_offscreen(w(), h());
+
+	canvas_ready = true;
+
+	// FIXME : fill canvas with something
+
+	redraw();
+}
+
+
+int UI_Window::handle(int event)
+{
+	// treat mouse motion specially, as Fl_Group::handle always eats it
+	if (event == FL_MOVE || event == FL_DRAG)
+	{
+		Input_RawMouse(event);
+	}
+
+	// try the normal handling...
+	if (Fl_Window::handle(event))
+		return 1;
+
+	// otherwise we will process a keyboard or mouse event
+	switch (event)
+	{
+		case FL_KEYDOWN:
+		case FL_KEYUP:
+		case FL_SHORTCUT:
+			return Input_RawKey(event);
+
+		case FL_PUSH:
+		case FL_RELEASE:
+			return Input_RawButton(event);
+
+		case FL_MOUSEWHEEL:
+			return Input_RawWheel(event);
+
+		default:
+			return 0;
+	}
+}
+
+
+void UI_Window::draw()
+{
+	if (! canvas_ready)
+		return;
+
+	fl_copy_offscreen(0, 0, w(), h(), canvas, 0, 0);
+}
+
+
+void UI_Window::CanvasBegin()
+{
+	SYS_ASSERT(canvas_ready);
+
+	fl_begin_offscreen(canvas);
+}
+
+
+void UI_Window::CanvasEnd()
+{
+	fl_end_offscreen();
+}
 
 
 //--- editor settings ---

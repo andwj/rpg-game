@@ -24,13 +24,30 @@
 #define __UI_WINDOW_H__
 
 
-class UI_Window : public Fl_Double_Window
+class UI_Window : public Fl_Window
 {
-public:
+private:
+	Fl_Offscreen canvas;
+
+	bool canvas_ready;
 
 public:
-	UI_Window(const char *title);
+	UI_Window(int W, int H, const char *title);
 	virtual ~UI_Window();
+
+public:
+	void CreateCanvas();
+
+	// FLTK event handling method
+	int handle(int event);
+
+	// FLTK draw method
+	void draw();
+
+public:
+	// allow drawing into the canvas
+	void CanvasBegin();
+	void CanvasEnd();
 };
 
 
@@ -38,9 +55,6 @@ extern int screen_w;
 extern int screen_h;
 
 extern UI_Window * main_win;
-
-
-#define isSpecialEdition  (main_win->g_game_sel->value() == 1)
 
 
 #endif /* __UI_WINDOW_H__ */
