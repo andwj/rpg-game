@@ -31,6 +31,13 @@ private:
 
 	bool canvas_ready;
 
+	Fl_Color cur_color;
+	Fl_Font  cur_font;
+	int      cur_font_size;
+
+	int		 cur_clip_x, cur_clip_y;
+	int		 cur_clip_w, cur_clip_h;
+
 public:
 	UI_Window(int W, int H, const char *title);
 	virtual ~UI_Window();
@@ -45,9 +52,21 @@ public:
 	void draw();
 
 public:
-	// allow drawing into the canvas
-	void CanvasBegin();
-	void CanvasEnd();
+	/* canvas drawing primitives */
+
+	void ResetState();
+
+	void Color(Fl_Color color);
+	void Font(int size, Fl_Font font);
+	void Clip(int x = -1, int y = -1, int w = -1, int h = -1);
+
+	void Rect(int x, int y, int w, int h);
+	void FilledRect(int x, int y, int w, int h);
+
+	void Line(int x, int y, int w, int h);
+
+	void Text(const char *str, int x, int y);
+	int  TextWidth(const char *str);
 };
 
 

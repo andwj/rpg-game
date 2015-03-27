@@ -67,6 +67,8 @@ void UI_Window::CreateCanvas()
 
 	canvas_ready = true;
 
+	ResetState();
+
 	// FIXME : fill canvas with something
 
 	redraw();
@@ -115,17 +117,36 @@ void UI_Window::draw()
 }
 
 
-void UI_Window::CanvasBegin()
+void UI_Window::ResetState()
 {
-	SYS_ASSERT(canvas_ready);
+	cur_color = fl_rgb_color(128,128,128);
 
-	fl_begin_offscreen(canvas);
+	cur_font      = FL_HELVETICA;
+	cur_font_size = 12;
+
+	cur_clip_x = cur_clip_y = -1;
+	cur_clip_w = cur_clip_h = -1;
 }
 
 
-void UI_Window::CanvasEnd()
+void UI_Window::Color(Fl_Color color)
 {
-	fl_end_offscreen();
+	cur_color = color;
+}
+
+
+void UI_Window::Font(int size, Fl_Font font)
+{
+	cur_font = font;
+	cur_font_size = size;
+}
+
+
+int UI_Window::TextWidth(const char *str)
+{
+	fl_font(cur_font, cur_font_size);
+
+	return fl_width(str);
 }
 
 
