@@ -61,7 +61,7 @@ public:
 	void Clip(int x = -1, int y = -1, int w = -1, int h = -1);
 
 	void Rect(int x, int y, int w, int h);
-	void FilledRect(int x, int y, int w, int h);
+	void FillRect(int x, int y, int w, int h);
 
 	void Line(int x1, int y1, int x2, int y2);
 

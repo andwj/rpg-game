@@ -69,7 +69,8 @@ void UI_Window::CreateCanvas()
 
 	ResetState();
 
-	// FIXME : fill canvas with something
+	// fill canvas with something
+	FillRect(0, 0, w(), h());
 
 	redraw();
 }
@@ -171,7 +172,7 @@ void UI_Window::Rect(int x, int y, int w, int h)
 }
 
 
-void UI_Window::FilledRect(int x, int y, int w, int h)
+void UI_Window::FillRect(int x, int y, int w, int h)
 {
 	if (! canvas_ready)
 		return;
