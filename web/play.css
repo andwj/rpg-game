@@ -8,11 +8,12 @@ body {
   color: white;
 }
 
-#bodydiv {
-  margin-top: 40px;
+#spacer {
+  height: 10px;
 }
 
 canvas {
+  margin-top: 40px;
   display: block;
   margin: auto;
 }
