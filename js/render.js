@@ -15,10 +15,42 @@ var DIV_COLOR = "#604030";
 var TEXT_BG   = "#003640";
 
 
+function render_Init()
+{
+  canvas_elem = document.getElementById("gamecanvas");
+
+  if (canvas_elem === null)
+  {
+    alert("Error: Unable to find canvas element");
+    return false;
+  }
+
+//// TEST
+// canvas_elem.width  = 680 * 2;
+// canvas_elem.height = 472 * 2;
+
+
+  ctx = canvas_elem.getContext("2d");
+
+  if (ctx === null)
+  {
+    alert("Error: Unable to get canvas context");
+    return false;
+  }
+
+
+  // OK
+  return true
+}
+
+
 function render_clearBackground()
 {
+//  alert("Inner size: " + window.innerWidth + " x " + window.innerHeight);
+//  alert("Canvas size: " + canvas_elem.width + " x " + canvas_elem.height);
+
   ctx.fillStyle = BG_COLOR;
-  ctx.fillRect(0, 0, 800, 500);
+  ctx.fillRect(0, 0, 680, 472);
 }
 
 

@@ -70,7 +70,7 @@ function loader_gotImage()
   loader_drawProgress();
 
   if (load_count == load_total)
-    start_game();
+    main_StartGame();
 }
 
 

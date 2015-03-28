@@ -9,21 +9,9 @@
 
 function init()
 {
-  canvas_elem = document.getElementById("gamecanvas");
-
-  if (canvas_elem === null)
-  {
-    alert("Error: Unable to find canvas element");
+  if (! render_Init())
     return;
-  }
 
-  ctx = canvas_elem.getContext("2d");
-
-  if (ctx === null)
-  {
-    alert("Error: Unable to get canvas context");
-    return;
-  }
 
   if (! window.addEventListener)
   {
@@ -44,7 +32,7 @@ function init()
 }
 
 
-function start_game()
+function main_StartGame()
 {
   // called by loader once all resources are loaded.
 

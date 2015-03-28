@@ -16,8 +16,15 @@ var CANVAS_MIN_W = 632;
 var CANVAS_MIN_H = 472;
 
 
-// the canvas element
+var Screen =
+{
+  // FIXME
+};
+
+
+  // the canvas element
 var canvas_elem;
+
 
 // the context of the canvas
 var ctx;
