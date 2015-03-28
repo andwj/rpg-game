@@ -6,4 +6,5 @@
 //  under the GNU GPL v3 license
 //______________________________________
 
+"use strict";
 
