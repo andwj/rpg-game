@@ -7,6 +7,20 @@
 //______________________________________
 
 
+// minimum size of canvas
+var CANVAS_MIN_W = 632;
+var CANVAS_MIN_H = 472;
+
+// maximum number of tiles
+var TILE_MAX_W = 22;
+var TILE_MAX_H = 16;
+
+// panel sizes (there is an 8 pixel buffer too)
+var LEFT_W = 240;
+var BOTTOM_H = 80;
+
+
+// FIXME: REMOVE
 var ROOM_W = 608;
 var ROOM_H = 368;
 
@@ -15,20 +29,99 @@ var DIV_COLOR = "#604030";
 var TEXT_BG   = "#003640";
 
 
+
+function render_Dimensions()
+{
+  //
+  // Determine what size to make the canvas, whether to double up, number of
+  // tiles to draw, etc...
+  //
+
+  var window_w = window.innerWidth;
+  var window_h = window.innerHeight;
+
+  Screen.scale = 1;
+
+  if ((window_w >= CANVAS_MIN_W * 2) &&
+      (window_h >= CANVAS_MIN_H * 2))
+  {
+    Screen.scale = 2;
+
+    window_w = window_w / 2;
+    window_h = window_h / 2;
+  }
+
+  // we don't properly support screens smaller than the minimum
+  // [ TODO: should we show an error message instead? ]
+
+  if (window_w < CANVAS_MIN_W)
+    window_w = CANVAS_MIN_W;
+
+  if (window_h < CANVAS_MIN_H)
+    window_h = CANVAS_MIN_H;
+    
+  Screen.tile_w = (window_w - 8 - LEFT_W)   / 32.0;
+  Screen.tile_h = (window_h - 8 - BOTTOM_H) / 32.0;
+
+  if (Screen.tile_w > TILE_MAX_W)
+    Screen.tile_w = TILE_MAX_W;
+
+  if (Screen.tile_h > TILE_MAX_H)
+    Screen.tile_h = TILE_MAX_H;
+
+  // compute wanted canvas size
+  Screen.width  = Screen.tile_w * 32 + 8 + LEFT_W;
+  Screen.height = Screen.tile_h * 32 + 8 + BOTTOM_H;
+
+  Screen.width  = Screen.width  * Screen.scale;
+  Screen.height = Screen.height * Screen.scale;
+
+  // compute padding for vertical centering
+  Screen.padding_h = Math.floor((window.innerHeight - Screen.height) / 2);
+
+  if (Screen.padding_h < 0)
+    Screen.padding_h = 0;
+}
+
+
 function render_Init()
 {
-  canvas_elem = document.getElementById("gamecanvas");
+  Screen.canvas_elem = document.getElementById("game");
 
-  if (canvas_elem === null)
+  if (Screen.canvas_elem === null)
   {
     alert("Error: Unable to find canvas element");
     return false;
   }
 
-//// TEST
-// canvas_elem.width  = 680 * 2;
-// canvas_elem.height = 472 * 2;
+  canvas_elem = Screen.canvas_elem;
 
+
+  Screen.spacer_elem = document.getElementById("spacer");
+
+  if (Screen.spacer_elem === null)
+  {
+    alert("Error: Unable to find spacer element");
+    return false;
+  }
+
+
+  render_Dimensions();
+
+  Screen.canvas_elem.width  = Screen.width;
+  Screen.canvas_elem.height = Screen.height;
+
+  Screen.spacer_elem.style.height = Screen.padding_h + "px";
+
+/* DEBUG
+  alert("Window size: " + window.innerWidth + " x " + window.innerHeight);
+  alert("Canvas size: " + Screen.width + " x " + Screen.height);
+  alert("  Tile size: " + Screen.tile_w + " x " + Screen.tile_h);
+*/
+
+  
+  // create the rendering context
+  // (must occur _after_ we figure out what size we want)
 
   ctx = canvas_elem.getContext("2d");
 
@@ -50,7 +143,7 @@ function render_clearBackground()
 //  alert("Canvas size: " + canvas_elem.width + " x " + canvas_elem.height);
 
   ctx.fillStyle = BG_COLOR;
-  ctx.fillRect(0, 0, 680, 472);
+  ctx.fillRect(0, 0, Screen.width, Screen.height);
 }
 
 

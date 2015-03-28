@@ -14,7 +14,7 @@ var load_total;
 
 function loader_drawProgress()
 {
-  var x = 250;
+  var x = 150;
   var y = 200;
 
   var w = 300;
