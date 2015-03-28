@@ -11,6 +11,10 @@
 var VERSION = "0.05";
 var VER_X   = "005";
 
+// minimum size of canvas
+var CANVAS_MIN_W = 632;
+var CANVAS_MIN_H = 472;
+
 
 // the canvas element
 var canvas_elem;
