@@ -6,6 +6,8 @@
 //  under the GNU GPL v3 license
 //______________________________________
 
+"use strict";
+
 
 // minimum size of canvas
 var CANVAS_MIN_W = 632;
@@ -27,6 +29,34 @@ var ROOM_H = 368;
 var  BG_COLOR = "#3C3630";
 var DIV_COLOR = "#604030";
 var TEXT_BG   = "#003640";
+
+
+// the drawing context
+var ctx = null;
+
+
+var Screen =
+{
+  // the canvas element
+  canvas_elem: null,
+
+  // spacer element at top
+  spacer_elem: null,
+
+  // size (in pixels) of the canvas bitmap
+  width: 0,
+  height: 0,
+
+  // the up-scaling factor (either 1 or 2)
+  scale: 1,
+
+  // how many tiles we can show (may be fractional)
+  tile_w: 0,
+  tile_h: 0,
+
+  // padding needed above the canvas
+  padding_h: 0
+};
 
 
 
@@ -94,8 +124,6 @@ function render_Init()
     return false;
   }
 
-  canvas_elem = Screen.canvas_elem;
-
 
   Screen.spacer_elem = document.getElementById("spacer");
 
@@ -123,7 +151,7 @@ function render_Init()
   // create the rendering context
   // (must occur _after_ we figure out what size we want)
 
-  ctx = canvas_elem.getContext("2d");
+  ctx = Screen.canvas_elem.getContext("2d");
 
   if (ctx === null)
   {
@@ -139,9 +167,6 @@ function render_Init()
 
 function render_clearBackground()
 {
-//  alert("Inner size: " + window.innerWidth + " x " + window.innerHeight);
-//  alert("Canvas size: " + canvas_elem.width + " x " + canvas_elem.height);
-
   ctx.fillStyle = BG_COLOR;
   ctx.fillRect(0, 0, Screen.width, Screen.height);
 }
