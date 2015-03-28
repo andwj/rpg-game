@@ -26,8 +26,8 @@
 
 #define PROG_TITLE  "Rpg-Game"
 
-#define PROG_VERSION  "0.06"
-#define PROG_HEX_VER  0x006
+#define PROG_VERSION  "0.07"
+#define PROG_HEX_VER  0x007
 
 
 #define ConPrintf    printf

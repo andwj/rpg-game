@@ -44,23 +44,12 @@
 #include <errno.h>
 #include <time.h>
 
-/* STL goodies */
+/* Allegro 5 */
 
-#include <string>
-#include <vector>
-#include <map>
-
-/* FLTK - Widget Library */
-
-#include <FL/Fl.H>
-#include <FL/Fl_Image.H>
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Window.H>
-
-#include <FL/fl_ask.H>
-#include <FL/fl_draw.H>
-#include <FL/filename.H>
-#include <FL/x.H>
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_image.h>
+#include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_ttf.h>
 
 /* AJ's utilities */
 
@@ -76,8 +65,9 @@
 /* Program stuff */
 
 #include "main.h"
-#include "window.h"
-#include "input.h"
+
+// #include "input.h"
+// #include "render.h"
 
 #define MSG_BUF_LEN		2000
 
