@@ -4,17 +4,18 @@ RPG Game
 
 This is the beginnings of a graphical rogue-like game.
 
-It will run @@@ in the browser, via HTML5/canvas and javascript.
+It will run in the browser, via HTML5/canvas and javascript.
+It is also planned to have a "native" version (a C or C++ binary which
+opens a window and renders the graphics).
 
-The license is the GNU GPL v3 (or any later version).
+The license is GNU GPL v3 (or any later version).
 
 Planned stuff which will set it apart from other rogue-likes:
 
 *  control a party of several characters
-*  try to avoid "yet another stupid death" cases
+*  try to avoid "yet another stupid death" syndrome
 *  better NPC characters, chatting, trading of items
 *  no separate levels, the dungeon is one large playfield (e.g. 50 tiles across but 1000 tiles high)
-*  more interesting layouts of dungeons
 *  ability to type complex commands, like in text adventures
 *  no need to identify objects
 
