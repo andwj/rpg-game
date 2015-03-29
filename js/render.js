@@ -160,6 +160,19 @@ function render_Init()
   }
 
 
+  // prepare for drawing loading progress bar
+
+  render_ClearBackground();
+
+
+  // start loading the tileset(s)
+
+  if (Screen.scale > 1)
+    Screen.tileset = load_Image("img/tileset_2x.png");
+  else
+    Screen.tileset = load_Image("img/tileset.png");
+
+
   // OK
   return true
 }

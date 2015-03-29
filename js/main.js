@@ -22,9 +22,6 @@ function init()
   }
 
 
-  render_ClearBackground();
-
-
   loader_Init();
 
   event_Init();
