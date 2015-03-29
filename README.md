@@ -15,7 +15,7 @@ Planned stuff which will set it apart from other rogue-likes:
 *  control a party of several characters
 *  try to avoid "yet another stupid death" syndrome
 *  better NPC characters, chatting, trading of items
-*  no separate levels, the dungeon is one large playfield (e.g. 50 tiles across but 1000 tiles high)
+*  no separate levels, the dungeon is one large playfield
 *  ability to type complex commands, like in text adventures
 *  no need to identify objects
 
