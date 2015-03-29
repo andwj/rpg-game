@@ -170,7 +170,7 @@ function render_Init()
 }
 
 
-function render_InitTileset()
+function render_LoadTileset()
 {
   if (Screen.scale > 1)
     Screen.tileset = load_Image("img/tileset_2x.png");
