@@ -29,5 +29,7 @@ function event_Init()
 {
   window.addEventListener("mousedown", event_MouseDown, true);
   window.addEventListener("keydown",   event_KeyDown,   true);
+
+  return true;
 }
 

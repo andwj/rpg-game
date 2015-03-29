@@ -37,5 +37,7 @@ function entity_Init()
   //
 
   player_Init();
+
+  return true;
 }
 

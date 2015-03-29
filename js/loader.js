@@ -21,6 +21,8 @@ function loader_Init()
 
   // draw an empty progress bar
   render_Progress(0, 0);
+
+  return true;
 }
 
 

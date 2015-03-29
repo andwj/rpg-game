@@ -15,6 +15,7 @@ function world_Init()
 
   World = {};
 
+  return true;
 }
 
 

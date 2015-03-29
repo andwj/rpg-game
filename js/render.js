@@ -165,16 +165,17 @@ function render_Init()
   render_ClearBackground();
 
 
-  // start loading the tileset(s)
+  // OK
+  return true
+}
 
+
+function render_InitTileset()
+{
   if (Screen.scale > 1)
     Screen.tileset = load_Image("img/tileset_2x.png");
   else
     Screen.tileset = load_Image("img/tileset.png");
-
-
-  // OK
-  return true
 }
 
 
@@ -236,6 +237,15 @@ function render_Progress(count, total)
     ctx.fillStyle = "#06c"; 
     ctx.fillRect(x, y, w, h);
   }
+}
+
+
+function render_StartScreen(img)
+{
+  var w = img.width;
+  var h = img.height;
+
+  //....
 }
 
 

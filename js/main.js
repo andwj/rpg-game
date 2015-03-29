@@ -22,10 +22,12 @@ function init()
   }
 
 
+  if (! event_Init())
+    return;
+
+
   loader_Init();
-
-  event_Init();
-
+  render_LoadTileset();
   entity_Init();
   world_Init();
 }
