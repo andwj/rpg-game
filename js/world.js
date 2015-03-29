@@ -15,7 +15,6 @@ function world_Init()
 
   World = {};
 
-  load_Image("room_template", "rooms/room_template.png");
 }
 
 

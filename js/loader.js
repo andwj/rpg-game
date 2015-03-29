@@ -16,8 +16,6 @@ var load_total;
 
 function loader_Init()
 {
-  all_images = {};
-
   load_count = 0;
   load_total = 0;
 
@@ -37,7 +35,7 @@ function loader_GotImage()
 }
 
 
-function load_Image(name, url)
+function load_Image(url)
 {
   load_total += 1;
 
@@ -47,6 +45,6 @@ function load_Image(name, url)
 
   img.addEventListener("load", loader_GotImage);
 
-  all_images[name] = img
+  return img
 }
 

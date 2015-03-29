@@ -12,11 +12,6 @@ var VERSION = "0.05";
 var VER_X   = "005";
 
 
-// rendering info goes here
-// all the images that we need  [ FIXME : REMOVE ]
-var all_images;
-
-
 // the player entities
 var Players;
 
