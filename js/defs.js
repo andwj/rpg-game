@@ -17,8 +17,8 @@ var VER_X   = "005";
 var all_images;
 
 
-// the player entity
-var Player;
+// the player entities
+var Players;
 
 // the whole world (all the rooms, monsters, items, etc...)
 var World;

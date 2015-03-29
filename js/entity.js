@@ -11,7 +11,9 @@
 
 function player_Init()
 {
-  Player =
+  Players = [ null, null, null, null ];
+
+  Players[1] =
   {
     health: 250,
 
@@ -24,7 +26,7 @@ function player_Init()
     }
   };
 
-  loader_addImage(Player.sprite.ref, Player.sprite.img_name);
+  loader_addImage(Players[1].sprite.ref, Players[1].sprite.img_name);
 }
 
 
