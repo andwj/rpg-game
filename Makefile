@@ -16,7 +16,7 @@ PREFIX=/usr/local
 
 DATA_DIR=$(PREFIX)/share/rpg-game
 
-CXX=g++
+CC=gcc
 
 OBJ_DIR=obj_linux
 
@@ -28,26 +28,36 @@ OS=UNIX
 
 #--- Internal stuff from here -----------------------------------
 
-# assumes system-wide FLTK installation
-FLTK_CONFIG=fltk-config
-FLTK_FLAGS=$(shell $(FLTK_CONFIG) --cflags)
-FLTK_LIBS=$(shell $(FLTK_CONFIG) --use-images --ldflags)
+AL_FLAGS=
+AL_LDFLAGS=
+AL_LIBS=\
+	-lallegro  \
+	-lallegro_main  \
+	-lallegro_color  \
+	-lallegro_font  \
+	-lallegro_memfile  \
+	-lallegro_dialog  \
+	-lallegro_primitives  \
+	-lallegro_image  \
+	-lallegro_ttf  \
 
-CXXFLAGS=$(OPTIMISE) -Wall -D$(OS) $(FLTK_FLAGS)
-LDFLAGS=-L/usr/X11R6/lib
-LIBS=-lm -lz $(FLTK_LIBS)
+
+CFLAGS=$(OPTIMISE) -Wall -Wno-unused-variable -D$(OS) $(AL_FLAGS)
+LDFLAGS=$(AL_LDFLAGS)
+LIBS=-lm -lz $(AL_LIBS)
 
 
 #----- Program Objects ----------------------------------------------
 
-OBJS=	$(OBJ_DIR)/main.o    \
-	$(OBJ_DIR)/input.o   \
-	$(OBJ_DIR)/window.o
+OBJS=	$(OBJ_DIR)/main2.o
+
+##	$(OBJ_DIR)/input.o   +
+##	$(OBJ_DIR)/window.o
 
 ##!!!	$(OBJ_DIR)/duktape.o
 
-$(OBJ_DIR)/%.o: src/%.cc
-	$(CXX) $(CXXFLAGS) -o $@ -c $<
+$(OBJ_DIR)/%.o: src/%.c
+	$(CC) $(CCFLAGS) -o $@ -c $<
 
 
 #----- Targets ----------------------------------------------------
@@ -61,13 +71,14 @@ clean:
 dirs:
 	-mkdir $(OBJ_DIR)
 
-$(PROGRAM): $(OBJS) $(APLIB_OBJS) $(LUA_OBJS)
-	$(CXX) -Wl,--warn-common $^ -o $@ $(LDFLAGS) $(LIBS)
+$(PROGRAM): $(OBJS)
+	$(CC) -Wl,--warn-common $^ -o $@ $(LDFLAGS) $(LIBS)
 
 stripped: $(PROGRAM)
 	strip --strip-unneeded $(PROGRAM)
 
-.PHONY: all clean dirs stripped install uninstall
+.PHONY: all clean dirs stripped
+.PHONY: install uninstall
 
 #--- editor settings ------------
 # vi:ts=8:sw=8:noexpandtab
