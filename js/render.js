@@ -172,6 +172,45 @@ function render_ClearBackground()
 }
 
 
+function render_Progress(count, total)
+{
+  var x = 150;
+  var y = 200;
+
+  var w = 300;
+  var h = 40;
+
+  if (count == 0)
+  {
+    ctx.font = "20px serif";
+    ctx.fillStyle = "#ccc";
+    ctx.fillText("Loading resources", x, y)
+  }
+
+  y += 30;
+
+  if (count == 0)
+  {
+    ctx.strokeStyle = "#fff";
+    ctx.strokeRect(x, y, w, h);
+  }
+ 
+  x += 1; y += 1;
+  w -= 2; h -= 2;
+
+  ctx.fillStyle = "#000"; 
+  ctx.fillRect(x, y, w, h);
+
+  w = w * count / total;
+
+  if (w > 0)
+  {
+    ctx.fillStyle = "#06c"; 
+    ctx.fillRect(x, y, w, h);
+  }
+}
+
+
 function render_UI()
 {
   var room_x = 800 - ROOM_W;
