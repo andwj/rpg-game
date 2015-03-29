@@ -56,7 +56,7 @@ OBJS=	$(OBJ_DIR)/main2.o
 
 ##!!!	$(OBJ_DIR)/duktape.o
 
-$(OBJ_DIR)/%.o: src/%.c
+$(OBJ_DIR)/%.o: %.c
 	$(CC) $(CCFLAGS) -o $@ -c $<
 
 
