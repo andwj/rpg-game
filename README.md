@@ -43,8 +43,8 @@ minor edits.
 Milestone 1
 -----------
 
-*  get basic code structure in place
-*  repack the tileset into two images: one for the items, one for everything else
+*  get basic code structure in place [DONE]
+*  sort out the tileset [DONE]
 *  code to create a single room with player in it
 *  code to render this map
 *  code to render a minimap
