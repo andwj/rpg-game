@@ -50,7 +50,6 @@ Milestone 1
 *  code to draw the text panel and add text to it
 *  allow player to move around the room with arrow keys
 *  title screen, press a key to start
-*  death screen 
 
 
 Milestone 2
