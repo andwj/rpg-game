@@ -234,7 +234,7 @@ function render_UI()
 
 function render_Sprite(rx, ry, sprite)
 {
-  var img = all_images[sprite.ref]
+  var img = sprite.img;
 
   if (! img)
     return;
@@ -251,25 +251,5 @@ function render_Sprite(rx, ry, sprite)
   y = Math.floor(y);
 
   ctx.drawImage(img, x, y);
-}
-
-
-function render_Room()
-{
-  var room_x = 800 - ROOM_W;
-  var room_y = 0;
-
-  // FIXME : show the base image for the current room
-  var img = all_images.room_template;
-
-  ctx.drawImage(img, room_x, room_y);
-
-  // TODO : apply modifiers to base image (e.g. doors)
-
-
-  // TODO : render all the entities (properly)
-
-  render_Sprite(0.5, 0.85, Player.sprite);
-
 }
 
