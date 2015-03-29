@@ -178,6 +178,21 @@ function render_Init()
 }
 
 
+function render_BeginClip(x, y, w, h)
+{
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(x, y, w, h);
+  ctx.clip();
+}
+
+
+function render_EndClip(x, y, w, h)
+{
+  ctx.restore();
+}
+
+
 function render_ClearBackground()
 {
   ctx.fillStyle = BG_COLOR;
