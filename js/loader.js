@@ -14,7 +14,7 @@ var load_count;
 var load_total;
 
 
-function loader_drawProgress()
+function loader_DrawProgress()
 {
   var x = 150;
   var y = 200;
@@ -53,7 +53,7 @@ function loader_drawProgress()
 }
 
 
-function loader_init()
+function loader_Init()
 {
   all_images = {};
 
@@ -61,22 +61,22 @@ function loader_init()
   load_total = 0;
 
   // draw an empty progress bar
-  loader_drawProgress();
+  loader_DrawProgress();
 }
 
 
-function loader_gotImage()
+function loader_GotImage()
 {
   load_count += 1;
 
-  loader_drawProgress();
+  loader_DrawProgress();
 
   if (load_count == load_total)
     main_StartGame();
 }
 
 
-function loader_addImage(name, url)
+function loader_AddImage(name, url)
 {
   load_total += 1;
 
@@ -84,7 +84,7 @@ function loader_addImage(name, url)
 
   img.src = url;
 
-  img.addEventListener("load", loader_gotImage);
+  img.addEventListener("load", loader_GotImage);
 
   all_images[name] = img
 }

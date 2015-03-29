@@ -9,7 +9,7 @@
 "use strict";
 
 
-function handleMouseDown(ev)
+function event_MouseDown(ev)
 {
   ev.preventDefault();
 
@@ -17,7 +17,7 @@ function handleMouseDown(ev)
 }
 
 
-function handleKeyDown(ev)
+function event_KeyDown(ev)
 {
   ev.preventDefault();
 
@@ -25,9 +25,9 @@ function handleKeyDown(ev)
 }
 
 
-function event_init()
+function event_Init()
 {
-  window.addEventListener("mousedown", handleMouseDown, true);
-  window.addEventListener("keydown",   handleKeyDown,   true);
+  window.addEventListener("mousedown", event_MouseDown, true);
+  window.addEventListener("keydown",   event_KeyDown,   true);
 }
 

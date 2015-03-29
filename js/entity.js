@@ -26,7 +26,7 @@ function player_Init()
     }
   };
 
-  loader_addImage(Players[1].sprite.ref, Players[1].sprite.img_name);
+  loader_AddImage(Players[1].sprite.ref, Players[1].sprite.img_name);
 }
 
 

@@ -165,7 +165,7 @@ function render_Init()
 }
 
 
-function render_clearBackground()
+function render_ClearBackground()
 {
   ctx.fillStyle = BG_COLOR;
   ctx.fillRect(0, 0, Screen.width, Screen.height);

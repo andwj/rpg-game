@@ -22,12 +22,12 @@ function init()
   }
 
 
-  render_clearBackground();
+  render_ClearBackground();
 
 
-  loader_init();
+  loader_Init();
 
-  event_init();
+  event_Init();
 
   entity_Init();
   world_Init();
@@ -38,7 +38,7 @@ function main_StartGame()
 {
   // called by loader once all resources are loaded.
 
-  render_clearBackground();
+  render_ClearBackground();
 
   world_Create();
 
