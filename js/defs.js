@@ -12,6 +12,14 @@ var VERSION = "0.05";
 var VER_X   = "005";
 
 
+// current game mode, can be:
+//    loading  (the resources)
+//    waiting  (for player to start)
+//    active
+//    over     (all player characters dead, or victory)
+var game_mode = "loading";
+
+
 // the player entities
 var Players;
 

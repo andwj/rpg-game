@@ -9,8 +9,13 @@
 "use strict";
 
 
+var start_image = null;
+
+
 function init()
 {
+  game_mode = "loading";
+
   if (! render_Init())
     return;
 
@@ -28,8 +33,15 @@ function init()
 
   loader_Init();
   render_LoadTileset();
+  main_Init();
   entity_Init();
   world_Init();
+}
+
+
+function main_Init()
+{
+  start_image = load_Image("img/start.png");
 }
 
 
@@ -37,11 +49,10 @@ function main_StartGame()
 {
   // called by loader once all resources are loaded.
 
+  game_mode = "waiting";
+
   render_ClearBackground();
 
-  world_Create();
-
-  render_UI();
-  render_Room();
+  render_Picture(start_image, "#000", "Press SPACE to start");
 }
 

@@ -282,7 +282,7 @@ function render_Progress(count, total)
 }
 
 
-function render_Picture(img, back_col)
+function render_Picture(img, back_col, text)
 {
   var w = img.width  * Screen.scale;
   var h = img.height * Screen.scale;
@@ -302,6 +302,26 @@ function render_Picture(img, back_col)
   ctx.fillRect(panel.x - 2, panel.y - 2, panel.w + 4, panel.h + 4);
 
   ctx.drawImage(img, x, y, w, h);
+
+  if (text)
+  {
+    x = panel.x + (panel.w / 2);
+    y = panel.y + (panel.h * 0.65);
+
+    if (Screen.scale > 1)
+      ctx.font = "28px Arial";
+    else
+      ctx.font = "16px Arial";
+
+    ctx.fillStyle = "#ddd";
+
+    var size = ctx.measureText(text);
+
+    x = Math.floor(x - size.width / 2);
+    y = Math.floor(y);
+
+    ctx.fillText(text, x, y);
+  }
 
   render_EndClip();
 }

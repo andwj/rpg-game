@@ -36,7 +36,7 @@ function entity_Init()
   // loads all the images for actors and objects.
   //
 
-  player_Init();
+///!!!  player_Init();
 
   return true;
 }
