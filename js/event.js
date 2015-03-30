@@ -11,14 +11,16 @@
 
 function event_MouseDown(ev)
 {
-  // ignore unknown buttons
+  // already consumed?
+  if (ev.defaultPrevented)
+    return;
+
+  // ignore unknown buttons (especially for RMB context menus)
   if (ev.button != 0)
     return;
 
-  ev.preventDefault();
-
-  var mx = ev.client_X;
-  var my = ev.client_Y;
+  var mx = ev.clientX;
+  var my = ev.clientY;
 
   if (! mx) return;
   if (! my) return;
@@ -26,22 +28,34 @@ function event_MouseDown(ev)
   console.log("MouseDown event: " + mx + " x " + my);
 
   // TODO
+
+  ev.preventDefault();
 }
 
 
 function event_KeyDown(ev)
 {
-  // ignore unknown keys
-  if (! ev.key)
+  // already consumed?
+  if (ev.defaultPrevented)
     return;
 
-  // FIXME : ignore CTRL or ALT or META modifiers
+  // ignore unknown keys
+  if (! ev.key || ev.key == "" || ev.key == "Unidentified")
+    return;
 
-//  ev.preventDefault();
+  // ignore dead keys / composing sequences
+  if (ev.key == "Dead" || ev.isComposing)
+    return;
+
+  // ignore CTRL or ALT or META modifiers
+  if (ev.ctrlKey || ev.altKey || ev.metaKey)
+    return;
 
   console.log("KeyDown event: key=" + ev.key);
 
   // TODO
+
+  ev.preventDefault();
 }
 
 
