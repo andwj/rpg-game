@@ -114,6 +114,47 @@ function render_Dimensions()
 }
 
 
+function render_PlacePanels()
+{
+  // positions for each panel
+  var mx  = 248 * Screen.scale;
+  var my  = Screen.height - 80 * Screen.scale;
+  var buf = 8 * Screen.scale;
+
+  Screen.info_panel =
+  {
+    x: 0,
+    y: 0,
+    w: mx - buf,
+    h: my - buf
+  };
+
+  Screen.radar_panel =
+  {
+    x: 0,
+    y: my,
+    w: mx - buf,
+    h: 80 * Screen.scale
+  };
+
+  Screen.main_panel =
+  {
+    x: mx,
+    y: 0,
+    w: Screen.width - mx,
+    h: my - buf
+  };
+
+  Screen.text_panel =
+  {
+    x: mx,
+    y: my,
+    w: Screen.width - mx,
+    h: 80 * Screen.scale
+  };
+}
+
+
 function render_Init()
 {
   Screen.canvas_elem = document.getElementById("game");
@@ -135,6 +176,7 @@ function render_Init()
 
 
   render_Dimensions();
+  render_PlacePanels();
 
   Screen.canvas_elem.width  = Screen.width;
   Screen.canvas_elem.height = Screen.height;
@@ -240,7 +282,7 @@ function render_Progress(count, total)
 }
 
 
-function render_StartScreen(img)
+function render_Picture(img)
 {
   var w = img.width;
   var h = img.height;
