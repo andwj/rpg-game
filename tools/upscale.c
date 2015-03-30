@@ -13,6 +13,7 @@
 
 
 #define TRANS_COLOR		0x313233
+#define OUTPUT_TRANS	0x010101
 
 #define WIDTH	(10 * 32)
 #define HEIGHT	(26 * 32)
@@ -37,7 +38,7 @@ int read_pixel()
 void write_pixel(int pix)
 {
 	if (pix == TRANS_COLOR)
-		pix = 0x717171;
+		pix = OUTPUT_TRANS;
 
 	int r = (pix & 0xff0000) >> 16;
 	int g = (pix & 0x00ff00) >>  8;
@@ -387,6 +388,8 @@ int main()
 	{
 		write_pixel(out_pix[x][y]);
 	}
+
+	return 0;
 }
 
 // --- editor settings ----
