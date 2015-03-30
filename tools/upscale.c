@@ -151,6 +151,9 @@ int analyse2(int A, int B, int C, int D, int E)
 
 void calc_pixels(int x, int y, int tx, int ty)
 {
+	int ox = (tx * 32 + x) * 2;
+	int oy = (ty * 32 + y) * 2;
+
 	// Map of input pixels:  I|E F|J
 	//                       -+---+-
 	//                       G|A B|K
@@ -292,10 +295,10 @@ void calc_pixels(int x, int y, int tx, int ty)
 		}
 	}
 
-	out_pix[tx*64 + 0][ty*64 + 0] = p1;
-	out_pix[tx*64 + 1][ty*64 + 0] = p2;
-	out_pix[tx*64 + 0][ty*64 + 1] = p3;
-	out_pix[tx*64 + 1][ty*64 + 1] = p4;
+	out_pix[ox + 0][oy + 0] = p1;
+	out_pix[ox + 1][oy + 0] = p2;
+	out_pix[ox + 0][oy + 1] = p3;
+	out_pix[ox + 1][oy + 1] = p4;
 }
 
 
