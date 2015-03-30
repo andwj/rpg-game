@@ -2,7 +2,7 @@
  * Upscale the tileset.ppm image, using 2xSaI algorithm.
  * 
  * 2xSaI code is by Derek Liauw ("Kreed") which he has licensed under
- * the GNU GPL v2 (or any later version).
+ * the GNU GPL, version 2 (or any later version).
  *
  * I (andrewj) have updated the mixing functions to handle transparent
  * pixels.
@@ -36,6 +36,9 @@ int read_pixel()
 
 void write_pixel(int pix)
 {
+	if (pix == TRANS_COLOR)
+		pix = 0x717171;
+
 	int r = (pix & 0xff0000) >> 16;
 	int g = (pix & 0x00ff00) >>  8;
 	int b = (pix & 0x0000ff);
@@ -91,8 +94,22 @@ int mix_four(int A, int B, int C, int D)
 	if (C == TRANS_COLOR) num_trans++;
 	if (D == TRANS_COLOR) num_trans++;
 
-	if (num_trans >= 2)
+	if (num_trans >= 3)
 		return TRANS_COLOR;
+
+	if (num_trans == 2)
+	{
+		int E;
+
+		// find the two non-transparent colors
+		if (A == TRANS_COLOR) { E = A; A = D; D = E; }
+		if (A == TRANS_COLOR) { E = A; A = C; C = E; }
+
+		if (B == TRANS_COLOR) { E = B; B = D; D = E; }
+		if (B == TRANS_COLOR) { E = B; B = C; C = E; }
+
+		return mix_two(A, B);
+	}
 
 	if (A == TRANS_COLOR) return mix_three(B, C, D);
 	if (B == TRANS_COLOR) return mix_three(A, C, D);
