@@ -11,7 +11,19 @@
 
 function event_MouseDown(ev)
 {
+  // ignore unknown buttons
+  if (ev.button != 0)
+    return;
+
   ev.preventDefault();
+
+  var mx = ev.client_X;
+  var my = ev.client_Y;
+
+  if (! mx) return;
+  if (! my) return;
+
+  console.log("MouseDown event: " + mx + " x " + my);
 
   // TODO
 }
@@ -19,7 +31,15 @@ function event_MouseDown(ev)
 
 function event_KeyDown(ev)
 {
-  ev.preventDefault();
+  // ignore unknown keys
+  if (! ev.key)
+    return;
+
+  // FIXME : ignore CTRL or ALT or META modifiers
+
+//  ev.preventDefault();
+
+  console.log("KeyDown event: key=" + ev.key);
 
   // TODO
 }
