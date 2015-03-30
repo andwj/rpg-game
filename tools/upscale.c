@@ -17,7 +17,7 @@ int in_pix[WIDTH][HEIGHT];
 
 int out_pix[WIDTH*2][HEIGHT*2];
 
-int tile_pix[34][34];
+int tile_pix[35][35];
 
 
 int read_pixel()
