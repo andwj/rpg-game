@@ -53,6 +53,6 @@ function main_StartGame()
 
   render_ClearBackground();
 
-  render_BigPicture(start_image, "#444", 75, "Press SPACE to start");
+  render_BigPicture(start_image, "#000", 75, "Press SPACE to start");
 }
 
