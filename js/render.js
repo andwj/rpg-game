@@ -282,12 +282,28 @@ function render_Progress(count, total)
 }
 
 
-function render_Picture(img)
+function render_Picture(img, back_col)
 {
-  var w = img.width;
-  var h = img.height;
+  var w = img.width  * Screen.scale;
+  var h = img.height * Screen.scale;
 
-  //....
+  var panel = Screen.main_panel;
+
+  // place the image directly in the center (horizontally and vertically)
+  var x = panel.x + (panel.w / 2) - (w / 2);
+  var y = panel.y + (panel.h / 2) - (h / 2);
+
+  x = Math.floor(x);
+  y = Math.floor(y);
+
+  render_BeginClip(panel.x, panel.y, panel.w, panel.h);
+
+  ctx.fillStyle = back_col;
+  ctx.fillRect(panel.x - 2, panel.y - 2, panel.w + 4, panel.h + 4);
+
+  ctx.drawImage(img, x, y, w, h);
+
+  render_EndClip();
 }
 
 
