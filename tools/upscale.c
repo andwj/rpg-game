@@ -1,14 +1,18 @@
 /*
- * Upscale the tileset.ppm image using the 2xSaI algorithm.
+ * Upscale the tileset.ppm image, using 2xSaI algorithm.
  * 
- * 2xSaI code is by Derek Liauw ("Kreed") and under the GNU GPL v2+
+ * 2xSaI code is by Derek Liauw ("Kreed") which he has licensed under
+ * the GNU GPL v2 (or any later version).
+ *
+ * I (andrewj) have updated the mixing functions to handle transparent
+ * pixels.
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 
 
-const int input_trans = 0x313233;
+#define TRANS_COLOR		0x313233
 
 #define WIDTH	(10 * 32)
 #define HEIGHT	(26 * 32)
@@ -39,6 +43,78 @@ void write_pixel(int pix)
 	putchar(r);
 	putchar(g);
 	putchar(b);
+}
+
+
+int mix_two(int A, int B)
+{
+	if (A == B)
+		return A;
+
+	// A and B cannot both be transparent here
+	if (A == TRANS_COLOR) return B;
+	if (B == TRANS_COLOR) return A;
+
+	int A2 = (A & 0xfefefe) >> 1;
+	int B2 = (B & 0xfefefe) >> 1;
+
+	return A2 + B2 + (A & B & 0x010101);
+}
+
+
+int mix_three(int A, int B, int C)
+{
+	// Note : never called with transparent pixels!
+
+	int r =	((A & 0xff0000) >> 16) + ((B & 0xff0000) >> 16) +
+			((C & 0xff0000) >> 16);
+
+	int g =	((A & 0x00ff00) >>  8) + ((B & 0x00ff00) >>  8) +
+			((C & 0x00ff00) >>  8);
+
+	int b =	(A & 0x0000ff) + (B & 0x0000ff) + (C & 0x0000ff);
+
+	r = r / 3;
+	g = g / 3;
+	b = b / 3;
+
+	return (r << 16) | (g << 8) | b;
+}
+
+
+int mix_four(int A, int B, int C, int D)
+{
+	int num_trans = 0;
+
+	if (A == TRANS_COLOR) num_trans++;
+	if (B == TRANS_COLOR) num_trans++;
+	if (C == TRANS_COLOR) num_trans++;
+	if (D == TRANS_COLOR) num_trans++;
+
+	if (num_trans >= 2)
+		return TRANS_COLOR;
+
+	if (A == TRANS_COLOR) return mix_three(B, C, D);
+	if (B == TRANS_COLOR) return mix_three(A, C, D);
+	if (C == TRANS_COLOR) return mix_three(A, B, D);
+	if (D == TRANS_COLOR) return mix_three(A, B, C);
+
+	// no pixels will be transparent now
+
+	int r =	((A & 0xff0000) >> 16) + ((B & 0xff0000) >> 16) +
+			((C & 0xff0000) >> 16) + ((D & 0xff0000) >> 16);
+
+	int g =	((A & 0x00ff00) >>  8) + ((B & 0x00ff00) >>  8) +
+			((C & 0x00ff00) >>  8) + ((D & 0x00ff00) >>  8);
+
+	int b =	(A & 0x0000ff) + (B & 0x0000ff) +
+			(C & 0x0000ff) + (D & 0x0000ff);
+	
+	r = r >> 2;
+	g = g >> 2;
+	b = b >> 2;
+
+	return (r << 16) | (g << 8) | b;
 }
 
 
@@ -90,7 +166,7 @@ void calc_pixels(int x, int y, int tx, int ty)
 		}
 		else
 		{
-			p2 = INTERPOLATE(A, B);
+			p2 = mix_two(A, B);
 		}
 
 		if (((A == G) && (C == O)) || ((A == B) && (A == H) && (G != C) && (C == M)))
@@ -99,7 +175,7 @@ void calc_pixels(int x, int y, int tx, int ty)
 		}
 		else
 		{
-			p3 = INTERPOLATE(A, C);
+			p3 = mix_two(A, C);
 		}
 	}
 	else if ((B == C) && (A != D))
@@ -112,7 +188,7 @@ void calc_pixels(int x, int y, int tx, int ty)
 		}
 		else
 		{
-			p2 = INTERPOLATE(A, B);
+			p2 = mix_two(A, B);
 		}
 
 		if (((C == H) && (A == F)) || ((C == G) && (C == D) && (A != H) && (A == I)))
@@ -121,7 +197,7 @@ void calc_pixels(int x, int y, int tx, int ty)
 		}
 		else
 		{
-			p3 = INTERPOLATE(A, C);
+			p3 = mix_two(A, C);
 		}
 	}
 	else if ((A == D) && (B == C))
@@ -136,13 +212,13 @@ void calc_pixels(int x, int y, int tx, int ty)
 		{
 			int r = 0;
 
-			p3 = INTERPOLATE(A, C);
-			p2 = INTERPOLATE(A, B);
+			p3 = mix_two(A, C);
+			p2 = mix_two(A, B);
 
-			r += GetResult1 (A, B, G, E, I);
-			r += GetResult2 (B, A, K, F, J);
-			r += GetResult2 (B, A, H, N, M);
-			r += GetResult1 (A, B, L, O, P);
+			r += GetResult1(A, B, G, E, I);
+			r += GetResult2(B, A, K, F, J);
+			r += GetResult2(B, A, H, N, M);
+			r += GetResult1(A, B, L, O, P);
 
 			if (r > 0)
 				p4 = A;
@@ -150,13 +226,13 @@ void calc_pixels(int x, int y, int tx, int ty)
 				p4 = B;
 			else
 			{
-				p4 = Q_INTERPOLATE(A, B, C, D);
+				p4 = mix_four(A, B, C, D);
 			}
 		}
 	}
 	else
 	{
-		p4 = Q_INTERPOLATE(A, B, C, D);
+		p4 = mix_four(A, B, C, D);
 
 		if ((A == C) && (A == F) && (B != E) && (B == J))
 		{
@@ -168,7 +244,7 @@ void calc_pixels(int x, int y, int tx, int ty)
 		}
 		else
 		{
-			p2 = INTERPOLATE(A, B);
+			p2 = mix_two(A, B);
 		}
 
 		if ((A == B) && (A == H) && (G != C) && (C == M))
@@ -181,7 +257,7 @@ void calc_pixels(int x, int y, int tx, int ty)
 		}
 		else
 		{
-			p3 = INTERPOLATE(A, C);
+			p3 = mix_two(A, C);
 		}
 	}
 
