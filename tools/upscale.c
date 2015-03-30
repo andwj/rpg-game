@@ -44,12 +44,12 @@ void write_pixel(int pix)
 
 void calc_pixels(int x, int y, int tx, int ty)
 {
-	// Map of the pixels:  I|E F|J
-	//                     -+---+-
-	//                     G|A B|K
-	//                     H|C D|L
-	//                     -+---+-
-	//                     M|N O|P
+	// Map of input pixels:  I|E F|J
+	//                       -+---+-
+	//                       G|A B|K
+	//                       H|C D|L
+	//                       -+---+-
+	//                       M|N O|P
 
 	int I = tile_pix[x  ][y];
 	int E = tile_pix[x+1][y];
@@ -71,123 +71,124 @@ void calc_pixels(int x, int y, int tx, int ty)
 	int O = tile_pix[x+2][y+3];
 	int P = tile_pix[x+3][y+3];
 
-	if ((colorA == colorD) && (colorB != colorC))
+	// Output pixels:  p1  p2
+	//
+	//                 p3  p4
+
+	int p1 = A;
+	int p2 = A;
+	int p3 = A;
+	int p4 = A;
+
+	if ((A == D) && (B != C))
 	{
-		if (((colorA == colorE) && (colorB == colorL)) ||
-				((colorA == colorC) && (colorA == colorF)
-				 && (colorB != colorE) && (colorB == colorJ)))
+		p4 = A;
+
+		if (((A == E) && (B == L)) || ((A == C) && (A == F) && (B != E) && (B == J)))
 		{
-			product = colorA;
+			p2 = A;
 		}
 		else
 		{
-			product = INTERPOLATE (colorA, colorB);
+			p2 = INTERPOLATE(A, B);
 		}
 
-		if (((colorA == colorG) && (colorC == colorO)) ||
-				((colorA == colorB) && (colorA == colorH)
-				 && (colorG != colorC) && (colorC == colorM)))
+		if (((A == G) && (C == O)) || ((A == B) && (A == H) && (G != C) && (C == M)))
 		{
-			product1 = colorA;
+			p3 = A;
 		}
 		else
 		{
-			product1 = INTERPOLATE (colorA, colorC);
+			p3 = INTERPOLATE(A, C);
 		}
-		product2 = colorA;
 	}
-	else if ((colorB == colorC) && (colorA != colorD))
+	else if ((B == C) && (A != D))
 	{
-		if (((colorB == colorF) && (colorA == colorH)) ||
-				((colorB == colorE) && (colorB == colorD)
-				 && (colorA != colorF) && (colorA == colorI)))
+		p4 = B;
+
+		if (((B == F) && (A == H)) || ((B == E) && (B == D) && (A != F) && (A == I)))
 		{
-			product = colorB;
+			p2 = B;
 		}
 		else
 		{
-			product = INTERPOLATE (colorA, colorB);
+			p2 = INTERPOLATE(A, B);
 		}
 
-		if (((colorC == colorH) && (colorA == colorF)) ||
-				((colorC == colorG) && (colorC == colorD)
-				 && (colorA != colorH) && (colorA == colorI)))
+		if (((C == H) && (A == F)) || ((C == G) && (C == D) && (A != H) && (A == I)))
 		{
-			product1 = colorC;
+			p3 = C;
 		}
 		else
 		{
-			product1 = INTERPOLATE (colorA, colorC);
+			p3 = INTERPOLATE(A, C);
 		}
-		product2 = colorB;
 	}
-	else if ((colorA == colorD) && (colorB == colorC))
+	else if ((A == D) && (B == C))
 	{
-		if (colorA == colorB)
+		if (A == B)
 		{
-			product = colorA;
-			product1 = colorA;
-			product2 = colorA;
+			p2 = A;
+			p3 = A;
+			p4 = A;
 		}
 		else
 		{
 			int r = 0;
 
-			product1 = INTERPOLATE (colorA, colorC);
-			product = INTERPOLATE (colorA, colorB);
+			p3 = INTERPOLATE(A, C);
+			p2 = INTERPOLATE(A, B);
 
-			r += GetResult1 (colorA, colorB, colorG, colorE, colorI);
-			r += GetResult2 (colorB, colorA, colorK, colorF, colorJ);
-			r += GetResult2 (colorB, colorA, colorH, colorN, colorM);
-			r += GetResult1 (colorA, colorB, colorL, colorO, colorP);
+			r += GetResult1 (A, B, G, E, I);
+			r += GetResult2 (B, A, K, F, J);
+			r += GetResult2 (B, A, H, N, M);
+			r += GetResult1 (A, B, L, O, P);
 
 			if (r > 0)
-				product2 = colorA;
+				p4 = A;
 			else if (r < 0)
-				product2 = colorB;
+				p4 = B;
 			else
 			{
-				product2 =
-					Q_INTERPOLATE (colorA, colorB, colorC,
-							colorD);
+				p4 = Q_INTERPOLATE(A, B, C, D);
 			}
 		}
 	}
 	else
 	{
-		product2 = Q_INTERPOLATE (colorA, colorB, colorC, colorD);
+		p4 = Q_INTERPOLATE(A, B, C, D);
 
-		if ((colorA == colorC) && (colorA == colorF)
-				&& (colorB != colorE) && (colorB == colorJ)) {
-			product = colorA;
+		if ((A == C) && (A == F) && (B != E) && (B == J))
+		{
+			p2 = A;
 		}
-		else if ((colorB == colorE) && (colorB == colorD)
-				&& (colorA != colorF) && (colorA == colorI)) {
-			product = colorB;
+		else if ((B == E) && (B == D) && (A != F) && (A == I))
+		{
+			p2 = B;
 		}
 		else
 		{
-			product = INTERPOLATE (colorA, colorB);
+			p2 = INTERPOLATE(A, B);
 		}
 
-		if ((colorA == colorB) && (colorA == colorH)
-				&& (colorG != colorC) && (colorC == colorM)) {
-			product1 = colorA;
+		if ((A == B) && (A == H) && (G != C) && (C == M))
+		{
+			p3 = A;
 		}
-		else if ((colorC == colorG) && (colorC == colorD)
-				&& (colorA != colorH) && (colorA == colorI)) {
-			product1 = colorC;
+		else if ((C == G) && (C == D) && (A != H) && (A == I))
+		{
+			p3 = C;
 		}
 		else
 		{
-			product1 = INTERPOLATE (colorA, colorC);
+			p3 = INTERPOLATE(A, C);
 		}
 	}
 
-	*(dP) = colorA;
-	*(dP + 1) = product;
-	*(dP + (dstPitch >> 2)) = product1;
-	*(dP + (dstPitch >> 2) + 1) = product2;
+	out_pix[tx*64 + 0][ty*64 + 0] = p1;
+	out_pix[tx*64 + 1][ty*64 + 0] = p2;
+	out_pix[tx*64 + 0][ty*64 + 1] = p3;
+	out_pix[tx*64 + 1][ty*64 + 1] = p4;
 }
 
 
@@ -200,8 +201,8 @@ void process_tile(int tx, int ty)
 	// nearest in-tile pixel.  This is done to prevent neighboring tiles
 	// from "bleeding" into each other.
 
-	for (x = 0 ; x < 34 ; x++)
-	for (y = 0 ; y < 34 ; y++)
+	for (x = 0 ; x < 35 ; x++)
+	for (y = 0 ; y < 35 ; y++)
 	{
 		// real pixel
 		int rx = x-1;
@@ -218,8 +219,8 @@ void process_tile(int tx, int ty)
 
 	// perform the upscale algorithm
 
-	for (x = 0 ; x < 34 ; x++)
-	for (y = 0 ; y < 34 ; y++)
+	for (x = 0 ; x < 32 ; x++)
+	for (y = 0 ; y < 32 ; y++)
 	{
 		calc_pixels(x, y, tx, ty);
 	}
