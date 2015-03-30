@@ -25,11 +25,11 @@ function event_MouseDown(ev)
   if (! mx) return;
   if (! my) return;
 
+  ev.preventDefault();
+
   console.log("MouseDown event: " + mx + " x " + my);
 
   // TODO
-
-  ev.preventDefault();
 }
 
 
@@ -53,9 +53,16 @@ function event_KeyDown(ev)
 
   console.log("KeyDown event: key=" + ev.key);
 
+  ev.preventDefault();
+
+  if (game_mode == "waiting" && (ev.key == " " || ev.key == "Space"))
+  {
+    main_BeginGame();
+    return;
+  }
+
   // TODO
 
-  ev.preventDefault();
 }
 
 

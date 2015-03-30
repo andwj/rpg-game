@@ -45,14 +45,20 @@ function main_Init()
 }
 
 
-function main_StartGame()
+function main_FinishLoading()
 {
   // called by loader once all resources are loaded.
 
   game_mode = "waiting";
 
-  render_ClearBackground();
-
   render_BigPicture(start_image, "#000", 75, "Press SPACE to start");
+}
+
+
+function main_BeginGame()
+{
+  // user has pressed SPACE to start a new game
+
+  render_ClearBackground();
 }
 

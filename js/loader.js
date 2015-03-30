@@ -33,7 +33,7 @@ function loader_GotImage()
   render_Progress(load_count, load_total);
 
   if (load_count == load_total)
-    main_StartGame();
+    main_FinishLoading();
 }
 
 
