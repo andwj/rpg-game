@@ -26,7 +26,7 @@ var BOTTOM_H = 80;
 var ROOM_W = 608;
 var ROOM_H = 368;
 
-var  BG_COLOR = "#3C3630";
+var  BG_COLOR = "#444";
 var DIV_COLOR = "#604030";
 var TEXT_BG   = "#003640";
 
@@ -282,31 +282,36 @@ function render_Progress(count, total)
 }
 
 
-function render_Picture(img, back_col, text)
+//
+// The picture uses the whole canvas area.
+// Area around the picture is cleared to the 'back_col' color.
+//
+function render_BigPicture(img, back_col, text_dy, text)
 {
   var w = img.width  * Screen.scale;
   var h = img.height * Screen.scale;
 
   var panel = Screen.main_panel;
 
+  var mx = Screen.width  / 2;
+  var my = Screen.height / 2;
+
   // place the image directly in the center (horizontally and vertically)
-  var x = panel.x + (panel.w / 2) - (w / 2);
-  var y = panel.y + (panel.h / 2) - (h / 2);
+  var x = mx - (w / 2);
+  var y = my - (h / 2);
 
   x = Math.floor(x);
   y = Math.floor(y);
 
-  render_BeginClip(panel.x, panel.y, panel.w, panel.h);
-
   ctx.fillStyle = back_col;
-  ctx.fillRect(panel.x - 2, panel.y - 2, panel.w + 4, panel.h + 4);
+  ctx.fillRect(0, 0, Screen.width, Screen.height);
 
   ctx.drawImage(img, x, y, w, h);
 
   if (text)
   {
-    x = panel.x + (panel.w / 2);
-    y = panel.y + (panel.h * 0.65);
+    x = mx;
+    y = my + text_dy * Screen.scale;
 
     if (Screen.scale > 1)
       ctx.font = "28px Arial";
@@ -322,8 +327,6 @@ function render_Picture(img, back_col, text)
 
     ctx.fillText(text, x, y);
   }
-
-  render_EndClip();
 }
 
 
