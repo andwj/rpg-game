@@ -118,6 +118,37 @@ int mix_four(int A, int B, int C, int D)
 }
 
 
+int analyse1(int A, int B, int C, int D, int E)
+{
+	int x = 0;
+	int y = 0;
+	int r = 0;
+
+	if (A == C) x += 1; else if (B == C) y += 1;
+	if (A == D) x += 1; else if (B == D) y += 1;
+
+	if (x <= 1) r += 1;
+	if (y <= 1) r -= 1;
+
+	return r;
+}
+
+int analyse2(int A, int B, int C, int D, int E)
+{
+	int x = 0;
+	int y = 0;
+	int r = 0;
+
+	if (A == C) x += 1; else if (B == C) y += 1;
+	if (A == D) x += 1; else if (B == D) y += 1;
+
+	if (x <= 1) r -= 1;
+	if (y <= 1) r += 1;
+
+	return r;
+}
+
+
 void calc_pixels(int x, int y, int tx, int ty)
 {
 	// Map of input pixels:  I|E F|J
@@ -215,10 +246,10 @@ void calc_pixels(int x, int y, int tx, int ty)
 			p3 = mix_two(A, C);
 			p2 = mix_two(A, B);
 
-			r += GetResult1(A, B, G, E, I);
-			r += GetResult2(B, A, K, F, J);
-			r += GetResult2(B, A, H, N, M);
-			r += GetResult1(A, B, L, O, P);
+			r += analyse1(A, B, G, E, I);
+			r += analyse2(B, A, K, F, J);
+			r += analyse2(B, A, H, N, M);
+			r += analyse1(A, B, L, O, P);
 
 			if (r > 0)
 				p4 = A;
