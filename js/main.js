@@ -67,6 +67,8 @@ function main_BeginGame()
 	// FIXME : create world, set up UI, etc..
 
 	render_RefreshAll();
+
+	render_AddLine("Welcome to Rpg-Game !");
 }
 
 

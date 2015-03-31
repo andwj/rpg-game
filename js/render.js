@@ -496,6 +496,8 @@ function render_WholeMap()
 
 function render_Radar()
 {
+	// whenever the mini-map scrolls, must call this
+
 	render_BeginPanel(Screen.radar_panel);
 
 	// TODO
@@ -548,7 +550,7 @@ function render_AddLine(line)
 
 		var size = ctx.measureText(cur_line + word);
 
-		if (size + 4 < Screen.text_panel.w)
+		if (size.width + 8 < Screen.text_panel.w)
 		{
 			if (cur_line.length > 0)
 				cur_line = cur_line + " ";
@@ -564,14 +566,34 @@ function render_AddLine(line)
 
 	if (cur_line.length > 0)
 		render_AddLineRaw(cur_line);
+
+	render_TextArea();
 }
 
 
 function render_TextArea()
 {
 	render_BeginPanel(Screen.text_panel);
+	
+	var first = 0;
 
-	// TODO
+	if (Screen.text_lines.length > SHOW_LINES)
+		first = Screen.text_lines.length - SHOW_LINES;
+
+	render_SetTextFont();
+
+	ctx.fillStyle = "#9bd";
+
+	for (var i = 0 ; i < SHOW_LINES ; i++)
+	{
+		var line = Screen.text_lines[first + i];
+
+		var tx = Screen.text_panel.x + 4;
+		var ty = Screen.text_panel.y + ((i + 1) * LINE_H - 5) * Screen.scale;
+
+		if (line)
+			ctx.fillText(line, tx, ty);
+	}
 
 	render_EndPanel();
 }
@@ -589,8 +611,6 @@ function render_InfoArea()
 
 	render_EndPanel();
 }
-
-
 
 
 //--- editor settings ---
