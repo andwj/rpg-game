@@ -9,16 +9,6 @@
 "use strict";
 
 
-function world_Init()
-{
-	World =
-	{
-	};
-
-	return true;
-}
-
-
 function world_Create()
 {
 }

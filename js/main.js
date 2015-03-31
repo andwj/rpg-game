@@ -31,10 +31,10 @@ function init()
 		return;
 
 	loader_Init();
+
 	render_LoadTileset();
+
 	main_Init();
-	entity_Init();
-	world_Init();
 }
 
 
@@ -59,6 +59,10 @@ function main_BeginGame()
 	// user has pressed SPACE to start a new game
 
 	render_ClearBackground();
+
+	game_mode = "active";
+
+	world_Create();
 
 	// FIXME : create world, set up UI, etc..
 
