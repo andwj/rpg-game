@@ -11,11 +11,11 @@
 
 function world_Init()
 {
-  // loads all the images
+	World =
+	{
+	};
 
-  World = {};
-
-  return true;
+	return true;
 }
 
 
@@ -23,3 +23,6 @@ function world_Create()
 {
 }
 
+
+//--- editor settings ---
+// vi:ts=4:sw=4:noexpandtab

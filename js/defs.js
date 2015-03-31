@@ -26,3 +26,6 @@ var Players;
 // the whole world (all the rooms, monsters, items, etc...)
 var World;
 
+
+//--- editor settings ---
+// vi:ts=4:sw=4:noexpandtab
