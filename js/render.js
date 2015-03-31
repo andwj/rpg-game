@@ -22,15 +22,6 @@ var LEFT_W = 240;
 var BOTTOM_H = 80;
 
 
-// FIXME: REMOVE
-var ROOM_W = 608;
-var ROOM_H = 368;
-
-var  BG_COLOR = "#444";
-var DIV_COLOR = "#604030";
-var TEXT_BG   = "#003640";
-
-
 // the drawing context
 var ctx = null;
 
@@ -162,7 +153,7 @@ function render_PlacePanels()
 		y: my,
 		w: Screen.width - mx,
 		h: 80 * Screen.scale,
-		bg: "#015"
+		bg: "#014"
 	};
 }
 
@@ -250,7 +241,7 @@ function render_EndClip(x, y, w, h)
 
 function render_ClearBackground()
 {
-	ctx.fillStyle = BG_COLOR;
+	ctx.fillStyle = "#444";
 	ctx.fillRect(0, 0, Screen.width, Screen.height);
 }
 
