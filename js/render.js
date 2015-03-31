@@ -161,7 +161,8 @@ function render_Init()
 		scroll_x: 0,
 		scroll_y: 0,
 
-		// 
+		// lines of text shown in text area (only last 4 or 5 are shown)
+		text_lines: []
 	};
 
 
@@ -506,6 +507,65 @@ function render_Radar()
 //----------------------------------------------------------------------
 //   TEXT AREA
 //----------------------------------------------------------------------
+
+var MAX_LINES = 400;
+
+var SHOW_LINES = 4;
+var LINE_H = 20;	// i.e. TEXT_H / SHOW_LINES
+
+
+function render_SetTextFont()
+{
+	if (Screen.scale > 1)
+		ctx.font = "28px Arial";
+	else
+		ctx.font = "16px Arial";
+}
+
+
+function render_AddLineRaw(line)
+{
+	if (Screen.text_lines.length >= MAX_LINES)
+		Screen.text_lines.shift();
+	
+	Screen.text_lines.push(line);
+}
+
+
+function render_AddLine(line)
+{
+	// split lines which are too long to display
+
+	render_SetTextFont();
+
+	var cur_line = "";
+
+	var words = util_Tokenize(line);
+
+	for (var i = 0 ; i < words.length ; i++)
+	{
+		var word = words[i];
+
+		var size = ctx.measureText(cur_line + word);
+
+		if (size + 4 < Screen.text_panel.w)
+		{
+			if (cur_line.length > 0)
+				cur_line = cur_line + " ";
+
+			cur_line = cur_line + word;
+		}
+		else
+		{
+			render_AddLineRaw(cur_line);
+			cur_line = word;
+		}
+	}
+
+	if (cur_line.length > 0)
+		render_AddLineRaw(cur_line);
+}
+
 
 function render_TextArea()
 {
