@@ -18,44 +18,16 @@ var TILE_MAX_W = 22;
 var TILE_MAX_H = 16;
 
 // panel sizes (there is an 8 pixel buffer too)
-var LEFT_W = 240;
-var BOTTOM_H = 80;
+var INFO_W = 240;
+var TEXT_H = 80;
+var BUFFER = 8;
 
 
 // the drawing context
 var ctx = null;
 
 
-var Screen =
-{
-	// the canvas element
-	canvas_elem: null,
-
-	// spacer element at top
-	spacer_elem: null,
-
-	// size (in pixels) of the canvas bitmap
-	width: 0,
-	height: 0,
-
-	// the up-scaling factor (either 1 or 2)
-	scale: 1,
-
-	// how many tiles we can show (may be fractional)
-	tile_w: 0,
-	tile_h: 0,
-
-	// padding needed above the canvas
-	padding_h: 0,
-
-	// current scroll position of main map, in TILE coords
-	// Note that tile Y coords go UPWARDS (0 = bottom-most)
-	// So: draw x = main_panel.x + (tx - scroll_x) * 32
-	//     draw y = main_panel.y + main_panel.h - (ty + 1 - scroll_y) * 32
-	scroll_x: 0,
-	scroll_y: 0
-};
-
+var Screen = {};
 
 
 function render_Dimensions()
@@ -88,8 +60,8 @@ function render_Dimensions()
 	if (window_h < CANVAS_MIN_H)
 		window_h = CANVAS_MIN_H;
 
-	Screen.tile_w = (window_w - 8 - LEFT_W)   / 32.0;
-	Screen.tile_h = (window_h - 8 - BOTTOM_H) / 32.0;
+	Screen.tile_w = (window_w - BUFFER - INFO_W) / 32.0;
+	Screen.tile_h = (window_h - BUFFER - TEXT_H) / 32.0;
 
 	if (Screen.tile_w > TILE_MAX_W)
 		Screen.tile_w = TILE_MAX_W;
@@ -98,8 +70,8 @@ function render_Dimensions()
 		Screen.tile_h = TILE_MAX_H;
 
 	// compute wanted canvas size
-	Screen.width  = Screen.tile_w * 32 + 8 + LEFT_W;
-	Screen.height = Screen.tile_h * 32 + 8 + BOTTOM_H;
+	Screen.width  = Screen.tile_w * 32 + BUFFER + INFO_W;
+	Screen.height = Screen.tile_h * 32 + BUFFER + TEXT_H;
 
 	Screen.width  = Screen.width  * Screen.scale;
 	Screen.height = Screen.height * Screen.scale;
@@ -115,9 +87,9 @@ function render_Dimensions()
 function render_PlacePanels()
 {
 	// positions for each panel
-	var mx  = 248 * Screen.scale;
-	var my  = Screen.height - 80 * Screen.scale;
-	var buf = 8 * Screen.scale;
+	var mx  = (INFO_W + BUFFER) * Screen.scale;
+	var my  = Screen.height - TEXT_H * Screen.scale;
+	var buf = BUFFER * Screen.scale;
 	var info_h = 320 * Screen.scale
 
 	Screen.info_panel =
@@ -152,7 +124,7 @@ function render_PlacePanels()
 		x: mx,
 		y: my,
 		w: Screen.width - mx,
-		h: 80 * Screen.scale,
+		h: TEXT_H * Screen.scale,
 		bg: "#014"
 	};
 }
@@ -160,6 +132,39 @@ function render_PlacePanels()
 
 function render_Init()
 {
+	Screen =
+	{
+		// the canvas element
+		canvas_elem: null,
+
+		// spacer element at top
+		spacer_elem: null,
+
+		// size (in pixels) of the canvas bitmap
+		width: 0,
+		height: 0,
+
+		// the up-scaling factor (either 1 or 2)
+		scale: 1,
+
+		// how many tiles we can show (may be fractional)
+		tile_w: 0,
+		tile_h: 0,
+
+		// padding needed above the canvas
+		padding_h: 0,
+
+		// current scroll position of main map, in TILE coords
+		// Note that tile Y coords go UPWARDS (0 = bottom-most)
+		// So: draw x = main_panel.x + (tx - scroll_x) * 32
+		//     draw y = main_panel.y + main_panel.h - (ty + 1 - scroll_y) * 32
+		scroll_x: 0,
+		scroll_y: 0,
+
+		// 
+	};
+
+
 	Screen.canvas_elem = document.getElementById("game");
 
 	if (Screen.canvas_elem === null)
@@ -319,7 +324,7 @@ function render_BigPicture(img, back_col, text_dy, text)
 		if (Screen.scale > 1)
 			ctx.font = "28px Arial";
 		else
-			ctx.font = "16px Arial";
+			ctx.font = "18px Arial";
 
 		ctx.fillStyle = "#ddd";
 
@@ -342,7 +347,7 @@ function render_PanelFrames()
 	var ix = Screen.info_panel.w;
 	var iy = Screen.info_panel.h;
 
-	var buf  = 8 * Screen.scale;
+	var buf  = BUFFER * Screen.scale;
 	var ofs  = 2 * Screen.scale;
 	var ofs2 = buf - ofs - 1;
 
@@ -378,6 +383,38 @@ function render_PanelFrames()
 	ctx.fillRect(ix + ofs2, ty + ofs2, Screen.width, 1);
 }
 
+
+function render_BeginPanel(panel)
+{
+	render_BeginClip(panel.x, panel.y, panel.w, panel.h);
+
+	ctx.fillStyle = panel.bg;
+	ctx.fillRect(panel.x - 4, panel.y - 4, panel.w + 8, panel.h + 8);
+}
+
+
+function render_EndPanel()
+{
+	render_EndClip();
+}
+
+
+function render_RefreshAll()
+{
+	// draws everything from scratch (the whole canvas)
+
+	render_PanelFrames();
+
+	render_WholeMap();
+	render_TextArea();
+	render_InfoArea();
+	render_Radar();
+}
+
+
+//----------------------------------------------------------------------
+//  MAP DRAWING
+//----------------------------------------------------------------------
 
 function render_getDrawX(tx)
 {
@@ -440,21 +477,6 @@ function render_Tile(tx, ty, id)
 }
 
 
-function render_BeginPanel(panel)
-{
-	render_BeginClip(panel.x, panel.y, panel.w, panel.h);
-
-	ctx.fillStyle = panel.bg;
-	ctx.fillRect(panel.x - 4, panel.y - 4, panel.w + 8, panel.h + 8);
-}
-
-
-function render_EndPanel()
-{
-	render_EndClip();
-}
-
-
 function render_WholeMap()
 {
 	// whenever the map scrolls, must call this
@@ -467,25 +489,9 @@ function render_WholeMap()
 }
 
 
-function render_TextArea()
-{
-	render_BeginPanel(Screen.text_panel);
-
-	// TODO
-
-	render_EndPanel();
-}
-
-
-function render_InfoArea()
-{
-	render_BeginPanel(Screen.info_panel);
-
-	// TODO
-
-	render_EndPanel();
-}
-
+//----------------------------------------------------------------------
+//  RADAR
+//----------------------------------------------------------------------
 
 function render_Radar()
 {
@@ -497,17 +503,34 @@ function render_Radar()
 }
 
 
-function render_RefreshAll()
+//----------------------------------------------------------------------
+//   TEXT AREA
+//----------------------------------------------------------------------
+
+function render_TextArea()
 {
-	// draws everything from scratch (the whole canvas)
+	render_BeginPanel(Screen.text_panel);
 
-	render_PanelFrames();
+	// TODO
 
-	render_WholeMap();
-	render_TextArea();
-	render_InfoArea();
-	render_Radar();
+	render_EndPanel();
 }
+
+
+//----------------------------------------------------------------------
+//   PLAYER INFO AREA
+//----------------------------------------------------------------------
+
+function render_InfoArea()
+{
+	render_BeginPanel(Screen.info_panel);
+
+	// TODO
+
+	render_EndPanel();
+}
+
+
 
 
 //--- editor settings ---
