@@ -55,7 +55,14 @@ var Screen =
   tile_h: 0,
 
   // padding needed above the canvas
-  padding_h: 0
+  padding_h: 0,
+
+  // current scroll position of main map, in TILE coords
+  // Note that tile Y coords go UPWARDS (0 = bottom-most)
+  // So: draw x = main_panel.x + (tx - scroll_x) * 32
+  //     draw y = main_panel.y + main_panel.h - (ty + 1 - scroll_y) * 32
+  scroll_x: 0,
+  scroll_y: 0
 };
 
 
@@ -348,6 +355,67 @@ function render_UI()
   ctx.fillStyle = DIV_COLOR;
   ctx.fillRect(room_x, text_y, ROOM_W, thick);
 
+}
+
+
+function render_getDrawX(tx)
+{
+  // relative to top of main panel
+  return (tx - Screen.scroll_x) * 32 * Screen.scale;
+}
+
+
+function render_getDrawY(ty)
+{
+  // relative to top of main panel
+  return Screen.main_panel.h - (ty + 1 - Screen.scroll_x) * 32 * Screen.scale;
+}
+
+
+function render_TileRaw(x, y, id)
+{
+  var W = 32 * Screen.scale;
+
+  x = x + Screen.main_panel.x;
+  y = y + Screen.main_panel.y;
+
+  // Convert id string to position in tileset.
+  // The id string is always <uppercase letter><digit>, e.g. "A3" or "M0".
+  // The letter is the row, the digit is the column (1,2,3...8,9,0).
+
+  var row = id.charCodeAt(0);
+  var col = id.charCodeAt(1);
+
+  // strange ID?
+  if (! row || row < 65 || row > 90) return;
+  if (! col || col < 48 || col > 57) return;
+
+  row = row - 65;
+  col = col - 49;
+
+  if (col < 0) col = 9;
+
+  // actually draw it
+  var sx = col * W;
+  var sy = row * W;
+
+  ctx.drawImage(Screen.tileset, sx, sy, W, W, x, y, W, W);
+}
+
+
+function render_Tile(tx, ty, id)
+{
+  var W = 32 * Screen.scale;
+
+  // get coordinate in main panel (for top-left corner)
+  var x = render_getDrawX(tx);
+  var y = render_getDrawY(ty);
+
+  // skip if not visible
+  if (x < -W || x > Screen.main_panel.w) return;
+  if (y < -W || y > Screen.main_panel.h) return;
+
+  render_TileRaw(x, y, id);
 }
 
 
