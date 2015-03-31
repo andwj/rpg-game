@@ -59,6 +59,10 @@ function main_BeginGame()
 	// user has pressed SPACE to start a new game
 
 	render_ClearBackground();
+
+	// FIXME : create world, set up UI, etc..
+
+	render_RefreshAll();
 }
 
 

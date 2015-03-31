@@ -162,7 +162,7 @@ function render_PlacePanels()
 		y: my,
 		w: Screen.width - mx,
 		h: 80 * Screen.scale,
-		bg: "#006"
+		bg: "#015"
 	};
 }
 
@@ -388,27 +388,6 @@ function render_PanelFrames()
 }
 
 
-function render_UI()
-{
-	var room_x = 800 - ROOM_W;
-
-	var text_y = ROOM_H
-		var text_h = 500 - ROOM_H
-
-		var thick = 3;
-
-	ctx.fillStyle = DIV_COLOR;
-	ctx.fillRect(room_x - thick, 0, thick, 500);
-
-	ctx.fillStyle = TEXT_BG;
-	ctx.fillRect(room_x, text_y, ROOM_W, text_h);
-
-	ctx.fillStyle = DIV_COLOR;
-	ctx.fillRect(room_x, text_y, ROOM_W, thick);
-
-}
-
-
 function render_getDrawX(tx)
 {
 	// relative to left edge of main panel
@@ -470,25 +449,73 @@ function render_Tile(tx, ty, id)
 }
 
 
-function render_Sprite(rx, ry, sprite)
+function render_BeginPanel(panel)
 {
-	var img = sprite.img;
+	render_BeginClip(panel.x, panel.y, panel.w, panel.h);
 
-	if (! img)
-		return;
+	ctx.fillStyle = panel.bg;
+	ctx.fillRect(panel.x - 4, panel.y - 4, panel.w + 8, panel.h + 8);
+}
 
-	var x = (800 - ROOM_W + ROOM_W * rx);
-	var y = (               ROOM_H * ry);
 
-	// FIXME : apply proper origin
+function render_EndPanel()
+{
+	render_EndClip();
+}
 
-	x = x - img.width / 2;
-	y = y - img.height;
 
-	x = Math.floor(x);
-	y = Math.floor(y);
+function render_WholeMap()
+{
+	// whenever the map scrolls, must call this
 
-	ctx.drawImage(img, x, y);
+	render_BeginPanel(Screen.main_panel);
+
+	// TODO
+
+	render_EndPanel();
+}
+
+
+function render_TextArea()
+{
+	render_BeginPanel(Screen.text_panel);
+
+	// TODO
+
+	render_EndPanel();
+}
+
+
+function render_InfoArea()
+{
+	render_BeginPanel(Screen.info_panel);
+
+	// TODO
+
+	render_EndPanel();
+}
+
+
+function render_Radar()
+{
+	render_BeginPanel(Screen.radar_panel);
+
+	// TODO
+
+	render_EndPanel();
+}
+
+
+function render_RefreshAll()
+{
+	// draws everything from scratch (the whole canvas)
+
+	render_PanelFrames();
+
+	render_WholeMap();
+	render_TextArea();
+	render_InfoArea();
+	render_Radar();
 }
 
 
