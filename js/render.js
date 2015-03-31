@@ -127,21 +127,24 @@ function render_PlacePanels()
 	var mx  = 248 * Screen.scale;
 	var my  = Screen.height - 80 * Screen.scale;
 	var buf = 8 * Screen.scale;
+	var info_h = 320 * Screen.scale
 
 	Screen.info_panel =
 	{
 		x: 0,
 		y: 0,
 		w: mx - buf,
-		h: my - buf
+		h: info_h,
+		bg: "#444"
 	};
 
 	Screen.radar_panel =
 	{
 		x: 0,
-		y: my,
+		y: info_h + buf,
 		w: mx - buf,
-		h: 80 * Screen.scale
+		h: Screen.height - info_h - buf,
+		bg: "#000"
 	};
 
 	Screen.main_panel =
@@ -149,7 +152,8 @@ function render_PlacePanels()
 		x: mx,
 		y: 0,
 		w: Screen.width - mx,
-		h: my - buf
+		h: my - buf,
+		bg: "#000"
 	};
 
 	Screen.text_panel =
@@ -157,7 +161,8 @@ function render_PlacePanels()
 		x: mx,
 		y: my,
 		w: Screen.width - mx,
-		h: 80 * Screen.scale
+		h: 80 * Screen.scale,
+		bg: "#006"
 	};
 }
 
@@ -334,6 +339,52 @@ function render_BigPicture(img, back_col, text_dy, text)
 
 		ctx.fillText(text, x, y);
 	}
+}
+
+
+function render_PanelFrames()
+{
+	// Clears the canvas and draws the separator elements.
+	// If we ever need to redraw the whole screen, this must be called
+	// (before or after everything else).
+
+	var ix = Screen.info_panel.w;
+	var iy = Screen.info_panel.h;
+
+	var buf  = 8 * Screen.scale;
+	var ofs  = 2 * Screen.scale;
+	var ofs2 = buf - ofs - 1;
+
+	var frame_color = "#777";
+
+	// vertical bar next to info/radar panels
+
+	ctx.fillStyle = "#000"; // Screen.info_panel.bg;
+	ctx.fillRect(ix, 0, buf, Screen.height);
+
+	ctx.fillStyle = frame_color;
+	ctx.fillRect(ix + ofs,  0, 1, Screen.height);
+	ctx.fillRect(ix + ofs2, 0, 1, Screen.height);
+
+	// horizontal bar below the info panel
+
+	ctx.fillStyle = "#000"; // Screen.info_panel.bg;
+	ctx.fillRect(0, iy, ix, buf);
+
+	ctx.fillStyle = frame_color;
+	ctx.fillRect(0, iy + ofs,  ix + ofs, 1);
+	ctx.fillRect(0, iy + ofs2, ix + ofs, 1);
+
+	// horizontal bar above text panel
+
+	var ty = Screen.main_panel.h;
+
+	ctx.fillStyle = "#000"; // Screen.text_panel.bg;
+	ctx.fillRect(ix + buf, ty, Screen.width - ix, buf);
+
+	ctx.fillStyle = frame_color;
+	ctx.fillRect(ix + ofs2, ty + ofs,  Screen.width, 1);
+	ctx.fillRect(ix + ofs2, ty + ofs2, Screen.width, 1);
 }
 
 
