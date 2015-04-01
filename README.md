@@ -55,9 +55,16 @@ Milestone 1
 Milestone 2
 -----------
 
+*  create larger map (60x60 tiles), multiple rooms, corridors
+*  scroll map when needed
+*  draw some player stats (health, armor, gold, strength, wisdom)
+*  ability to die, show a death screen
+*  create a monster, have it move around
+*  monster can attack player and vice versa, can die
+*  render a minimap, scroll when needed
+
 
 Milestone 3
 -----------
 
-*  code to render a minimap
 
