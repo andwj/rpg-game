@@ -20,6 +20,7 @@ function loader_Init()
 	load_total = 0;
 
 	// draw an empty progress bar
+	render_ClearBackground();
 	render_Progress(0, 0);
 
 	return true;

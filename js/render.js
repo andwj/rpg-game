@@ -30,6 +30,15 @@ var ctx = null;
 var Screen = {};
 
 
+function render_SetSmoothing(enable)
+{
+	ctx.imageSmoothingEnabled = enable;
+	ctx.webkitImageSmoothingEnabled = enable;
+	ctx.mozImageSmoothingEnabled = enable;
+	ctx.oImageSmoothingEnabled = enable;  
+}
+
+
 function render_Dimensions()
 {
 	//
@@ -211,9 +220,7 @@ function render_Init()
 	}
 
 
-	// prepare for drawing loading progress bar
-
-	render_ClearBackground();
+	render_SetSmoothing(false);
 
 
 	// OK
