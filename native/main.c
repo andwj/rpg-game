@@ -31,6 +31,11 @@
 #endif
 
 
+ALLEGRO_DISPLAY        *display;
+ALLEGRO_MOUSE_STATE     mouse_state;
+ALLEGRO_KEYBOARD_STATE  kbd_state;
+
+
 bool want_quit;
 
 const char *install_dir = NULL;
@@ -57,8 +62,8 @@ static void ShowInfo()
 
 static bool Verify_InstallDir(const char *path)
 {
-	static char filename[FL_PATH_MAX];
-	sprintf(filename, "%s/prog/track_open.lua", path);
+	static char filename[4096];
+	sprintf(filename, "%s/js/render.js", path);
 
 #if 0  // DEBUG
 	fprintf(stderr, "Trying install dir: [%s]\n", path);
@@ -76,6 +81,12 @@ void Determine_InstallDir(const char *argv0)
 	// secondly find the "Install directory", and store the
 	// result in the global variable 'install_dir'.  This is
 	// where all the LUA scripts and other data files are.
+
+// FIXME
+install_dir = StringDup(".");
+return;
+
+#if 0
 
 	int index;
 	int parms;
@@ -133,75 +144,38 @@ void Determine_InstallDir(const char *argv0)
 
 	if (! Verify_InstallDir(install_dir))
 		Main_FatalError("Unable to find the install directory!\n");
-}
 
-
-/* this is only to prevent ESCAPE key from quitting */
-int Main_key_handler(int event)
-{
-	if (event != FL_SHORTCUT)
-		return 0;
-
-	if (Fl::event_key() == FL_Escape)
-		return 1;  // eat it
-
-	return 0;
-}
-
-
-void Main_InitFLTK()
-{
-	Fl::visual(FL_DOUBLE | FL_RGB);
-
-	screen_w = Fl::w();
-	screen_h = Fl::h();
-
-#if 0  // debug
-	fprintf(stderr, "Screen dimensions = %dx%d\n", screen_w, screen_h);
 #endif
-
-
-	// default font size for widgets
-	FL_NORMAL_SIZE = 16;
-
-	fl_message_font(FL_HELVETICA /* _BOLD */, 18);
 }
 
 
-void Main_OpenWindow()
+void Window_InitAllegro()
 {
-	ConPrintf("Opening main window....\n");
-
- 	Fl::add_handler(Main_key_handler);
-
-
-	main_win = new UI_Window(800, 500, PROG_TITLE " v" PROG_VERSION);
-
-
-	// show window (pass some dummy arguments)
+	if (! al_init())
 	{
-		char *argv[2];
-		argv[0] = strdup("Rpg-Game.exe");
-		argv[1] = NULL;
-
-		main_win->show(1 /* argc */, argv);
+		Main_FatalError("Failed to init Allegro.\n");
 	}
 
-	Fl::wait(0.1);
-	Fl::wait(0.1);
+	al_init_primitives_addon();
+	al_install_mouse();
+	al_install_keyboard();
+	al_init_image_addon();
+}
 
-	main_win->CreateCanvas();
+
+void Window_Create()
+{
+	display = al_create_display(640, 480);
+
+	if (! display)
+	{
+		Main_FatalError("Failed to create window\n");
+	}
 }
 
 
 void Main_Shutdown(bool error)
 {
-	if (main_win)
-	{
-		delete main_win;
-		main_win = NULL;
-	}
-
 //!!!	Script_Close();
 }
 
@@ -220,7 +194,9 @@ void Main_FatalError(const char *msg, ...)
 
 	fprintf(stderr, "\n%s\n\n", buffer);
 
-	fl_alert("%s", buffer);
+//  FIXME
+//  al_init_native_dialog_addon();
+//  al_show_native_message_box(display, "Error", "A fatal error occurred", buffer, NULL, ALLEGRO_MESSAGEBOX_ERROR);
 
 	Main_Shutdown(true);
 
@@ -259,8 +235,7 @@ int main(int argc, char **argv)
 	}
 
 
-	// prepare for dialogs...
-	Main_InitFLTK();
+	Window_InitAllegro();
 
 
 	Determine_InstallDir(argv[0]);
@@ -282,24 +257,29 @@ int main(int argc, char **argv)
 
 //!!	Script_Open();
 
+
 	// FIXME : script will do this
-	Main_OpenWindow();
+	Window_Create();
 
 
 	// run the GUI until the user quits
-	try
-	{
-		while (! want_quit)
-		{
-			Fl::wait();
-		}
-	}
-	catch (...)
-	{
-		Main_FatalError("An unknown problem occurred (an exception was thrown).\n");
-	}
 
-	//?? Main_WritePrefs();
+	while (! want_quit)
+	{
+		al_get_mouse_state(&mouse_state);
+		al_get_keyboard_state(&kbd_state);
+
+		static int r = 0; r++;
+
+		al_clear_to_color(al_map_rgb(r & 0xff, 0x80, 0));
+
+		al_flip_display();
+
+		al_rest(0.005);
+
+		if (al_key_down(&kbd_state, ALLEGRO_KEY_ESCAPE))
+			want_quit = true;
+	}
 
 	Main_Shutdown(false);
 
