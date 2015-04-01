@@ -460,8 +460,8 @@ function render_TileRaw(x, y, id)
 	if (col < 0) col = 9;
 
 	// actually draw it
-	var sx = col * W;
-	var sy = row * W;
+	var sx = col * 32;
+	var sy = row * 32;
 
 	ctx.drawImage(Screen.tileset, sx, sy, 32, 32, x, y, W, W);
 }
@@ -488,6 +488,8 @@ function render_WholeMap()
 	// whenever the map scrolls, must call this
 
 	render_BeginPanel(Screen.main_panel);
+
+	render_Tile(5, 5, "G3");
 
 	// TODO
 
