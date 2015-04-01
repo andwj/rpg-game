@@ -220,6 +220,7 @@ function render_Init()
 	}
 
 
+	// this causes doubled-up images to appear pixelated (instead of blurry)
 	render_SetSmoothing(false);
 
 
@@ -230,10 +231,7 @@ function render_Init()
 
 function render_LoadTileset()
 {
-	if (Screen.scale > 1)
-		Screen.tileset = load_Image("img/tileset_2x.png");
-	else
-		Screen.tileset = load_Image("img/tileset.png");
+	Screen.tileset = load_Image("img/tileset.png");
 }
 
 
@@ -465,7 +463,7 @@ function render_TileRaw(x, y, id)
 	var sx = col * W;
 	var sy = row * W;
 
-	ctx.drawImage(Screen.tileset, sx, sy, W, W, x, y, W, W);
+	ctx.drawImage(Screen.tileset, sx, sy, 32, 32, x, y, W, W);
 }
 
 
