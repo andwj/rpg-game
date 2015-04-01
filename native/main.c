@@ -25,11 +25,6 @@
 
 #include "headers.h"
 
-#ifndef WIN32
-#include <sys/time.h>
-#include <time.h>
-#endif
-
 
 bool want_quit;
 
