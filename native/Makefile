@@ -49,7 +49,7 @@ LIBS=-lm -lz $(AL_LIBS)
 
 #----- Program Objects ----------------------------------------------
 
-OBJS=	$(OBJ_DIR)/main2.o
+OBJS=	$(OBJ_DIR)/main.o
 
 ##	$(OBJ_DIR)/input.o   +
 ##	$(OBJ_DIR)/window.o
