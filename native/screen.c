@@ -25,6 +25,8 @@
 
 static ALLEGRO_DISPLAY * display;
 
+static ALLEGRO_BITMAP * canvas;
+
 static ALLEGRO_MOUSE_STATE     mouse_state;
 static ALLEGRO_KEYBOARD_STATE  kbd_state;
 
@@ -49,27 +51,56 @@ void Screen_Init(void)
 
 void Screen_Shutdown(void)
 {
+	if (display)
+		al_set_target_backbuffer(display);
+
+	if (canvas)
+	{
+	   al_destroy_bitmap(canvas);
+	   canvas = NULL;
+	}
+
+	if (display)
+	{
+		al_destroy_display(display);
+		display = NULL;
+	}
 }
 
 
 void Screen_OpenWindow(int w, int h)
 {
-	display = al_create_display(640, 480);
+	display = al_create_display(w, h);
 
 	if (! display)
-	{
 		Main_FatalError("Failed to create window\n");
-	}
+
+	canvas = al_create_bitmap(w, h);
+
+	if (! canvas)
+		Main_FatalError("Failed to create canvas bitmap\n");
+
+	// the canvas bitmap is always the current target EXCEPT when copying to the back-buffer
+
+	al_set_target_bitmap(canvas);
+
+	al_clear_to_color(al_map_rgb(0,64,0));
 }
 
 
 void Screen_Render(void)
 {
-	static int r = 0; r++;
+// TEST
+static int r = 0; r++;
+al_clear_to_color(al_map_rgb(r & 0xff, 0x80, 0));
 
-	al_clear_to_color(al_map_rgb(r & 0xff, 0x80, 0));
+	// copy the canvas bitmap to the back-buffer
+	al_set_target_backbuffer(display);
+	al_draw_bitmap(canvas, 0, 0, 0 /* flags */);
 
 	al_flip_display();
+
+	al_set_target_bitmap(canvas);
 }
 
 
