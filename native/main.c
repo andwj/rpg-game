@@ -31,11 +31,6 @@
 #endif
 
 
-ALLEGRO_DISPLAY        *display;
-ALLEGRO_MOUSE_STATE     mouse_state;
-ALLEGRO_KEYBOARD_STATE  kbd_state;
-
-
 bool want_quit;
 
 const char *install_dir = NULL;
@@ -43,7 +38,7 @@ const char *install_dir = NULL;
 
 /* ----- user information ----------------------------- */
 
-static void ShowInfo()
+static void ShowInfo(void)
 {
 	printf(
 		"\n"
@@ -149,36 +144,11 @@ return;
 }
 
 
-void Window_InitAllegro()
-{
-	if (! al_init())
-	{
-		Main_FatalError("Failed to init Allegro.\n");
-	}
-
-	al_init_native_dialog_addon();
-	al_init_primitives_addon();
-	al_init_image_addon();
-
-	al_install_mouse();
-	al_install_keyboard();
-}
-
-
-void Window_Create()
-{
-	display = al_create_display(640, 480);
-
-	if (! display)
-	{
-		Main_FatalError("Failed to create window\n");
-	}
-}
-
-
 void Main_Shutdown(bool error)
 {
-//!!!	Script_Close();
+	Screen_Shutdown();
+
+//!!!	JS_Close();
 }
 
 
@@ -196,9 +166,9 @@ void Main_FatalError(const char *msg, ...)
 
 	fprintf(stderr, "\n%s\n\n", buffer);
 
-	al_show_native_message_box(display, PROG_TITLE " : Error", "A fatal error occurred", buffer, NULL, ALLEGRO_MESSAGEBOX_ERROR);
-
 	Main_Shutdown(true);
+
+	al_show_native_message_box(NULL, PROG_TITLE " : Error", "A fatal error occurred", buffer, NULL, ALLEGRO_MESSAGEBOX_ERROR);
 
 	exit(9);
 }
@@ -207,7 +177,7 @@ void Main_FatalError(const char *msg, ...)
 /* ----- Main Program ----------------------------- */
 
 
-void Main_ParseArguments()
+void Main_ParseArguments(void)
 {
 	int index;
 	int parms;
@@ -235,7 +205,7 @@ int main(int argc, char **argv)
 	}
 
 
-	Window_InitAllegro();
+	Screen_Init();
 
 
 	Determine_InstallDir(argv[0]);
@@ -255,30 +225,21 @@ int main(int argc, char **argv)
 	//?? Main_ReadPrefs();
 
 
-//!!	Script_Open();
+//!!	JS_Load();
 
 
 	// FIXME : script will do this
-	Window_Create();
+	Screen_OpenWindow(640, 480);
 
 
 	// run the GUI until the user quits
 
 	while (! want_quit)
 	{
-		al_get_mouse_state(&mouse_state);
-		al_get_keyboard_state(&kbd_state);
-
-		static int r = 0; r++;
-
-		al_clear_to_color(al_map_rgb(r & 0xff, 0x80, 0));
-
-		al_flip_display();
+		Screen_HandleInput();
+		Screen_Render();
 
 		al_rest(0.005);
-
-		if (al_key_down(&kbd_state, ALLEGRO_KEY_ESCAPE))
-			want_quit = true;
 	}
 
 	Main_Shutdown(false);

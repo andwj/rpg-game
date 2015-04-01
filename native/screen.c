@@ -23,8 +23,25 @@
 #include "headers.h"
 
 
+static ALLEGRO_DISPLAY * display;
+
+static ALLEGRO_MOUSE_STATE     mouse_state;
+static ALLEGRO_KEYBOARD_STATE  kbd_state;
+
+
 void Screen_Init(void)
 {
+	if (! al_init())
+	{
+		Main_FatalError("Failed to init Allegro.\n");
+	}
+
+	al_init_native_dialog_addon();
+	al_init_primitives_addon();
+	al_init_image_addon();
+
+	al_install_mouse();
+	al_install_keyboard();
 }
 
 
@@ -35,6 +52,32 @@ void Screen_Shutdown(void)
 
 void Screen_OpenWindow(int w, int h)
 {
+	display = al_create_display(640, 480);
+
+	if (! display)
+	{
+		Main_FatalError("Failed to create window\n");
+	}
+}
+
+
+void Screen_Render(void)
+{
+	static int r = 0; r++;
+
+	al_clear_to_color(al_map_rgb(r & 0xff, 0x80, 0));
+
+	al_flip_display();
+}
+
+
+void Screen_HandleInput(void)
+{
+	al_get_mouse_state(&mouse_state);
+	al_get_keyboard_state(&kbd_state);
+
+	if (al_key_down(&kbd_state, ALLEGRO_KEY_ESCAPE))
+		want_quit = true;
 }
 
 
