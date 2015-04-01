@@ -49,15 +49,13 @@ LIBS=-lm -lz $(AL_LIBS)
 
 #----- Program Objects ----------------------------------------------
 
-OBJS=	$(OBJ_DIR)/main.o
-
-##	$(OBJ_DIR)/input.o   +
-##	$(OBJ_DIR)/window.o
+OBJS=	$(OBJ_DIR)/main.o	\
+	$(OBJ_DIR)/screen.o
 
 ##!!!	$(OBJ_DIR)/duktape.o
 
 $(OBJ_DIR)/%.o: %.c
-	$(CC) $(CCFLAGS) -o $@ -c $<
+	$(CC) $(CFLAGS) -o $@ -c $<
 
 
 #----- Targets ----------------------------------------------------

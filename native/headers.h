@@ -66,9 +66,7 @@
 /* Program stuff */
 
 #include "main.h"
-
-// #include "input.h"
-// #include "render.h"
+#include "screen.h"
 
 #define MSG_BUF_LEN		2000
 
