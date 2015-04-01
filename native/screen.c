@@ -27,6 +27,8 @@ static ALLEGRO_DISPLAY * display;
 
 static ALLEGRO_BITMAP * canvas;
 
+static ALLEGRO_EVENT_QUEUE * queue;
+
 static ALLEGRO_MOUSE_STATE     mouse_state;
 static ALLEGRO_KEYBOARD_STATE  kbd_state;
 
@@ -85,26 +87,29 @@ void Screen_OpenWindow(int w, int h)
 	al_set_target_bitmap(canvas);
 
 	al_clear_to_color(al_map_rgb(0,64,0));
+
+
+	// input handling
+
+	queue = al_create_event_queue();
+
+	if (! queue)
+		Main_FatalError("Failed to create event queue\n");
+	
+	if (al_get_keyboard_event_source())
+		al_register_event_source(queue, al_get_keyboard_event_source());
+
+	if (al_get_mouse_event_source())
+		al_register_event_source(queue, al_get_mouse_event_source());
 }
 
 
-void Screen_HandleInput(void)
-{
-	al_get_mouse_state(&mouse_state);
-	al_get_keyboard_state(&kbd_state);
-
-	if (al_key_down(&kbd_state, ALLEGRO_KEY_ESCAPE))
-		want_quit = true;
-}
+void Screen_ProcessEvents(void);
 
 
 void Screen_Update(void)
 {
-// TEST
-static int r = 0; r++;
-al_clear_to_color(al_map_rgb(r & 0xff, 0x80, 0));
-
-	Screen_HandleInput();
+	Screen_ProcessEvents();
 
 	// copy the canvas bitmap to the back-buffer
 	al_set_target_backbuffer(display);
@@ -112,11 +117,81 @@ al_clear_to_color(al_map_rgb(r & 0xff, 0x80, 0));
 
 	al_flip_display();
 
+	// go back to drawing on the canvas again
 	al_set_target_bitmap(canvas);
 
 	al_rest(0.005);
 }
 
+
+//----------------------------------------------------------------------
+//    DRAWING ONTO CANVAS
+//----------------------------------------------------------------------
+
+// TODO
+
+
+//----------------------------------------------------------------------
+//    INPUT HANDLING
+//----------------------------------------------------------------------
+
+
+static void Event_KeyDown(ALLEGRO_EVENT *ev)
+{
+	// TODO
+}
+
+static void Event_KeyUp(ALLEGRO_EVENT *ev)
+{
+	// TODO
+}
+
+
+static void Event_MouseDown(ALLEGRO_EVENT *ev)
+{
+	// TODO
+}
+
+static void Event_MouseUp(ALLEGRO_EVENT *ev)
+{
+	// TODO
+}
+
+
+void Screen_ProcessEvents(void)
+{
+	ALLEGRO_EVENT ev;
+
+	al_get_mouse_state(&mouse_state);
+	al_get_keyboard_state(&kbd_state);
+
+	// TODO : use event system
+	if (al_key_down(&kbd_state, ALLEGRO_KEY_ESCAPE))
+		want_quit = true;
+
+	while (al_get_next_event(queue, &ev))
+	{
+		switch (ev.type)
+		{
+			case ALLEGRO_EVENT_KEY_DOWN:
+				Event_KeyDown(&ev);
+				break;
+
+			case ALLEGRO_EVENT_KEY_UP:
+				Event_KeyUp(&ev);
+				break;
+
+			case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
+				Event_MouseDown(&ev);
+
+			case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
+				Event_MouseUp(&ev);
+
+			default:
+				break;
+		}
+	}
+}
 
 //--- editor settings ---
 // vi:ts=4:sw=4:noexpandtab
