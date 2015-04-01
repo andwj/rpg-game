@@ -16,11 +16,11 @@ PREFIX=/usr/local
 
 DATA_DIR=$(PREFIX)/share/rpg-game
 
-CC=gcc
+CC=gcc -std=c99
 
 OBJ_DIR=obj_linux
 
-OPTIMISE=-O0 -g3
+OPTIMISE=-O0 -g3 -fstrict-aliasing
 
 # operating system choices: UNIX WIN32
 OS=UNIX
