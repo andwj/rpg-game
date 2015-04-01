@@ -29,8 +29,7 @@ void Screen_Shutdown(void);
 
 void Screen_OpenWindow(int w, int h);
 
-void Screen_Render(void);
-void Screen_HandleInput(void);
+void Screen_Update(void);
 
 
 #endif /* __UI_SCREEN_H__ */

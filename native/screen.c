@@ -88,11 +88,23 @@ void Screen_OpenWindow(int w, int h)
 }
 
 
-void Screen_Render(void)
+void Screen_HandleInput(void)
+{
+	al_get_mouse_state(&mouse_state);
+	al_get_keyboard_state(&kbd_state);
+
+	if (al_key_down(&kbd_state, ALLEGRO_KEY_ESCAPE))
+		want_quit = true;
+}
+
+
+void Screen_Update(void)
 {
 // TEST
 static int r = 0; r++;
 al_clear_to_color(al_map_rgb(r & 0xff, 0x80, 0));
+
+	Screen_HandleInput();
 
 	// copy the canvas bitmap to the back-buffer
 	al_set_target_backbuffer(display);
@@ -101,16 +113,8 @@ al_clear_to_color(al_map_rgb(r & 0xff, 0x80, 0));
 	al_flip_display();
 
 	al_set_target_bitmap(canvas);
-}
 
-
-void Screen_HandleInput(void)
-{
-	al_get_mouse_state(&mouse_state);
-	al_get_keyboard_state(&kbd_state);
-
-	if (al_key_down(&kbd_state, ALLEGRO_KEY_ESCAPE))
-		want_quit = true;
+	al_rest(0.005);
 }
 
 

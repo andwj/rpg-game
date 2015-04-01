@@ -232,14 +232,9 @@ int main(int argc, char **argv)
 	Screen_OpenWindow(640, 480);
 
 
-	// run the GUI until the user quits
-
 	while (! want_quit)
 	{
-		Screen_HandleInput();
-		Screen_Render();
-
-		al_rest(0.005);
+		Screen_Update();
 	}
 
 	Main_Shutdown(false);
