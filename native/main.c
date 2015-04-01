@@ -156,10 +156,12 @@ void Window_InitAllegro()
 		Main_FatalError("Failed to init Allegro.\n");
 	}
 
+	al_init_native_dialog_addon();
 	al_init_primitives_addon();
+	al_init_image_addon();
+
 	al_install_mouse();
 	al_install_keyboard();
-	al_init_image_addon();
 }
 
 
@@ -194,9 +196,7 @@ void Main_FatalError(const char *msg, ...)
 
 	fprintf(stderr, "\n%s\n\n", buffer);
 
-//  FIXME
-//  al_init_native_dialog_addon();
-//  al_show_native_message_box(display, "Error", "A fatal error occurred", buffer, NULL, ALLEGRO_MESSAGEBOX_ERROR);
+	al_show_native_message_box(display, PROG_TITLE " : Error", "A fatal error occurred", buffer, NULL, ALLEGRO_MESSAGEBOX_ERROR);
 
 	Main_Shutdown(true);
 
