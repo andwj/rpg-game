@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------
-//  MAIN WINDOW
+//  SCREEN STUFF (via Allegro)
 //----------------------------------------------------------------------
 //
 //  Copyright (C) 2015  Andrew Apted
@@ -20,63 +20,17 @@
 //
 //----------------------------------------------------------------------
 
-#ifndef __UI_WINDOW_H__
-#define __UI_WINDOW_H__
+#ifndef __UI_SCREEN_H__
+#define __UI_SCREEN_H__
 
 
-class UI_Window : public Fl_Window
-{
-private:
-	Fl_Offscreen canvas;
+void Screen_Init(void);
+void Screen_Shutdown(void);
 
-	bool canvas_ready;
-
-	Fl_Color cur_color;
-	Fl_Font  cur_font;
-	int      cur_size;
-
-	int		 cur_clip_x, cur_clip_y;
-	int		 cur_clip_w, cur_clip_h;
-
-public:
-	UI_Window(int W, int H, const char *title);
-	virtual ~UI_Window();
-
-public:
-	void CreateCanvas();
-
-	// FLTK event handling method
-	int handle(int event);
-
-	// FLTK draw method
-	void draw();
-
-public:
-	/* canvas drawing primitives */
-
-	void ResetState();
-
-	void Color(Fl_Color color);
-	void Font(int size, Fl_Font font);
-	void Clip(int x = -1, int y = -1, int w = -1, int h = -1);
-
-	void Rect(int x, int y, int w, int h);
-	void FillRect(int x, int y, int w, int h);
-
-	void Line(int x1, int y1, int x2, int y2);
-
-	void Text(const char *str, int x, int y);
-	int  TextWidth(const char *str);
-};
+void Screen_OpenWindow(int w, int h);
 
 
-extern int screen_w;
-extern int screen_h;
-
-extern UI_Window * main_win;
-
-
-#endif /* __UI_WINDOW_H__ */
+#endif /* __UI_SCREEN_H__ */
 
 //--- editor settings ---
 // vi:ts=4:sw=4:noexpandtab
