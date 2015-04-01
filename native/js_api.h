@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------
-//  ALL INCLUDES
+//  JAVASCRIPT INTERFACE (to Duktape)
 //----------------------------------------------------------------------
 //
 //  Copyright (C) 2015  Andrew Apted
@@ -20,61 +20,16 @@
 //
 //----------------------------------------------------------------------
 
-#ifndef __ALL_HEADERS_H__
-#define __ALL_HEADERS_H__
+#ifndef __JSFOO_API_H__
+#define __JSFOO_API_H__
 
-/* OS specifics */
-#ifdef WIN32
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#endif
 
-/* C library (C99) */
+void JS_Init(void);
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <stdint.h>
-#include <limits.h>
-#include <assert.h>
+void JS_Load(void);
 
-#include <string.h>
-#include <ctype.h>
-#include <math.h>
-#include <errno.h>
-#include <time.h>
 
-/* Allegro 5 */
-
-#include <allegro5/allegro.h>
-#include <allegro5/allegro_image.h>
-#include <allegro5/allegro_native_dialog.h>
-#include <allegro5/allegro_primitives.h>
-#include <allegro5/allegro_font.h>
-#include <allegro5/allegro_ttf.h>
-
-/* AJ's utilities */
-
-#include "aj_macros.h"
-#include "aj_arg_lib.h"
-
-#define SYS_ASSERT(x)   assert(x)
-
-// FIXME : temp crud
-#define StringDup(x)    strdup(x)
-#define StringFree(x)   free(((void *)(x)))
-
-/* Program stuff */
-
-#include "main.h"
-#include "js_api.h"
-#include "screen.h"
-
-#define MSG_BUF_LEN		2000
-
-/* Note : duktape is NOT included here */
-
-#endif /* __ALL_HEADERS_H__ */
+#endif /* __JSFOO_API_H__ */
 
 //--- editor settings ---
 // vi:ts=4:sw=4:noexpandtab

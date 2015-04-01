@@ -50,9 +50,9 @@ LIBS=-lm -lz $(AL_LIBS)
 #----- Program Objects ----------------------------------------------
 
 OBJS=	$(OBJ_DIR)/main.o	\
-	$(OBJ_DIR)/screen.o
-
-##!!!	$(OBJ_DIR)/duktape.o
+	$(OBJ_DIR)/js_api.o	\
+	$(OBJ_DIR)/screen.o	\
+	$(OBJ_DIR)/duktape.o
 
 $(OBJ_DIR)/%.o: %.c
 	$(CC) $(CFLAGS) -o $@ -c $<
