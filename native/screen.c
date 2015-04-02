@@ -33,6 +33,17 @@ static ALLEGRO_MOUSE_STATE     mouse_state;
 static ALLEGRO_KEYBOARD_STATE  kbd_state;
 
 
+typedef struct
+{
+	ALLEGRO_COLOR color;
+
+	ALLEGRO_FONT * font;
+
+} drawing_context_t;
+
+static drawing_context_t ctx;
+
+
 void Screen_Init(void)
 {
 	if (! al_init())
@@ -48,6 +59,9 @@ void Screen_Init(void)
 
 	al_install_mouse();
 	al_install_keyboard();
+
+	// reset the drawing context
+	memset(&ctx, 0, sizeof(ctx));
 }
 
 
@@ -109,6 +123,7 @@ void Screen_ProcessEvents(void);
 
 void Screen_Update(void)
 {
+	Screen_ResetClip();
 	Screen_ProcessEvents();
 
 	// copy the canvas bitmap to the back-buffer
@@ -184,7 +199,28 @@ static ALLEGRO_FONT * LookupFont(int size, int face)
 }
 
 
-// TODO
+void Screen_SetFont(int size, int face)
+{
+	ctx.font = LookupFont(size, face);
+}
+
+
+void Screen_SetColor(int r, int g, int b, int a)
+{
+	ctx.color = al_map_rgba(r, g, b, a);
+}
+
+
+void Screen_SetClip(int x, int y, int w, int h)
+{
+	al_set_clipping_rectangle(x, y, w, h);
+}
+
+
+void Screen_ResetClip(void)
+{
+	al_reset_clipping_rectangle();
+}
 
 
 //----------------------------------------------------------------------

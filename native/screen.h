@@ -32,6 +32,12 @@ void Screen_Update(void);
 
 /* canvas drawing functions */
 
+void Screen_SetColor(int r, int g, int b, int a);
+void Screen_SetFont (int size, int face);
+
+void Screen_SetClip  (int x, int y, int w, int h);
+void Screen_ResetClip(void);
+
 // TODO
 
 
