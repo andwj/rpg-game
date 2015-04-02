@@ -33,6 +33,16 @@ static ALLEGRO_MOUSE_STATE     mouse_state;
 static ALLEGRO_KEYBOARD_STATE  kbd_state;
 
 
+static int display_flags = ALLEGRO_WINDOWED;
+
+static int display_width  = 640;
+static int display_height = 480;
+
+// these are determined after opening the display
+int screen_w;
+int screen_h;
+
+
 typedef struct
 {
 	ALLEGRO_COLOR color;
@@ -62,6 +72,30 @@ void Screen_Init(void)
 
 	// reset the drawing context
 	memset(&ctx, 0, sizeof(ctx));
+
+	// check some arguments
+
+	if (aj_arg_Exists('f', "fullscreen"))
+		display_flags = ALLEGRO_FULLSCREEN_WINDOW;
+
+	int index;
+	int parms;
+
+	index = aj_arg_Find('g', "geom", &parms);
+
+	if (index >= 0)
+	{
+		if (parms < 1)
+			Main_FatalError("Missing size (like 800x600) for -geom option.\n");
+
+		const char * geom = aj_arg_Param(index, 0);
+
+		if (sscanf(geom, "%dx%d", &display_width, &display_height) != 2)
+			Main_FatalError("Invalid size (like 800x600) for -geom option.\n");
+
+		if (display_width < 100 || display_height < 100)
+			Main_FatalError("Invalid -geom size (too small).\n");
+	}
 }
 
 
@@ -84,14 +118,20 @@ void Screen_Shutdown(void)
 }
 
 
-void Screen_OpenWindow(int w, int h)
+void Screen_OpenWindow(void)
 {
-	display = al_create_display(w, h);
+	al_set_new_display_flags(display_flags);
+
+	display = al_create_display(display_width, display_height);
 
 	if (! display)
 		Main_FatalError("Failed to create window\n");
 
-	canvas = al_create_bitmap(w, h);
+	screen_w = al_get_display_width (display);
+	screen_h = al_get_display_height(display);
+
+
+	canvas = al_create_bitmap(screen_w, screen_h);
 
 	if (! canvas)
 		Main_FatalError("Failed to create canvas bitmap\n");

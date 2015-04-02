@@ -225,8 +225,7 @@ int main(int argc, char **argv)
 //!!	JS_Load();
 
 
-	// FIXME : script will do this
-	Screen_OpenWindow(640, 480);
+	Screen_OpenWindow();
 
 
 	while (! want_quit)

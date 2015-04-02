@@ -24,10 +24,13 @@
 #define __UI_SCREEN_H__
 
 
+extern int screen_w, screen_h;
+
+
 void Screen_Init(void);
 void Screen_Shutdown(void);
 
-void Screen_OpenWindow(int w, int h);
+void Screen_OpenWindow(void);
 void Screen_Update(void);
 
 /* canvas drawing functions */
