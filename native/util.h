@@ -24,8 +24,18 @@
 #define __NATFOO_UTIL_H__
 
 
+#define SYS_ASSERT(x)	assert(x)
+
+#define MSG_BUF_LEN		2048
+
+
 /* string utilities */
 
+int StringCaseCmp(const char *A, const char *B);
+
+char * StringNew(int length);
+char * StringDup(const char *orig);
+void   StringFree(const char *str);
 
 #endif /* __NATFOO_UTIL_H__ */
 

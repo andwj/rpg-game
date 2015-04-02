@@ -58,20 +58,12 @@
 #include "aj_macros.h"
 #include "aj_arg_lib.h"
 
-#define SYS_ASSERT(x)   assert(x)
-
-// FIXME : temp crud
-#define StringDup(x)    strdup(x)
-#define StringFree(x)   free(((void *)(x)))
-
 /* Program stuff */
 
 #include "main.h"
 #include "js_api.h"
 #include "screen.h"
 #include "util.h"
-
-#define MSG_BUF_LEN		2000
 
 /* Note : duktape is NOT included here */
 
