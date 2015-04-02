@@ -69,6 +69,7 @@
 #include "main.h"
 #include "js_api.h"
 #include "screen.h"
+#include "util.h"
 
 #define MSG_BUF_LEN		2000
 
