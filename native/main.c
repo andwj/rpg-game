@@ -228,6 +228,9 @@ int main(int argc, char **argv)
 	Screen_OpenWindow();
 
 
+//!!	JS_BeginScript();
+
+
 	while (! want_quit)
 	{
 		Screen_Update();

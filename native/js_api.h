@@ -28,6 +28,8 @@ void JS_Init(void);
 
 void JS_Load(void);
 
+void JS_BeginScript(void);
+
 
 #endif /* __JSFOO_API_H__ */
 

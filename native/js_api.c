@@ -25,14 +25,60 @@
 #include "duktape.h"
 
 
+static duk_context * js_ctx;
+
+
+static duk_ret_t Native_set_font(duk_context *ctx)
+{
+	int size = duk_require_int(ctx, 0);
+	int face = duk_require_int(ctx, 1);
+
+	Screen_SetFont(size, face);
+
+	return 0;
+}
+
+
+//----------------------------------------------------------------------
+
+
 void JS_Init(void)
+{
+	js_ctx = duk_create_heap_default();
+
+	if (! js_ctx)
+		Main_FatalError("Failed to create JS context.\n");
+}
+
+
+static void JS_RegisterFunc()
 {
 	// TODO
 }
 
 
+static void JS_SetupNativeObject(void)
+{
+	// set Native.active to true
+
+	// FIXME
+
+	// add callback API
+
+	// FIXME  JS_RegisterFunc("set_font", &Native_set_font);
+}
+
+
 void JS_LoadFile(const char *filename)
 {
+	if (duk_peval_file(js_ctx, filename) != 0)
+	{
+		Main_FatalError("Failed to load javascript file: %s\n%s\n",
+			filename, duk_safe_to_string(js_ctx, -1));
+	}
+
+	// ignore any result
+	duk_pop(js_ctx);
 }
 
 
@@ -64,6 +110,18 @@ void JS_Load(void)
 
 		JS_LoadFile(s);
 	}
+}
+
+
+void JS_BeginScript(void)
+{
+	// flesh out the 'Native' object
+
+	JS_SetupNativeObject();
+
+	// call the 'init()' function
+
+	// FIXME
 }
 
 //--- editor settings ---
