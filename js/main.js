@@ -16,6 +16,8 @@ function init()
 {
 	game_mode = "loading";
 
+	native_Init();
+
 	if (! render_Init())
 		return;
 
