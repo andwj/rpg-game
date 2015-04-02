@@ -222,6 +222,35 @@ void Screen_ResetClip(void)
 }
 
 
+void Screen_DrawRect(int x, int y, int w, int h, _Bool filled)
+{
+	if (filled)
+	{
+		al_draw_filled_rectangle(x, y, x+w, y+h, ctx.color);
+	}
+	else
+	{
+		al_draw_rectangle(x, y, x+w, y+h, ctx.color, 1.0 /* thickness */);
+	}
+}
+
+
+void Screen_DrawLine(int x1, int y1, int x2, int y2)
+{
+	al_draw_rectangle(x1, y1, x2, y2, ctx.color, 1.0 /* thickness */);
+}
+
+
+void Screen_DrawText(const char *str, int x, int y)
+{
+	// silently ignore when no font has been set yet
+	if (! ctx.font)
+		return;
+
+	// TODO
+}
+
+
 //
 //  Image caching
 //
