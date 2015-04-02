@@ -9,7 +9,7 @@
 # LICENSE: this makefile is under the zlib license.
 #
 
-PROGRAM=rpg-game
+PROGRAM=../rpg-game
 
 # prefix choices: /usr  /usr/local  /opt
 PREFIX=/usr/local
