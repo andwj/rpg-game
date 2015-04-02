@@ -9,13 +9,18 @@
 "use strict";
 
 
+var Native_check = this.Native;
+
+
 function native_Init()
 {
 	// check if running on native binary
-	if (! Native)
+	if (! Native_check)
 		return;
 
 	// TODO : setup stuff....
+
+	alert("WTF : native?");
 }
 
 
