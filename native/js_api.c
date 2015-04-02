@@ -46,7 +46,7 @@ void JS_Load(void)
 	FILE *fp = fopen("js/all_files.txt", "r");
 
 	if (! fp)
-		Main_FatalError("Failed to open js/all_files.txt");
+		Main_FatalError("Failed to open js/all_files.txt\n");
 
 	while ((s = fgets(line_buf, sizeof(line_buf), fp)))
 	{

@@ -128,6 +128,62 @@ void Screen_Update(void)
 //    DRAWING ONTO CANVAS
 //----------------------------------------------------------------------
 
+// font caching stuff
+typedef struct
+{
+	int size;
+
+	// only support two faces (0 = sans, 1 = mono)
+	int face;
+
+	ALLEGRO_FONT *font;
+
+} cached_font_t;
+
+#define MAX_CACHED_FONTS	64
+
+static cached_font_t cached_fonts[MAX_CACHED_FONTS];
+
+static int num_cached_fonts;
+
+
+static ALLEGRO_FONT * LookupFont(int size, int face)
+{
+	for (int i = 0 ; i < num_cached_fonts ; i++)
+	{
+		cached_font_t * CF = &cached_fonts[i];
+
+		if (CF->size == size && CF->face == face)
+			return CF->font;
+	}
+
+	// not cached, load it now
+
+	if (num_cached_fonts >= MAX_CACHED_FONTS)
+		Main_FatalError("Too many fonts used.\n");
+
+	cached_font_t * CF = &cached_fonts[num_cached_fonts];
+	num_cached_fonts++;
+
+	const char *font_file;
+
+	if (face == 0)
+		font_file = "font/DejaVuLGCSans.ttf";
+	else
+		font_file = "font/DejaVuLGCSansMono.ttf";
+
+    CF->size = size;
+	CF->face = face;
+
+	CF->font = al_load_font(font_file, size, 0 /* flags */);
+
+	if (! CF->font)
+		Main_FatalError("Failed to load font: %s\n", font_file);
+
+	return CF->font;
+}
+
+
 // TODO
 
 
