@@ -35,9 +35,10 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include <limits.h>
-#include <assert.h>
 
+#include <assert.h>
 #include <string.h>
 #include <ctype.h>
 #include <math.h>
