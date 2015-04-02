@@ -30,5 +30,41 @@ void JS_Init(void)
 	// TODO
 }
 
+
+void JS_LoadFile(const char *filename)
+{
+}
+
+
+void JS_Load(void)
+{
+	// read a list of script files to load
+
+	char line_buf[256];
+	char *s;
+
+	FILE *fp = fopen("js/all_files.txt", "r");
+
+	if (! fp)
+		Main_FatalError("Failed to open js/all_files.txt");
+
+	while ((s = fgets(line_buf, sizeof(line_buf), fp)))
+	{
+		// skip whitespace
+		while (isspace(*s))
+			s++;
+
+		// remove trailing newline character
+		if (strchr(s, '/'))
+			strchr(s, '/')[0] = 0;
+
+		// ignore blank lines
+		if (strlen(s) == 0)
+			continue;
+
+		JS_LoadFile(s);
+	}
+}
+
 //--- editor settings ---
 // vi:ts=4:sw=4:noexpandtab

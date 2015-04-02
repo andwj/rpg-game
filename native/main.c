@@ -53,7 +53,7 @@ static void ShowInfo(void)
 static bool Verify_InstallDir(const char *path)
 {
 	static char filename[4096];
-	sprintf(filename, "%s/js/render.js", path);
+	sprintf(filename, "%s/js/all_files.txt", path);
 
 #if 0  // DEBUG
 	fprintf(stderr, "Trying install dir: [%s]\n", path);
@@ -201,6 +201,8 @@ int main(int argc, char **argv)
 
 
 	Screen_Init();
+
+	JS_Init();
 
 
 	Determine_InstallDir(argv[0]);
