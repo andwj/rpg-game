@@ -247,7 +247,11 @@ void Screen_DrawText(const char *str, int x, int y)
 	if (! ctx.font)
 		return;
 
-	// TODO
+	al_hold_bitmap_drawing(true);
+
+	al_draw_text(ctx.font, ctx.color, x, y, 0 /* flags */, str);
+
+	al_hold_bitmap_drawing(false);
 }
 
 
