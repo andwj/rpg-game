@@ -156,7 +156,6 @@ typedef struct
 } cached_font_t;
 
 #define MAX_CACHED_FONTS	64
-
 static cached_font_t cached_fonts[MAX_CACHED_FONTS];
 
 static int num_cached_fonts;
@@ -178,7 +177,7 @@ static ALLEGRO_FONT * LookupFont(int size, int face)
 		Main_FatalError("Too many fonts used.\n");
 
 	cached_font_t * CF = &cached_fonts[num_cached_fonts];
-	num_cached_fonts++;
+	num_cached_fonts += 1;
 
 	const char *font_file;
 
@@ -220,6 +219,53 @@ void Screen_SetClip(int x, int y, int w, int h)
 void Screen_ResetClip(void)
 {
 	al_reset_clipping_rectangle();
+}
+
+
+//
+//  Image caching
+//
+
+typedef struct
+{
+	ALLEGRO_BITMAP * bitmap;
+
+} cached_image_t;
+
+#define MAX_CACHED_IMAGES	256
+static cached_image_t cached_images[MAX_CACHED_IMAGES];
+
+static int num_cached_images;
+
+
+int  Screen_LoadImage(const char *image_name)
+{
+	if (num_cached_images >= MAX_CACHED_IMAGES)
+		Main_FatalError("Too many images used.\n");
+	
+	int id = num_cached_images;
+	num_cached_images += 1;
+
+	cached_image_t * CI = &cached_images[id];
+
+	CI->bitmap = al_load_bitmap(image_name);
+
+	if (! CI->bitmap)
+		Main_FatalError("Failed to load image: %s\n", image_name);
+
+	return id;
+}
+
+
+void Screen_DrawImage(int id, int x, int y, int w, int h)
+{
+	// TODO
+}
+
+
+void Screen_DrawImagePart(int id, int x, int y, int w, int h, int sx, int sy, int sw, int sh)
+{
+	// TODO
 }
 
 

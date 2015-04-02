@@ -38,7 +38,14 @@ void Screen_SetFont (int size, int face);
 void Screen_SetClip  (int x, int y, int w, int h);
 void Screen_ResetClip(void);
 
-// TODO
+void Screen_DrawRect(int x, int y, int w, int h, _Bool filled);
+void Screen_DrawLine(int x1, int y1, int x2, int y2);
+void Screen_DrawText(const char *str, int x, int y);
+
+int  Screen_LoadImage(const char *image_name);
+
+void Screen_DrawImage(int id, int x, int y, int w, int h);
+void Screen_DrawImagePart(int id, int x, int y, int w, int h, int sx, int sy, int sw, int sh);
 
 
 #endif /* __UI_SCREEN_H__ */
