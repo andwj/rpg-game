@@ -589,7 +589,7 @@ function render_TextArea()
 
 	render_SetTextFont();
 
-	ctx.fillStyle = "#9bd";
+	ctx.fillStyle = "#bdf";
 
 	for (var i = 0 ; i < SHOW_LINES ; i++)
 	{
