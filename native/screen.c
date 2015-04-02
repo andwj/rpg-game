@@ -290,22 +290,35 @@ int  Screen_LoadImage(const char *image_name)
 }
 
 
-void Screen_DrawImage(int id, int x, int y, int w, int h)
+void Screen_DrawImagePart(int id, int x, int y, int w, int h, int sx, int sy, int sw, int sh)
 {
-	// TODO
+	const cached_image_t * CI;
+
+	if (id < 0 || id >= num_cached_images)
+		Main_FatalError("Screen_DrawImage: bad id number\n");
+
+	CI = &cached_images[id];
+
+	if (! CI->bitmap)
+		Main_FatalError("Screen_DrawImage: bad id number\n");
+
+	// negative source width/height means use the whole image
+	if (sw < 0) sw = al_get_bitmap_width (CI->bitmap);
+	if (sh < 0) sh = al_get_bitmap_height(CI->bitmap);
+
+	al_draw_scaled_bitmap(CI->bitmap, sx, sy, sw, sh, x, y, w, h, 0 /* flags */);
 }
 
 
-void Screen_DrawImagePart(int id, int x, int y, int w, int h, int sx, int sy, int sw, int sh)
+void Screen_DrawImage(int id, int x, int y, int w, int h)
 {
-	// TODO
+	Screen_DrawImagePart(id, x, y, w, h, 0, 0, -1, -1);
 }
 
 
 //----------------------------------------------------------------------
 //    INPUT HANDLING
 //----------------------------------------------------------------------
-
 
 static void Event_KeyDown(ALLEGRO_EVENT *ev)
 {
