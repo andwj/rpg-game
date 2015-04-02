@@ -42,7 +42,7 @@ function init()
 
 function main_Init()
 {
-	start_image = load_Image("img/start.png");
+	start_image = load_Image("data/start.png");
 }
 
 

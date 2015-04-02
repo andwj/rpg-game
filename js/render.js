@@ -231,7 +231,7 @@ function render_Init()
 
 function render_LoadTileset()
 {
-	Screen.tileset = load_Image("img/tileset.png");
+	Screen.tileset = load_Image("data/tileset.png");
 }
 
 
