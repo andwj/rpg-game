@@ -14,8 +14,15 @@ var all_players =
 	barbarian:
 	{
 		kind: "Barbarian",
-		health: 100,
+		health: 125,
 		tile: "G3"
+	},
+
+	knight:
+	{
+		kind: "Knight",
+		health: 100,
+		tile: "G6"
 	}
 };
 
@@ -39,9 +46,17 @@ Player.prototype =
 	sayHello: function()
 	{
 		render_AddText(this.info.kind + " says hello!\n");
+	},
+
+	// hmmm, good idea or not??
+	entKind: function()
+	{
+		return "player";
 	}
 };
 
+
+//________________________________________________
 
 
 function player_NewGame()
@@ -51,8 +66,7 @@ function player_NewGame()
 	Players[1] = new Player(all_players.barbarian);
 
 	// temp : spawn spot
-
-	Players[1].tx = 5;
+	Players[1].tx = 10;
 	Players[1].ty = 5;
 }
 
