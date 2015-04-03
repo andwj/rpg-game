@@ -112,8 +112,8 @@ void JS_Load(void)
 			s++;
 
 		// remove trailing newline character
-		if (strchr(s, '/'))
-			strchr(s, '/')[0] = 0;
+		if (strchr(s, '\n'))
+			strchr(s, '\n')[0] = 0;
 
 		// ignore blank lines
 		if (strlen(s) == 0)
@@ -122,7 +122,7 @@ void JS_Load(void)
 		JS_LoadFile(s);
 	}
 
-	LogPrintf("Finished loading scripts.\n");
+	LogPrintf("Finished loading scripts.\n\n");
 }
 
 
