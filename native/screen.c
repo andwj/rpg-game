@@ -56,6 +56,8 @@ static drawing_context_t ctx;
 
 void Screen_Init(void)
 {
+	LogPrintf("Screen_Init....\n");
+
 	if (! al_init())
 	{
 		Main_FatalError("Failed to init Allegro.\n");
@@ -120,6 +122,9 @@ void Screen_Shutdown(void)
 
 void Screen_OpenWindow(void)
 {
+	LogPrintf("Screen: opening window %dx%d (flags %d)\n",
+				display_width, display_height, display_flags);
+
 	al_set_new_display_flags(display_flags);
 
 	display = al_create_display(display_width, display_height);
@@ -129,6 +134,8 @@ void Screen_OpenWindow(void)
 
 	screen_w = al_get_display_width (display);
 	screen_h = al_get_display_height(display);
+
+	LogPrintf("Screen: actual window is %dx%d\n", screen_w, screen_h);
 
 
 	canvas = al_create_bitmap(screen_w, screen_h);

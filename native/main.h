@@ -30,10 +30,6 @@
 #define PROG_HEX_VER  0x007
 
 
-#define ConPrintf    printf
-#define DebugPrintf  printf
-
-
 extern const char *install_dir;
 
 extern bool want_quit;

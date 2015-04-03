@@ -44,10 +44,19 @@ static duk_ret_t Native_set_font(duk_context *ctx)
 
 void JS_Init(void)
 {
+	LogPrintf("JS_Init....\n");
+
 	js_ctx = duk_create_heap_default();
 
 	if (! js_ctx)
 		Main_FatalError("Failed to create JS context.\n");
+}
+
+
+void JS_Close(void)
+{
+	// TODO
+	// duk_destroy_heap(js_ctx);
 }
 
 
@@ -71,6 +80,8 @@ static void JS_SetupNativeObject(void)
 
 void JS_LoadFile(const char *filename)
 {
+	LogPrintf("Loading JS file: %s\n", filename);
+
 	if (duk_peval_file(js_ctx, filename) != 0)
 	{
 		Main_FatalError("Failed to load javascript file: %s\n%s\n",
@@ -110,6 +121,8 @@ void JS_Load(void)
 
 		JS_LoadFile(s);
 	}
+
+	LogPrintf("Finished loading scripts.\n");
 }
 
 

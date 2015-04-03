@@ -139,11 +139,20 @@ return;
 }
 
 
-void Main_Shutdown(bool error)
+void Main_Shutdown(void)
 {
-	Screen_Shutdown();
+	static _Bool shutting_down = false;
 
-//!!!	JS_Close();
+	if (shutting_down)
+		return;
+
+	shutting_down = true;
+
+	LogPrintf("\nShutting down....\n");
+
+	JS_Close();
+
+	Screen_Shutdown();
 }
 
 
@@ -161,7 +170,7 @@ void Main_FatalError(const char *msg, ...)
 
 	fprintf(stderr, "\n%s\n\n", buffer);
 
-	Main_Shutdown(true);
+	Main_Shutdown();
 
 	al_show_native_message_box(NULL, PROG_TITLE " : Error", "A fatal error occurred", buffer, NULL, ALLEGRO_MESSAGEBOX_ERROR);
 
@@ -200,35 +209,39 @@ int main(int argc, char **argv)
 	}
 
 
-	Screen_Init();
-
-	JS_Init();
+	LogPrintf("\n");
+	LogPrintf("******************************************\n");
+	LogPrintf("** " PROG_TITLE " " PROG_VERSION " (C) 2015 Andrew Apted **\n");
+	LogPrintf("******************************************\n");
+	LogPrintf("\n");
 
 
 	Determine_InstallDir(argv[0]);
 
-
-	ConPrintf("\n");
-	ConPrintf("******************************************\n");
-	ConPrintf("** " PROG_TITLE " " PROG_VERSION " (C) 2015 Andrew Apted **\n");
-	ConPrintf("******************************************\n");
-	ConPrintf("\n");
-
-	ConPrintf("install_dir: %s\n", install_dir);
+	LogPrintf("Install_dir: %s\n", install_dir);
+	LogPrintf("\n");
 
 
-	Main_ParseArguments();
+	JS_Init();
 
-	//?? Main_ReadPrefs();
+	Screen_Init();
+
+	//TODO Main_ReadOptions();
+
+	Main_ParseArguments();	// TODO: make part of Main_ReadOptions
 
 
-//!!	JS_Load();
+	/* init complete, actually do stuff now... */
 
+	LogPrintf("\n");
+
+	JS_Load();
 
 	Screen_OpenWindow();
 
+	JS_BeginScript();
 
-//!!	JS_BeginScript();
+	LogPrintf("\nStartup successful.\n\n");
 
 
 	while (! want_quit)
@@ -236,7 +249,7 @@ int main(int argc, char **argv)
 		Screen_Update();
 	}
 
-	Main_Shutdown(false);
+	Main_Shutdown();
 
 	return 0;
 }

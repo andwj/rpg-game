@@ -25,6 +25,7 @@
 
 
 void JS_Init(void);
+void JS_Close(void);
 
 void JS_Load(void);
 

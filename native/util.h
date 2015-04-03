@@ -28,6 +28,9 @@
 
 #define MSG_BUF_LEN		2048
 
+// TODO:
+#define LogPrintf		printf
+
 
 /* string utilities */
 
