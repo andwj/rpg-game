@@ -26,8 +26,8 @@
 
 #define PROG_TITLE  "Rpg-Game"
 
-#define PROG_VERSION  "0.07"
-#define PROG_HEX_VER  0x007
+#define PROG_VERSION  "0.11"
+#define PROG_HEX_VER  0x011
 
 
 extern const char *install_dir;
