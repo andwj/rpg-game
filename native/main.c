@@ -210,9 +210,9 @@ int main(int argc, char **argv)
 
 
 	LogPrintf("\n");
-	LogPrintf("******************************************\n");
+	LogPrintf("*****************************************\n");
 	LogPrintf("** " PROG_TITLE " " PROG_VERSION " (C) 2015 Andrew Apted **\n");
-	LogPrintf("******************************************\n");
+	LogPrintf("*****************************************\n");
 	LogPrintf("\n");
 
 
