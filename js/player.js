@@ -9,22 +9,51 @@
 "use strict";
 
 
+var all_players =
+{
+	barbarian:
+	{
+		kind: "Barbarian",
+		health: 100,
+		tile: "G3"
+	}
+};
+
+
+// Player class : extends Entity
+
+var Player = function(info)
+{
+	// The 'info' parameter must be looked up in all_players[].
+	// For example: x = new Player(all_players.barbarian)
+
+	this.info	= info;
+	this.health = info.health;
+
+	// TODO : inventory items
+};
+
+
+Player.prototype =
+{
+	sayHello: function()
+	{
+		render_AddText(this.info.kind + " says hello!\n");
+	}
+};
+
+
+
 function player_NewGame()
 {
 	Players = [ null ];
 
-	Players[1] =
-	{
-		health: 250,
+	Players[1] = new Player(all_players.barbarian);
 
-		sprite:
-		{
-			ref: "player",
-			img_name: "mons/player1.png",
-			origin_x: 0.5,
-			origin_y: 1.0
-		}
-	};
+	// temp : spawn spot
+
+	Players[1].tx = 5;
+	Players[1].ty = 5;
 }
 
 

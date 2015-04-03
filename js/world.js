@@ -9,7 +9,7 @@
 "use strict";
 
 
-function world_Create()
+function world_NewGame()
 {
 }
 

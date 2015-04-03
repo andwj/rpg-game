@@ -64,7 +64,8 @@ function main_BeginGame()
 
 	game_mode = "active";
 
-	world_Create();
+	player_NewGame();
+	 world_NewGame();
 
 	// FIXME : create world, set up UI, etc..
 
