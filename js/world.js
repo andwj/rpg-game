@@ -9,6 +9,22 @@
 "use strict";
 
 
+var MiniTilesetConv =
+{
+	A8: "A5",	// lava
+	A9: "A3",	// water
+	B8: "A4",	// grass
+	B9: "B2",	// hallway
+	C8: "A2",	// cave floor
+	C9: "B1",	// cave wall
+
+	// floors
+	A1: "A2", A2: "A2", A3: "A2", A4: "A2", A5: "A2", A6: "A2", A7: "A2",
+	B1: "A2", B2: "A2", B3: "A2", B4: "A2", B5: "A2", B6: "A2", B7: "A2",
+	C3: "A2", C7: "A2"
+};
+
+
 // Tile class
 
 var Tile = function(kind)
@@ -62,6 +78,23 @@ Tile.prototype =
 		}
 
 		return null;
+	},
+
+	miniTile: function()
+	{
+		if (! this.seen)
+			return null;
+
+		if (this.actor && this.actor.kind == "player")
+			return "C1";
+
+		if (this.actor && this.actor.is_pet)
+			return "D1";
+
+		if (! this.tile)
+			return null;
+
+		return MiniTilesetConv[this.tile] || "A1";
 	}
 };
 
