@@ -160,6 +160,9 @@ function render_Init()
 		scroll_x: 0,
 		scroll_y: 0,
 
+		// scroll position of radar (do not need an X pos here)
+		radar_y: 0,
+
 		// lines of text shown in text area (only last 4 or 5 are shown)
 		text_lines: []
 	};
@@ -222,6 +225,8 @@ function render_Init()
 function render_LoadTileset()
 {
 	Screen.tileset = load_Image("data/tileset.png");
+
+	Screen.mini_tiles = load_Image("data/mini_tiles.png");
 }
 
 
@@ -412,14 +417,13 @@ function render_RefreshAll()
 //  MAP DRAWING
 //----------------------------------------------------------------------
 
-function render_getDrawX(tx)
+function render_CalcDrawX(tx)
 {
 	// relative to left edge of main panel
 	return (tx - Screen.scroll_x) * 32 * Screen.scale;
 }
 
-
-function render_getDrawY(ty)
+function render_CalcDrawY(ty)
 {
 	// relative to bottom of main panel
 	return Screen.main_panel.h - (ty + 1 - Screen.scroll_y) * 32 * Screen.scale;
@@ -462,8 +466,8 @@ function render_Tile(tx, ty, id)
 	var W = 32 * Screen.scale;
 
 	// get coordinate in main panel (for top-left corner)
-	var x = render_getDrawX(tx);
-	var y = render_getDrawY(ty);
+	var x = render_CalcDrawX(tx);
+	var y = render_CalcDrawY(ty);
 
 	// skip if not visible
 	if (x < -W || x > Screen.main_panel.w) return;
@@ -522,13 +526,98 @@ console.log("render_WholeMap : (" + tx1 + " " + tx2 + ") .. (" + ty1 + " " + ty2
 //  RADAR
 //----------------------------------------------------------------------
 
+function render_CalcMiniX(tx)
+{
+	// relative to left edge of main panel
+	return tx * 4 * Screen.scale;
+}
+
+function render_CalcMiniY(ty)
+{
+	// relative to bottom of main panel
+	return Screen.radar_panel.h - (ty + 1 - Screen.radar_y) * 4 * Screen.scale;
+}
+
+
+function render_MiniTileRaw(x, y, id)
+{
+	var W = 4 * Screen.scale;
+
+	x = x + Screen.radar_panel.x;
+	y = y + Screen.radar_panel.y;
+
+	// convert id string to position in tileset (see render_TileRaw)
+
+	var row = id.charCodeAt(0);
+	var col = id.charCodeAt(1);
+
+	// strange ID?
+	if (! row || row < 65 || row > 90) return;
+	if (! col || col < 48 || col > 57) return;
+
+	row = row - 65;
+	col = col - 49;
+
+	// actually draw it
+	ctx.drawImage(Screen.mini_tiles, col * 4, row * 4, 4, 4, x, y, W, W);
+}
+
+
+function render_MiniTile(tx, ty, id)
+{
+	var W = 4 * Screen.scale;
+
+	// get coordinate in main panel (for top-left corner)
+	var x = render_CalcMiniX(tx);
+	var y = render_CalcMiniY(ty);
+
+	// skip if not visible
+	if (x < -W || x > Screen.radar_panel.w) return;
+	if (y < -W || y > Screen.radar_panel.h) return;
+
+	render_MiniTileRaw(x, y, id);
+}
+
+
 function render_Radar()
 {
 	// whenever the mini-map scrolls, must call this
 
 	render_BeginPanel(Screen.radar_panel);
 
-	// TODO
+	// determine range of tiles we need to draw
+	var tx1, ty1, tx2, ty2;
+
+	tx1 = 0;
+	tx2 = 59;
+
+	ty1 = Math.floor(Screen.radar_y);
+	ty2 = Math.ceil (Screen.radar_y + Screen.tile_h);
+
+	if (tx1 < 0) tx1 = 0;
+	if (ty1 < 0) ty1 = 0;
+
+	if (tx2 > Screen.tile_w - 1)
+		tx2 = Screen.tile_w - 1;
+
+	if (ty2 > Screen.tile_h - 1)
+		ty2 = Screen.tile_h - 1;
+
+console.log("render_WholeMap : (" + tx1 + " " + tx2 + ") .. (" + ty1 + " " + ty2 + ")");
+
+	for (var tx = tx1 ; tx <= tx2 ; tx++)
+	for (var ty = ty1 ; ty <= ty2 ; ty++)
+	{
+		var w = World.tiles[tx][ty];
+
+		if (! w)
+			continue;
+
+		var id = w.miniTile();
+
+		if (id)
+			render_MiniTile(tx, ty, id);
+	}
 
 	render_EndPanel();
 }
