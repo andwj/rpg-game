@@ -12,6 +12,10 @@ var VERSION = "0.05";
 var VER_X   = "005";
 
 
+// grab the global namespace
+var global = this;
+
+
 // current game mode, can be:
 //    loading  (the resources)
 //    waiting  (for player to start)
