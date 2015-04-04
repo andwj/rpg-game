@@ -55,7 +55,9 @@ function world_NewGame()
 
 		areas: [],
 
-		entities: []
+		entities: [],
+
+		rescued: 0
 	};
 
 

@@ -10,6 +10,7 @@
 
 
 var start_image = null;
+var death_image = null;
 
 
 function init()
@@ -43,6 +44,7 @@ function init()
 function main_Init()
 {
 	start_image = load_Image("data/start.png");
+	death_image = load_Image("data/death.png");
 }
 
 
@@ -72,6 +74,19 @@ function main_BeginGame()
 	render_RefreshAll();
 
 	render_AddLine("Welcome to Rpg-Game !");
+}
+
+
+function main_EndGame()
+{
+	game_mode = "over";
+
+	var message = "";
+
+	if (World.rescued > 0)
+		message = "Rescued " + World.rescued + " Rabbits";
+
+	render_BigPicture(death_image, "#000", 70, message);
 }
 
 
