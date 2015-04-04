@@ -9,6 +9,10 @@
 "use strict";
 
 
+var keyboard_handler;
+
+
+
 function event_MouseDown(ev)
 {
 	// already consumed?
@@ -25,11 +29,13 @@ function event_MouseDown(ev)
 	if (! mx) return;
 	if (! my) return;
 
+	// TODO : support mouse
+	return;
+
 	ev.preventDefault();
 
-	console.log("MouseDown event: " + mx + " x " + my);
-
-	// TODO
+//DEBUG
+//	console.log("MouseDown event: " + mx + " x " + my);
 }
 
 
@@ -51,27 +57,32 @@ function event_KeyDown(ev)
 	if (ev.ctrlKey || ev.altKey || ev.metaKey)
 		return;
 
-	console.log("KeyDown event: key=" + ev.key);
+//DEBUG
+//	console.log("KeyDown event: key=" + ev.key);
 
 	ev.preventDefault();
 
-	if (game_mode == "waiting" && (ev.key == " " || ev.key == "Space"))
+	if (keyboard_handler)
 	{
-		main_BeginGame();
-		return;
+		keyboard_handler(ev);
 	}
-
-	// TODO
-
 }
 
 
 function event_Init()
 {
+	keyboard_handler = null;
+
 	window.addEventListener("mousedown", event_MouseDown, true);
 	window.addEventListener("keydown",   event_KeyDown,   true);
 
 	return true;
+}
+
+
+function event_SetKeyHandler(func)
+{
+	keyboard_handler = func;
 }
 
 

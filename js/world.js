@@ -179,12 +179,12 @@ function world_CreateRoom(tx1, ty1, tx2, ty2, info)
 		var y_wall = (ty == ty1 || ty == ty2);
 
 		var kind = "floor";
-		var tile = "C8";
+		var tile = "A1";
 
 		if (x_wall || y_wall)
 		{
 			kind = "wall";
-			tile = "C9";
+			tile = "C1";
 		}
 
 		var w = new Tile(kind);

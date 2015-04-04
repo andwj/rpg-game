@@ -48,7 +48,12 @@ Player.prototype =
 {
 	sayHello: function()
 	{
-		render_AddText(this.info.kind + " says hello!\n");
+		render_AddLine(this.info.species + " says hello!");
+	},
+
+	moveStep: function(dir)
+	{
+		// FIXME
 	}
 };
 
@@ -67,6 +72,24 @@ function player_NewGame()
 	var ty = 5;
 
 	world_AddEntity(Players[1], tx, ty);
+}
+
+
+function player_HandleKey(ev)
+{
+	var pl = Players[1];
+
+	if (ev.key == "Up")
+		pl.moveStep(8);
+
+	if (ev.key == "Down")
+		pl.moveStep(2);
+
+	if (ev.key == "Left")
+		pl.moveStep(4);
+
+	if (ev.key == "Right")
+		pl.moveStep(6);
 }
 
 
