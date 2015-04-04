@@ -47,8 +47,8 @@ Milestone 1
 *  sort out the tileset [DONE]
 *  title screen, press a key to start [DONE]
 *  code to draw the text panel and add text to it [DONE]
-*  code to create a single room with player in it
-*  code to render this map
+*  code to create a single room with player in it [DONE]
+*  code to render this map [DONE]
 *  allow player to move around the room with arrow keys
 
 
