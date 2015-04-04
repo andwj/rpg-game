@@ -51,9 +51,22 @@ Player.prototype =
 		render_AddLine(this.info.species + " says hello!");
 	},
 
+	getTile: function()
+	{
+		return World.tiles[this.tx][this.ty];
+	},
+
 	moveStep: function(dir)
 	{
-		// FIXME
+		var T = this.getTile();
+
+		if (! T.canMove(dir, this))
+			return false;
+
+		world_MoveEntity2(this, T.neighbor(dir));
+
+		// FIXME!!!
+		render_RefreshAll();
 	}
 };
 
