@@ -16,11 +16,17 @@ var Tile = function(kind)
 	// the kind of tile [ FIXME : describe ]
 	this.kind = kind;
 
+	// main tile to draw here (a floor or wall)
+	this.tile = "A1";
+
 	// all the objects here
 	this.objects = [];
 
-	// the monster or player here (if any)
+	// the monster or player here (null if none)
 	this.actor = null;
+
+	// has been seen?
+	this.seen = true;	// FIXME
 };
 
 
@@ -29,6 +35,25 @@ Tile.prototype =
 	sayHello: function()
 	{
 		render_AddText(this.info.kind + " says hello!\n");
+	},
+
+	// return what should be rendered here (null for nothing at all)
+	getTile: function()
+	{
+		if (! this.seen)
+			return null;
+
+		if (this.actor)
+			return this.actor.info.tile;
+
+		if (this.objects.length > 0)
+		{
+			var obj = this.objects[this.objects.length - 1];
+
+			return obj.info.tile;
+		}
+
+		return this.tile;
 	}
 };
 
