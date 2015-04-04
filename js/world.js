@@ -57,8 +57,8 @@ Tile.prototype =
 		var new_tx = this.tx;
 		var new_ty = this.ty;
 
-		if (dir == 2) new_ty += 1;
-		if (dir == 8) new_ty -= 1;
+		if (dir == 2) new_ty -= 1;
+		if (dir == 8) new_ty += 1;
 		if (dir == 4) new_tx -= 1;
 		if (dir == 6) new_tx += 1;
 
