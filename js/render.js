@@ -517,12 +517,11 @@ console.log("render_WholeMap : (" + tx1 + " " + tx2 + ") .. (" + ty1 + " " + ty2
 		if (! w)
 			continue;
 
-		var id = w.getTile();
+		var id1 = w.bgTile();
+		var id2 = w.fgTile();
 
-		if (! id)
-			continue;
-
-		render_Tile(tx, ty, id);
+		if (id1) render_Tile(tx, ty, id1);
+		if (id2) render_Tile(tx, ty, id2);
 	}
 
 	render_EndPanel();

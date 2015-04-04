@@ -13,14 +13,14 @@ var all_players =
 {
 	barbarian:
 	{
-		kind: "Barbarian",
+		species: "Barbarian",
 		health: 125,
 		tile: "G3"
 	},
 
 	knight:
 	{
-		kind: "Knight",
+		species: "Knight",
 		health: 100,
 		tile: "G6"
 	}
@@ -34,6 +34,9 @@ var Player = function(info)
 	// The 'info' parameter must be looked up in all_players[].
 	// For example: x = new Player(all_players.barbarian)
 
+	this.kind     = "player";
+	this.is_actor = true;
+
 	this.info	= info;
 	this.health = info.health;
 
@@ -46,12 +49,6 @@ Player.prototype =
 	sayHello: function()
 	{
 		render_AddText(this.info.kind + " says hello!\n");
-	},
-
-	// hmmm, good idea or not??
-	entKind: function()
-	{
-		return "player";
 	}
 };
 
@@ -65,9 +62,11 @@ function player_NewGame()
 
 	Players[1] = new Player(all_players.barbarian);
 
-	// temp : spawn spot
-	Players[1].tx = 10;
-	Players[1].ty = 5;
+	// FIXME : spawn spot
+	var tx = 10;
+	var ty = 5;
+
+	world_AddEntity(Players[1], tx, ty);
 }
 
 

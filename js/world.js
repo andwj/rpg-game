@@ -38,7 +38,15 @@ Tile.prototype =
 	},
 
 	// return what should be rendered here (null for nothing at all)
-	getTile: function()
+	bgTile: function()
+	{
+		if (! this.seen)
+			return null;
+
+		return this.tile;
+	},
+
+	fgTile: function()
 	{
 		if (! this.seen)
 			return null;
@@ -53,7 +61,7 @@ Tile.prototype =
 			return obj.info.tile;
 		}
 
-		return this.tile;
+		return null;
 	}
 };
 
@@ -72,6 +80,61 @@ function world_NewTileColumn()
 }
 
 
+function world_AddEntity(ent, tx, ty)
+{
+	ent.tx = tx;
+	ent.ty = ty;
+
+	var tile = World.tiles[tx][ty];
+
+	if (ent.is_actor)
+		tile.actor = ent;
+	else
+		tile.objects.push(ent);
+}
+
+
+function world_RemoveEntity(ent)
+{
+	var tile = World.tiles[ent.tx][ent.ty];
+
+	ent.tx = null;
+	ent.ty = null;
+
+	if (tile.actor == ent)
+		tile.actor = null;
+	else
+	{
+		var idx = tile.objects.indexOf(ent);
+
+		if (idx >= 0)
+			tile.objects.splice(idx, 1);
+	}
+}
+
+
+function world_MoveEntity(ent, tx, ty)
+{
+	world_RemoveEntity(ent);
+	world_AddEntity(ent, tx, ty);
+}
+
+
+function world_SwapActors(ent1, ent2)
+{
+	var tile1 = World.tiles[ent1.tx][ent1.ty];
+	var tile2 = World.tiles[ent2.tx][ent2.ty];
+
+	tile1.actor = ent2;
+	tile2.actor = ent1;
+
+	var tmp;
+
+	tmp = ent1.tx; ent1.tx = ent2.tx; ent2.tx = tmp;
+	tmp = ent1.ty; ent1.ty = ent2.ty; ent2.ty = tmp;
+}
+
+
 function world_CreateRoom(tx1, ty1, tx2, ty2, info)
 {
 	var tx, ty;
@@ -83,12 +146,12 @@ function world_CreateRoom(tx1, ty1, tx2, ty2, info)
 		var y_wall = (ty == ty1 || ty == ty2);
 
 		var kind = "floor";
-		var tile = "A1";
+		var tile = "C8";
 
 		if (x_wall || y_wall)
 		{
 			kind = "wall";
-			tile = "C1";
+			tile = "C9";
 		}
 
 		var w = new Tile(kind);
