@@ -27,8 +27,12 @@ var MiniTilesetConv =
 
 // Tile class
 
-var Tile = function(kind)
+var Tile = function(tx, ty, kind)
 {
+	// coordinate
+	this.tx = tx;
+	this.ty = ty;
+
 	// the kind of tile [ FIXME : describe ]
 	this.kind = kind;
 
@@ -48,9 +52,20 @@ var Tile = function(kind)
 
 Tile.prototype =
 {
-	sayHello: function()
+	neighbor: function(dir)
 	{
-		render_AddText(this.info.kind + " says hello!\n");
+		var new_tx = this.tx;
+		var new_ty = this.ty;
+
+		if (dir == 2) new_ty += 1;
+		if (dir == 8) new_ty -= 1;
+		if (dir == 4) new_tx -= 1;
+		if (dir == 6) new_tx += 1;
+
+		if (new_tx < 0 || new_tx >= World.tw) return null;
+		if (new_ty < 0 || new_ty >= World.th) return null;
+
+		return World.tiles[new_tx][new_ty];
 	},
 
 	// return what should be rendered here (null for nothing at all)
@@ -95,7 +110,24 @@ Tile.prototype =
 			return null;
 
 		return MiniTilesetConv[this.tile] || "A1";
+	},
+
+	canMove: function(dir, ent)		// ent is optional
+	{
+		var N = this.neighbor(dir);
+
+		if (! N)
+			return false;
+
+		if (N.kind == "wall")
+			return false;
+
+		if (N.is_solid || N.actor)
+			return false;
+
+		return true;
 	}
+
 };
 
 
@@ -153,6 +185,13 @@ function world_MoveEntity(ent, tx, ty)
 }
 
 
+function world_MoveEntity2(ent, T)
+{
+	world_RemoveEntity(ent);
+	world_AddEntity(ent, T.tx, T.ty);
+}
+
+
 function world_SwapActors(ent1, ent2)
 {
 	var tile1 = World.tiles[ent1.tx][ent1.ty];
@@ -187,7 +226,7 @@ function world_CreateRoom(tx1, ty1, tx2, ty2, info)
 			tile = "C1";
 		}
 
-		var w = new Tile(kind);
+		var w = new Tile(tx, ty, kind);
 		w.tile = tile;
 
 		World.tiles[tx][ty] = w;
