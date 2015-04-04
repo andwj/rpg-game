@@ -72,6 +72,39 @@ function world_NewTileRow(w)
 }
 
 
+function world_CreateRoom(tx1, ty1, tx2, ty2, info)
+{
+	var tx, ty;
+
+	for (tx = tx1 ; tx <= tx2 ; tx++)
+	for (ty = ty1 ; ty <= ty2 ; ty++)
+	{
+		var x_wall = (tx == tx1 || tx == tx2);
+		var y_wall = (ty == ty1 || ty == ty2);
+
+		var kind = "floor";
+		var tile = "A1";
+
+		if (x_wall && y_wall)
+		{
+			// corner
+			kind = "solid";
+			tile = "A4";
+		}
+		else if (x_wall || y_wall)
+		{
+			kind = "solid";
+			tile = "A3";
+		}
+
+		var w = new Tile(kind);
+		w.tile = tile;
+
+		World.tiles[tx][ty] = w;
+	}
+}
+
+
 function world_NewGame()
 {
 	World =
@@ -96,6 +129,9 @@ function world_NewGame()
 	{
 		World.tiles.push(world_NewTileRow);
 	}
+
+
+	world_CreateRoom(1, 1, 14, 9);
 }
 
 
