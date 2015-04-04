@@ -11,6 +11,7 @@
 
 var start_image = null;
 var death_image = null;
+var  vict_image = null;
 
 
 function init()
@@ -45,6 +46,7 @@ function main_Init()
 {
 	start_image = load_Image("data/start.png");
 	death_image = load_Image("data/death.png");
+	 vict_image = load_Image("data/victory.png");
 }
 
 
@@ -87,6 +89,14 @@ function main_EndGame()
 		message = "Rescued " + World.rescued + " Rabbits";
 
 	render_BigPicture(death_image, "#000", 70, message);
+}
+
+
+function main_Victory()
+{
+	game_mode = "over";
+
+	render_BigPicture(vict_image, "#99ccff");
 }
 
 
