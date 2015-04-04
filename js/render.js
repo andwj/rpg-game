@@ -13,10 +13,6 @@
 var CANVAS_MIN_W = 632;
 var CANVAS_MIN_H = 472;
 
-// maximum number of tiles
-var TILE_MAX_W = 22;
-var TILE_MAX_H = 16;
-
 // panel sizes (there is an 8 pixel buffer too)
 var INFO_W = 240;
 var TEXT_H = 80;
@@ -71,12 +67,6 @@ function render_Dimensions()
 
 	Screen.tile_w = (window_w - BUFFER - INFO_W) / 32.0;
 	Screen.tile_h = (window_h - BUFFER - TEXT_H) / 32.0;
-
-	if (Screen.tile_w > TILE_MAX_W)
-		Screen.tile_w = TILE_MAX_W;
-
-	if (Screen.tile_h > TILE_MAX_H)
-		Screen.tile_h = TILE_MAX_H;
 
 	// compute wanted canvas size
 	Screen.width  = Screen.tile_w * 32 + BUFFER + INFO_W;
