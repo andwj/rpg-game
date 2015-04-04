@@ -431,8 +431,8 @@ function render_getDrawX(tx)
 
 function render_getDrawY(ty)
 {
-	// relative to top of main panel
-	return Screen.main_panel.h - (ty + 1 - Screen.scroll_x) * 32 * Screen.scale;
+	// relative to bottom of main panel
+	return Screen.main_panel.h - (ty + 1 - Screen.scroll_y) * 32 * Screen.scale;
 }
 
 
@@ -489,9 +489,41 @@ function render_WholeMap()
 
 	render_BeginPanel(Screen.main_panel);
 
-	render_Tile(5, 5, "G3");
+	// figure out what range of tiles we need to draw
+	var tx1, ty1, tx2, ty2;
 
-	// TODO
+	tx1 = Math.floor(Screen.scroll_x);
+	ty1 = Math.floor(Screen.scroll_y);
+
+	tx2 = Math.ceil(Screen.scroll_x + Screen.tile_w);
+	ty2 = Math.ceil(Screen.scroll_y + Screen.tile_h);
+
+	if (tx1 < 0) tx1 = 0;
+	if (ty1 < 0) ty1 = 0;
+
+	if (tx2 > Screen.tile_w - 1)
+		tx2 = Screen.tile_w - 1;
+
+	if (ty2 > Screen.tile_h - 1)
+		ty2 = Screen.tile_h - 1;
+
+console.log("render_WholeMap : (" + tx1 + " " + tx2 + ") .. (" + ty1 + " " + ty2 + ")");
+
+	for (var tx = tx1 ; tx <= tx2 ; tx++)
+	for (var ty = ty1 ; ty <= ty2 ; ty++)
+	{
+		var w = World.tiles[tx][ty];
+
+		if (! w)
+			continue;
+
+		var id = w.getTile();
+
+		if (! id)
+			continue;
+
+		render_Tile(tx, ty, id);
+	}
 
 	render_EndPanel();
 }

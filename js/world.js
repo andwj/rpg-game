@@ -61,11 +61,11 @@ Tile.prototype =
 //________________________________________________
 
 
-function world_NewTileRow(w)
+function world_NewTileColumn()
 {
 	var row = [];
 
-	for (var i = 0 ; i < w ; i++)
+	for (var i = 0 ; i < World.th ; i++)
 		row.push(null);
 
 	return row;
@@ -85,16 +85,10 @@ function world_CreateRoom(tx1, ty1, tx2, ty2, info)
 		var kind = "floor";
 		var tile = "A1";
 
-		if (x_wall && y_wall)
+		if (x_wall || y_wall)
 		{
-			// corner
-			kind = "solid";
-			tile = "A4";
-		}
-		else if (x_wall || y_wall)
-		{
-			kind = "solid";
-			tile = "A3";
+			kind = "wall";
+			tile = "C1";
 		}
 
 		var w = new Tile(kind);
@@ -125,9 +119,9 @@ function world_NewGame()
 	World.tw = 60;
 	World.th = 60;
 
-	for (var ty = 0 ; ty < World.th ; ty++)
+	for (var tx = 0 ; tx < World.tw ; tx++)
 	{
-		World.tiles.push(world_NewTileRow);
+		World.tiles.push(world_NewTileColumn());
 	}
 
 
