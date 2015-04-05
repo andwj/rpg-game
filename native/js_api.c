@@ -92,6 +92,20 @@ static void JS_SetupNativeObject(void)
 
 	duk_set_top(js_ctx, 0);
 
+	// set Native.screen_w and Native.screen_h
+
+	duk_push_global_object(js_ctx);
+	duk_get_prop_string(js_ctx, -1, "Native");
+	duk_push_number(js_ctx, screen_w);
+	duk_put_prop_string(js_ctx, -2, "screen_w");
+
+	duk_push_global_object(js_ctx);
+	duk_get_prop_string(js_ctx, -1, "Native");
+	duk_push_number(js_ctx, screen_h);
+	duk_put_prop_string(js_ctx, -2, "screen_h");
+
+	duk_set_top(js_ctx, 0);
+
 	// add callback API
 
 	JS_RegisterFunc("set_font", &Native_set_font, 2);
