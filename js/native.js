@@ -38,12 +38,19 @@ function native_ctx_measureText(str)
 
 	print("native_ctx_measureText : ", str);
 
-	return 20;
+	return { width:64, height:16 };
 }
 
-function native_ctx_drawImage(img)  // FIXME
+function native_ctx_drawImage(img, sx, sy, sw, sh, x, y, w, h)
 {
-	print("native_ctx_drawImage");
+	if (w && h)
+	{
+		Native.drawImagePart(img.id, x, y, w, h, sx, sy, sw, sh);
+	}
+	else
+	{
+		Native.drawImage(img.id, sx, sy, sw, sh);
+	}
 }
 
 function native_ctx_setClip(x, y, w, h)

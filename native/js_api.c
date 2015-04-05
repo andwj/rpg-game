@@ -204,6 +204,20 @@ static duk_ret_t Native_get_image_prop(duk_context *ctx)
 
 static duk_ret_t Native_draw_image(duk_context *ctx)
 {
+	int id = duk_require_int(ctx, 0);
+
+	int x = duk_require_int(ctx, 1);
+	int y = duk_require_int(ctx, 2);
+	int w = duk_require_int(ctx, 3);
+	int h = duk_require_int(ctx, 4);
+
+	Screen_DrawImage(id, x, y, w, h);
+	return 0;
+}
+
+
+static duk_ret_t Native_draw_image_part(duk_context *ctx)
+{
 	// FIXME
 
 	return 0;
@@ -287,9 +301,10 @@ static void JS_SetupNativeObject(void)
 
 	JS_RegisterFunc("fillText",   &Native_draw_text, 3);
 
-	JS_RegisterFunc("loadImage",  &Native_load_image, 1);
+	JS_RegisterFunc("loadImage",     &Native_load_image, 1);
 	JS_RegisterFunc("getImageProp",  &Native_get_image_prop, 2);
-	JS_RegisterFunc("drawImage",  &Native_draw_image, 1);
+	JS_RegisterFunc("drawImage",     &Native_draw_image, 5);
+	JS_RegisterFunc("drawImagePart", &Native_draw_image_part, 9);
 }
 
 
