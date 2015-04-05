@@ -22,6 +22,8 @@ OBJ_DIR=obj_linux
 
 OPTIMISE=-O0 -g3 -fstrict-aliasing
 
+DEBUG=-DDUK_OPT_DEBUG -DDUK_OPT_ASSERTIONS
+
 # operating system choices: UNIX WIN32
 OS=UNIX
 
@@ -42,7 +44,7 @@ AL_LIBS=\
 	-lallegro_ttf  \
 
 
-CFLAGS=$(OPTIMISE) -Wall -Wno-unused-variable -D$(OS) $(AL_FLAGS)
+CFLAGS=$(OPTIMISE) -Wall -Wno-unused-variable -D$(OS) $(DEBUG) $(AL_FLAGS)
 LDFLAGS=$(AL_LDFLAGS)
 LIBS=-lm -lz $(AL_LIBS)
 
