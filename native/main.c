@@ -168,7 +168,7 @@ void Main_FatalError(const char *msg, ...)
 
 	buffer[MSG_BUF_LEN-1] = 0;
 
-	fprintf(stderr, "\n%s\n\n", buffer);
+	fprintf(stderr, "\nERROR: %s\n\n", buffer);
 
 	Main_Shutdown();
 
