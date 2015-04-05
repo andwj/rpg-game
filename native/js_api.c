@@ -57,8 +57,31 @@ static const char * CSS1_color_names[] =
 
 static duk_ret_t Native_set_font(duk_context *ctx)
 {
-	int size = duk_require_int(ctx, 0);
-	int face = duk_require_int(ctx, 1);
+	const char * str = duk_require_string(ctx, 0);
+
+	// assume size is first thing (e.g. 20px)
+	int size = atoi(str);
+
+	if (size <= 0)
+		return 0;
+
+	// assume second word is font name
+	str = strchr(str, ' ');
+	
+	if (! str)
+		return 0;
+
+	str++;
+
+	// check for monospace font
+	int face = 0;
+
+	if (StringCaseCmp(str, "mono") == 0 ||
+		StringCaseCmp(str, "monospace") == 0 ||
+		StringCaseCmp(str, "courier") == 0)
+	{
+		face = 1;
+	}
 
 	Screen_SetFont(size, face);
 

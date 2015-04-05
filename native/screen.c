@@ -233,7 +233,7 @@ static ALLEGRO_FONT * LookupFont(int size, int face)
 	else
 		font_file = "font/DejaVuLGCSansMono.ttf";
 
-    CF->size = size;
+	CF->size = size;
 	CF->face = face;
 
 	CF->font = al_load_font(font_file, size, 0 /* flags */);
