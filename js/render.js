@@ -267,9 +267,9 @@ function render_Progress(count, total)
 
 	if (count == 0)
 	{
-		ctx.font = "20px serif";
+		ctx.font = "20px monospace";
 		ctx.fillStyle = "#ccc";
-		ctx.fillText("Loading resources", x, y);
+		ctx.fillText("Loading resources...", x, y);
 	}
 
 	y += 30;
