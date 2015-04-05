@@ -146,6 +146,38 @@ void JS_Load(void)
 }
 
 
+static int get_stack_raw(duk_context *ctx)
+{
+	if (! duk_is_object(ctx, -1))
+		return 1;
+
+	if (! duk_has_prop_string(ctx, -1, "stack"))
+		return 1;
+
+	if (! duk_is_error(ctx, -1))
+		return 1;
+
+	duk_get_prop_string(ctx, -1, "stack");  /* caller coerces */
+	duk_remove(ctx, -2);
+
+	return 1;
+}
+
+
+/* Print error objects with a stack trace specially.
+ * Note that getting the stack trace may throw an error
+ * so this also needs to be safe call wrapped.
+ */
+void JS_ShowStacktrace()
+{
+	duk_safe_call(js_ctx, get_stack_raw, 1 /*nargs*/, 1 /*nrets*/);
+
+	fprintf(stderr, "%s\n", duk_safe_to_string(js_ctx, -1));
+
+	duk_pop(js_ctx);
+}
+
+
 void JS_BeginScript(void)
 {
 	// flesh out the 'Native' object
@@ -159,10 +191,11 @@ void JS_BeginScript(void)
 	if (! duk_get_prop_string(js_ctx, -1, "init"))
 		Main_FatalError("Failed to find init() function.\n");
 
-	if (duk_pcall(js_ctx, 0) != 0)
+	if (duk_pcall(js_ctx, 0) != DUK_EXEC_SUCCESS)
 	{
-		Main_FatalError("Calling init() failed:\n\n%s\n",
-			duk_safe_to_string(js_ctx, -1));
+		JS_ShowStacktrace();
+
+		Main_FatalError("JS: init() failed.\n");
 	}
 
 	duk_set_top(js_ctx, 0);

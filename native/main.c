@@ -148,7 +148,7 @@ void Main_Shutdown(void)
 
 	shutting_down = true;
 
-	LogPrintf("\nShutting down....\n");
+	LogPrintf("Shutting down....\n");
 
 	JS_Close();
 
@@ -168,7 +168,7 @@ void Main_FatalError(const char *msg, ...)
 
 	buffer[MSG_BUF_LEN-1] = 0;
 
-	fprintf(stderr, "\nERROR: %s\n\n", buffer);
+	fprintf(stderr, "\nERROR: %s\n", buffer);
 
 	Main_Shutdown();
 
