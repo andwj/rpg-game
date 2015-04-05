@@ -60,9 +60,17 @@ void JS_Close(void)
 }
 
 
-static void JS_RegisterFunc(const char *func_name, int FUNC)
+static void JS_RegisterFunc(const char *func_name, duk_c_function FUNC, duk_idx_t num_args)
 {
-	// TODO
+	duk_push_global_object(js_ctx);
+
+	// assume this works (already tested when setting 'active')
+	duk_get_prop_string(js_ctx, -1 /*index*/, "Native");
+
+	duk_push_c_function(js_ctx, FUNC, num_args);
+
+	if (! duk_put_prop_string(js_ctx, -2, func_name))
+		Main_FatalError("Failed to register Native function.\n");
 }
 
 
@@ -82,7 +90,7 @@ static void JS_SetupNativeObject(void)
 
 	// add callback API
 
-	// FIXME  JS_RegisterFunc("set_font", &Native_set_font);
+	JS_RegisterFunc("set_font", &Native_set_font, 2);
 }
 
 
