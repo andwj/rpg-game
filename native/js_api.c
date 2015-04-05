@@ -218,8 +218,20 @@ static duk_ret_t Native_draw_image(duk_context *ctx)
 
 static duk_ret_t Native_draw_image_part(duk_context *ctx)
 {
-	// FIXME
+	int id = duk_require_int(ctx, 0);
 
+	int x = duk_require_int(ctx, 1);
+	int y = duk_require_int(ctx, 2);
+	int w = duk_require_int(ctx, 3);
+	int h = duk_require_int(ctx, 4);
+
+	// source rectangle in image
+	int sx = duk_require_int(ctx, 5);
+	int sy = duk_require_int(ctx, 6);
+	int sw = duk_require_int(ctx, 7);
+	int sh = duk_require_int(ctx, 8);
+
+	Screen_DrawImagePart(id, x, y, w, h, sx, sy, sw, sh);
 	return 0;
 }
 
