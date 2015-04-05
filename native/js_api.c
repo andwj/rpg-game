@@ -28,12 +28,68 @@
 static duk_context * js_ctx;
 
 
+static const char * CSS1_color_names[] =
+{
+	"black",	"#000000",
+	"blue",		"#0000ff",
+	"red",		"#ff0000",
+	"fuchsia",	"#ff00ff",
+	"lime",		"#00ff00",
+	"aqua",		"#00ffff",
+	"yellow",	"#ffff00",
+	"white",	"#ffffff",
+
+	"gray",		"#808080",
+	"grey",		"#808080",
+	"silver",	"#c0c0c0",
+	"maroon",	"#800000",
+	"purple",	"#800080",
+	"green",	"#008000",
+	"olive",	"#808000",
+	"navy",		"#000080",
+	"teal",		"#008080",
+	"orange",	"#ffa500",
+
+	// end of list
+	NULL, NULL
+};
+
+
 static duk_ret_t Native_set_font(duk_context *ctx)
 {
 	int size = duk_require_int(ctx, 0);
 	int face = duk_require_int(ctx, 1);
 
 	Screen_SetFont(size, face);
+
+	return 0;
+}
+
+
+static duk_ret_t Native_set_color(duk_context *ctx)
+{
+	const char * str = duk_require_string(ctx, 0);
+
+	// find a keyword color (only supports CSS1 names + orange)
+	if (str[0] != '#')
+	{
+		for (int i = 0 ; CSS1_color_names[i] ; i += 2)
+		{
+			if (StringCaseCmp(CSS1_color_names[i], str) == 0)
+			{
+				str = CSS1_color_names[i + 1];
+				break;
+			}
+		}
+	}
+
+	// unknown color name? --> IGNORE
+	if (str[0] != '#')
+		return 0;
+
+	// FIXME : parse RGB color
+
+//	Screen_SetColor(
 
 	return 0;
 }
@@ -108,7 +164,8 @@ static void JS_SetupNativeObject(void)
 
 	// add callback API
 
-	JS_RegisterFunc("set_font", &Native_set_font, 2);
+	JS_RegisterFunc("set_font",  &Native_set_font, 2);
+	JS_RegisterFunc("set_color", &Native_set_color, 1);
 }
 
 
