@@ -506,7 +506,7 @@ function render_WholeMap()
 	if (ty2 > Screen.tile_h - 1)
 		ty2 = Screen.tile_h - 1;
 
-console.log("render_WholeMap : (" + tx1 + " " + tx2 + ") .. (" + ty1 + " " + ty2 + ")");
+//console.log("render_WholeMap : (" + tx1 + " " + tx2 + ") .. (" + ty1 + " " + ty2 + ")");
 
 	for (var tx = tx1 ; tx <= tx2 ; tx++)
 	for (var ty = ty1 ; ty <= ty2 ; ty++)
@@ -597,18 +597,18 @@ function render_Radar()
 	tx2 = 59;
 
 	ty1 = Math.floor(Screen.radar_y);
-	ty2 = Math.ceil (Screen.radar_y + Screen.tile_h);
+	ty2 = Math.ceil (Screen.radar_y + Screen.radar_panel.h / 4);
 
 	if (tx1 < 0) tx1 = 0;
 	if (ty1 < 0) ty1 = 0;
 
-	if (tx2 > Screen.tile_w - 1)
-		tx2 = Screen.tile_w - 1;
+	if (tx2 > World.tw - 1)
+		tx2 = World.tw - 1;
 
-	if (ty2 > Screen.tile_h - 1)
-		ty2 = Screen.tile_h - 1;
+	if (ty2 > World.th - 1)
+		ty2 = World.th - 1;
 
-console.log("render_WholeMap : (" + tx1 + " " + tx2 + ") .. (" + ty1 + " " + ty2 + ")");
+//console.log("render_Radar : (" + tx1 + " " + tx2 + ") .. (" + ty1 + " " + ty2 + ")");
 
 	for (var tx = tx1 ; tx <= tx2 ; tx++)
 	for (var ty = ty1 ; ty <= ty2 ; ty++)
