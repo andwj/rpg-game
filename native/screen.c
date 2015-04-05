@@ -156,7 +156,7 @@ void Screen_OpenWindow(void)
 
 	if (! queue)
 		Main_FatalError("Failed to create event queue\n");
-	
+
 	if (al_get_keyboard_event_source())
 		al_register_event_source(queue, al_get_keyboard_event_source());
 
@@ -324,7 +324,7 @@ int  Screen_LoadImage(const char *image_name)
 {
 	if (num_cached_images >= MAX_CACHED_IMAGES)
 		Main_FatalError("Too many images used.\n");
-	
+
 	int id = num_cached_images;
 	num_cached_images += 1;
 
@@ -336,6 +336,23 @@ int  Screen_LoadImage(const char *image_name)
 		Main_FatalError("Failed to load image: %s\n", image_name);
 
 	return id;
+}
+
+
+void Screen_GetImageSize(int id, int *w, int *h)
+{
+	const cached_image_t * CI;
+
+	if (id < 0 || id >= num_cached_images)
+		Main_FatalError("Screen_GetImageSize: bad id number\n");
+
+	CI = &cached_images[id];
+
+	if (! CI->bitmap)
+		Main_FatalError("Screen_GetImageSize: bad id number\n");
+
+	*w = al_get_bitmap_width (CI->bitmap);
+	*h = al_get_bitmap_height(CI->bitmap);
 }
 
 

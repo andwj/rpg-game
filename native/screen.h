@@ -46,6 +46,7 @@ void Screen_DrawLine(int x1, int y1, int x2, int y2);
 void Screen_DrawText(const char *str, int x, int y);
 
 int  Screen_LoadImage(const char *image_name);
+void Screen_GetImageSize(int id, int *w, int *h);
 
 void Screen_DrawImage(int id, int x, int y, int w, int h);
 void Screen_DrawImagePart(int id, int x, int y, int w, int h, int sx, int sy, int sw, int sh);

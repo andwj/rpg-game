@@ -84,7 +84,6 @@ static duk_ret_t Native_set_font(duk_context *ctx)
 	}
 
 	Screen_SetFont(size, face);
-
 	return 0;
 }
 
@@ -132,7 +131,6 @@ static duk_ret_t Native_set_color(duk_context *ctx)
 	}
 
 	Screen_SetColor(r, g, b, 255);
-
 	return 0;
 }
 
@@ -145,7 +143,6 @@ static duk_ret_t Native_fill_rect(duk_context *ctx)
 	int h = duk_require_int(ctx, 3);
 
 	Screen_DrawRect(x, y, w, h, true /* filled */);
-
 	return 0;
 }
 
@@ -158,7 +155,6 @@ static duk_ret_t Native_stroke_rect(duk_context *ctx)
 	int h = duk_require_int(ctx, 3);
 
 	Screen_DrawRect(x, y, w, h, false /* filled */);
-
 	return 0;
 }
 
@@ -171,6 +167,44 @@ static duk_ret_t Native_draw_text(duk_context *ctx)
 	int y = duk_require_int(ctx, 2);
 
 	Screen_DrawText(str, x, y);
+	return 0;
+}
+
+
+static duk_ret_t Native_load_image(duk_context *ctx)
+{
+	const char *str = duk_require_string(ctx, 0);
+
+	int id = Screen_LoadImage(str);
+
+	duk_push_int(ctx, id);
+	return 1;
+}
+
+
+static duk_ret_t Native_get_image_prop(duk_context *ctx)
+{
+	int id = duk_require_int(ctx, 0);
+	const char * prop = duk_require_string(ctx, 1);
+
+	int w, h;
+
+	Screen_GetImageSize(id, &w, &h);
+
+	if (StringCaseCmp(prop, "width") == 0)
+		duk_push_int(ctx, w);
+	else if (StringCaseCmp(prop, "height") == 0)
+		duk_push_int(ctx, h);
+	else
+		duk_push_int(ctx, 0);
+
+	return 1;
+}
+
+
+static duk_ret_t Native_draw_image(duk_context *ctx)
+{
+	// FIXME
 
 	return 0;
 }
@@ -192,8 +226,8 @@ void JS_Init(void)
 
 void JS_Close(void)
 {
-	// TODO
-	// duk_destroy_heap(js_ctx);
+	duk_destroy_heap(js_ctx);
+	js_ctx = NULL;
 }
 
 
@@ -252,6 +286,10 @@ static void JS_SetupNativeObject(void)
 	JS_RegisterFunc("strokeRect", &Native_stroke_rect, 4);
 
 	JS_RegisterFunc("fillText",   &Native_draw_text, 3);
+
+	JS_RegisterFunc("loadImage",  &Native_load_image, 1);
+	JS_RegisterFunc("getImageProp",  &Native_get_image_prop, 2);
+	JS_RegisterFunc("drawImage",  &Native_draw_image, 1);
 }
 
 
