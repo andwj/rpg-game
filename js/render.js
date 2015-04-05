@@ -670,7 +670,7 @@ function render_AddLine(line)
 	{
 		var word = words[i];
 
-		var size = ctx.measureText(cur_line + word);
+		var size = ctx.measureText(cur_line + " " + word);
 
 		if (size.width + 8 < Screen.text_panel.w)
 		{
