@@ -73,6 +73,12 @@ function event_Init()
 {
 	keyboard_handler = null;
 
+	if (! window.addEventListener)
+	{
+		alert("Error: no event listener api");
+		return false;
+	}
+
 	window.addEventListener("mousedown", event_MouseDown, true);
 	window.addEventListener("keydown",   event_KeyDown,   true);
 

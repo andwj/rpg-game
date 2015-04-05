@@ -23,14 +23,6 @@ function init()
 	if (! render_Init())
 		return;
 
-
-	if (! window.addEventListener)
-	{
-		alert("Error: no event listener api");
-		return;
-	}
-
-
 	if (! event_Init())
 		return;
 
