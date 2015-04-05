@@ -9,7 +9,12 @@
 "use strict";
 
 
-var Native = {};
+var Native = { width:1024, height:768 };
+
+
+function native_ctx_Foo()
+{
+}
 
 
 function native_Init()
@@ -18,9 +23,46 @@ function native_Init()
 	if (! Native.active)
 		return;
 
-	// TODO : setup stuff....
+	// create a rendering context
 
-	alert("WTF : native?");
+	Native.ctx =
+	{
+		foo: native_ctx_Foo
+	}
+
+	// create a dummy 'window' object
+
+	global.window =
+	{
+		innerWidth:  Native.width,
+		innerHeight: Native.height
+	}
+
+	// create a dummy 'document' global
+
+	global.document =
+	{
+		spacer: {},
+
+		canvas:
+		{
+			getContext: function()
+			{
+				return Native.ctx;
+			}
+		},
+
+		getElementById: function(name)
+		{
+			if (name == "game")
+				return this.canvas;
+
+			if (name == "spacer")
+				return this.spacer;
+
+			return null;
+		}
+	};
 }
 
 
