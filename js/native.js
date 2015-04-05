@@ -14,18 +14,23 @@ var Native = {};
 
 function native_ctx_fillRect(x, y, w, h)
 {
-	print("native_ctx_fillRect : ", x, y, w, h, " : ", this.fillStyle);
+	Native.set_color(this.fillStyle);
+//	Native.fillRect(x, y, w, h, this.fillStyle);
 }
 
 
 function native_ctx_strokeRect(x, y, w, h)
 {
+	Native.set_color(this.strokeStyle);
+
 	print("native_ctx_strokeRect : ", x, y, w, h, " : ", this.strokeStyle);
 }
 
 
 function native_ctx_fillText(str, x, y)
 {
+	Native.set_color(this.fillStyle);
+
 	print("native_ctx_fillText : ", str, " : ", this.font);
 }
 

@@ -87,9 +87,30 @@ static duk_ret_t Native_set_color(duk_context *ctx)
 	if (str[0] != '#')
 		return 0;
 
-	// FIXME : parse RGB color
+	// parse RGB color
+	int r, g, b;
 
-//	Screen_SetColor(
+	str++;
+
+	if (strlen(str) < 3)
+		return 0;
+	
+	if (strlen(str) < 6)
+	{
+		sscanf(str, "%1x%1x%1x", &r, &g, &b);
+
+		r = r * 17;
+		g = g * 17;
+		b = b * 17;
+	}
+	else
+	{
+		sscanf(str, "%2x%2x%2x", &r, &g, &b);
+	}
+
+fprintf(stderr, "Color #%s --> (%d %d %d)\n", str, r, g, b);
+
+	Screen_SetColor(r, g, b, 255);
 
 	return 0;
 }
