@@ -104,7 +104,7 @@ void JS_LoadFile(const char *filename)
 
 	if (duk_peval_file(js_ctx, filename) != 0)
 	{
-		Main_FatalError("Failed to load javascript file: %s\n%s\n",
+		Main_FatalError("Failed to load javascript file: %s\n\n%s\n",
 			filename, duk_safe_to_string(js_ctx, -1));
 	}
 
@@ -154,7 +154,18 @@ void JS_BeginScript(void)
 
 	// call the 'init()' function
 
-	// FIXME
+	duk_push_global_object(js_ctx);
+
+	if (! duk_get_prop_string(js_ctx, -1, "init"))
+		Main_FatalError("Failed to find init() function.\n");
+
+	if (duk_pcall(js_ctx, 0) != 0)
+	{
+		Main_FatalError("Calling init() failed:\n\n%s\n",
+			duk_safe_to_string(js_ctx, -1));
+	}
+
+	duk_set_top(js_ctx, 0);
 }
 
 //--- editor settings ---
