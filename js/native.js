@@ -12,9 +12,43 @@
 var Native = { width:1024, height:768 };
 
 
-function native_ctx_Foo()
+function native_ctx_fillRect(x, y, w, h)
 {
+	print("native_ctx_fillRect : ", x, y, w, h, " : ", this.fillStyle);
 }
+
+
+function native_ctx_strokeRect(x, y, w, h)
+{
+	print("native_ctx_strokeRect : ", x, y, w, h, " : ", this.strokeStyle);
+}
+
+
+function native_ctx_fillText(str, x, y)
+{
+	print("native_ctx_fillText : ", str, " : ", this.font);
+}
+
+
+function native_ctx_measureText(str)
+{
+	print("native_ctx_measureText : ", str);
+}
+
+
+function native_ctx_drawImage(img)  // FIXME
+{
+	print("native_ctx_drawImage");
+}
+
+
+function native_window_addListener(type, listener, useCapture)
+{
+	print("native_window_addListener : ", type);
+}
+
+
+//_______________________________________________
 
 
 function native_Init()
@@ -27,22 +61,32 @@ function native_Init()
 
 	Native.ctx =
 	{
-		foo: native_ctx_Foo
-	}
+		fillRect:		native_ctx_fillRect,
+		strokeRect:		native_ctx_strokeRect,
+		fillText:		native_ctx_fillText,
+		measureText:	native_ctx_measureText,
+		drawImage:		native_ctx_drawImage 
+	};
 
 	// create a dummy 'window' object
 
 	global.window =
 	{
+		// window size is set by the native player
 		innerWidth:  Native.width,
-		innerHeight: Native.height
-	}
+		innerHeight: Native.height,
+
+		addEventListener: native_window_addListener
+	};
 
 	// create a dummy 'document' global
 
 	global.document =
 	{
-		spacer: {},
+		spacer:
+		{
+			style: {}
+		},
 
 		canvas:
 		{
@@ -61,6 +105,21 @@ function native_Init()
 				return this.spacer;
 
 			return null;
+		}
+	};
+
+	// create our own Image class
+
+	global.Image = function()
+	{
+		// TODO
+	};
+
+	global.Image.prototype =
+	{
+		addEventListener: function(type, listener)
+		{
+			// TODO
 		}
 	};
 }
