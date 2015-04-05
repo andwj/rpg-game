@@ -71,6 +71,8 @@ static void JS_RegisterFunc(const char *func_name, duk_c_function FUNC, duk_idx_
 
 	if (! duk_put_prop_string(js_ctx, -2, func_name))
 		Main_FatalError("Failed to register Native function.\n");
+
+	duk_set_top(js_ctx, 0);
 }
 
 
@@ -80,13 +82,15 @@ static void JS_SetupNativeObject(void)
 
 	duk_push_global_object(js_ctx);
 
-	if (! duk_get_prop_string(js_ctx, -1 /*index*/, "Native"))
-		Main_FatalError("Failed to setup Native object.\n");
+	if (! duk_get_prop_string(js_ctx, -1, "Native"))
+		Main_FatalError("Failed to find Native object.\n");
 
 	duk_push_boolean(js_ctx, 1);
 
 	if (! duk_put_prop_string(js_ctx, -2, "active"))
 		Main_FatalError("Failed to setup Native object.\n");
+
+	duk_set_top(js_ctx, 0);
 
 	// add callback API
 
