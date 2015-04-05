@@ -294,6 +294,8 @@ void Screen_DrawText(const char *str, int x, int y)
 	if (! ctx.font)
 		return;
 
+	y = y - al_get_font_ascent(ctx.font);
+
 	al_hold_bitmap_drawing(true);
 
 	al_draw_text(ctx.font, ctx.color, x, y, 0 /* flags */, str);

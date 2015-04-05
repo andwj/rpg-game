@@ -163,6 +163,19 @@ static duk_ret_t Native_stroke_rect(duk_context *ctx)
 }
 
 
+static duk_ret_t Native_draw_text(duk_context *ctx)
+{
+	const char *str = duk_require_string(ctx, 0);
+
+	int x = duk_require_int(ctx, 1);
+	int y = duk_require_int(ctx, 2);
+
+	Screen_DrawText(str, x, y);
+
+	return 0;
+}
+
+
 //----------------------------------------------------------------------
 
 
@@ -237,6 +250,8 @@ static void JS_SetupNativeObject(void)
 
 	JS_RegisterFunc("fillRect",   &Native_fill_rect, 4);
 	JS_RegisterFunc("strokeRect", &Native_stroke_rect, 4);
+
+	JS_RegisterFunc("fillText",   &Native_draw_text, 3);
 }
 
 

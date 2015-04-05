@@ -27,12 +27,15 @@ function native_ctx_strokeRect(x, y, w, h)
 function native_ctx_fillText(str, x, y)
 {
 	Native.setColor(this.fillStyle);
+	Native.setFont (this.font);
 
-	print("native_ctx_fillText : ", str, " : ", this.font);
+	Native.fillText(str, x, y);
 }
 
 function native_ctx_measureText(str)
 {
+	Native.setFont(this.font);
+
 	print("native_ctx_measureText : ", str);
 }
 
