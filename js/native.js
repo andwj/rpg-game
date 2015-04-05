@@ -14,46 +14,39 @@ var Native = {};
 
 function native_ctx_fillRect(x, y, w, h)
 {
-	Native.set_color(this.fillStyle);
-//	Native.fillRect(x, y, w, h, this.fillStyle);
+	Native.setColor(this.fillStyle);
+	Native.fillRect(x, y, w, h);
 }
-
 
 function native_ctx_strokeRect(x, y, w, h)
 {
-	Native.set_color(this.strokeStyle);
-
-	print("native_ctx_strokeRect : ", x, y, w, h, " : ", this.strokeStyle);
+	Native.setColor(this.strokeStyle);
+	Native.strokeRect(x, y, w, h);
 }
-
 
 function native_ctx_fillText(str, x, y)
 {
-	Native.set_color(this.fillStyle);
+	Native.setColor(this.fillStyle);
 
 	print("native_ctx_fillText : ", str, " : ", this.font);
 }
-
 
 function native_ctx_measureText(str)
 {
 	print("native_ctx_measureText : ", str);
 }
 
-
 function native_ctx_drawImage(img)  // FIXME
 {
 	print("native_ctx_drawImage");
 }
 
-
-function native_ctx_nativeClip(x, y, w, h)
+function native_ctx_setClip(x, y, w, h)
 {
 	print("native_ctx_nativeClip");
 }
 
-
-function native_ctx_restore(x, y, w, h)   /* end clip */
+function native_ctx_clearClip(x, y, w, h)
 {
 	print("native_ctx_restore");
 }
@@ -83,8 +76,8 @@ function native_Init()
 		fillText:		native_ctx_fillText,
 		measureText:	native_ctx_measureText,
 		drawImage:		native_ctx_drawImage,
-		nativeClip:		native_ctx_nativeClip,
-		restore:		native_ctx_restore
+		nativeClip:		native_ctx_setClip,
+		restore:		native_ctx_clearClip
 	};
 
 	// create a dummy 'window' object

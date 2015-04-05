@@ -108,9 +108,33 @@ static duk_ret_t Native_set_color(duk_context *ctx)
 		sscanf(str, "%2x%2x%2x", &r, &g, &b);
 	}
 
-fprintf(stderr, "Color #%s --> (%d %d %d)\n", str, r, g, b);
-
 	Screen_SetColor(r, g, b, 255);
+
+	return 0;
+}
+
+
+static duk_ret_t Native_fill_rect(duk_context *ctx)
+{
+	int x = duk_require_int(ctx, 0);
+	int y = duk_require_int(ctx, 1);
+	int w = duk_require_int(ctx, 2);
+	int h = duk_require_int(ctx, 3);
+
+	Screen_DrawRect(x, y, w, h, true /* filled */);
+
+	return 0;
+}
+
+
+static duk_ret_t Native_stroke_rect(duk_context *ctx)
+{
+	int x = duk_require_int(ctx, 0);
+	int y = duk_require_int(ctx, 1);
+	int w = duk_require_int(ctx, 2);
+	int h = duk_require_int(ctx, 3);
+
+	Screen_DrawRect(x, y, w, h, false /* filled */);
 
 	return 0;
 }
@@ -185,8 +209,11 @@ static void JS_SetupNativeObject(void)
 
 	// add callback API
 
-	JS_RegisterFunc("set_font",  &Native_set_font, 2);
-	JS_RegisterFunc("set_color", &Native_set_color, 1);
+	JS_RegisterFunc("setFont",  &Native_set_font, 2);
+	JS_RegisterFunc("setColor", &Native_set_color, 1);
+
+	JS_RegisterFunc("fillRect",   &Native_fill_rect, 4);
+	JS_RegisterFunc("strokeRect", &Native_stroke_rect, 4);
 }
 
 
