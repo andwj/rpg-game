@@ -260,7 +260,7 @@ function world_NewGame()
 	}
 
 
-	world_CreateRoom(1, 1, 14, 9);
+	world_CreateRoom(1, 1, 54, 49);
 }
 
 

@@ -31,6 +31,11 @@ function init()
 	render_LoadTileset();
 
 	main_Init();
+
+	// HACK
+
+	if (Native.active)
+		main_BeginGame();
 }
 
 

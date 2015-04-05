@@ -37,6 +37,8 @@ function native_ctx_measureText(str)
 	Native.setFont(this.font);
 
 	print("native_ctx_measureText : ", str);
+
+	return 20;
 }
 
 function native_ctx_drawImage(img)  // FIXME
@@ -49,7 +51,7 @@ function native_ctx_setClip(x, y, w, h)
 	print("native_ctx_nativeClip");
 }
 
-function native_ctx_clearClip(x, y, w, h)
+function native_ctx_resetClip(x, y, w, h)
 {
 	print("native_ctx_restore");
 }
@@ -58,6 +60,22 @@ function native_ctx_clearClip(x, y, w, h)
 function native_window_addListener(type, listener, useCapture)
 {
 	print("native_window_addListener : ", type);
+}
+
+
+function native_image_addListener(type, listener)
+{
+	// this actually causes the image to be loaded
+	// [ a little bit hacky, but it works... ]
+
+	// 'this' is an Image instance
+
+	this.id = Native.loadImage(this.src);
+
+	this.width  = Native.getImageProp(this.id, "width");
+	this.height = Native.getImageProp(this.id, "height");
+
+	// FIXME : cannot do the callback right now...
 }
 
 
@@ -80,12 +98,10 @@ function native_Init()
 		measureText:	native_ctx_measureText,
 		drawImage:		native_ctx_drawImage,
 		nativeClip:		native_ctx_setClip,
-		restore:		native_ctx_clearClip
+		restore:		native_ctx_resetClip
 	};
 
 	// create a dummy 'window' object
-
-print("Native screen size:", Native.screen_w, Native.screen_h);
 
 	global.window =
 	{
@@ -134,10 +150,7 @@ print("Native screen size:", Native.screen_w, Native.screen_h);
 
 	global.Image.prototype =
 	{
-		addEventListener: function(type, listener)
-		{
-			// TODO
-		}
+		addEventListener: native_image_addListener
 	};
 }
 
