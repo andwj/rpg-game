@@ -231,6 +231,12 @@ function render_LoadTileset()
 
 function render_BeginClip(x, y, w, h)
 {
+	if (ctx.nativeClip)
+	{
+		ctx.nativeClip(x, y, w, h);
+		return;
+	}
+
 	ctx.save();
 	ctx.beginPath();
 	ctx.rect(x, y, w, h);
@@ -238,7 +244,7 @@ function render_BeginClip(x, y, w, h)
 }
 
 
-function render_EndClip(x, y, w, h)
+function render_EndClip()
 {
 	ctx.restore();
 }

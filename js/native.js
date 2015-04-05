@@ -9,7 +9,7 @@
 "use strict";
 
 
-var Native = { width:1024, height:768 };
+var Native = {};
 
 
 function native_ctx_fillRect(x, y, w, h)
@@ -42,6 +42,18 @@ function native_ctx_drawImage(img)  // FIXME
 }
 
 
+function native_ctx_nativeClip(x, y, w, h)
+{
+	print("native_ctx_nativeClip");
+}
+
+
+function native_ctx_restore(x, y, w, h)   /* end clip */
+{
+	print("native_ctx_restore");
+}
+
+
 function native_window_addListener(type, listener, useCapture)
 {
 	print("native_window_addListener : ", type);
@@ -65,16 +77,20 @@ function native_Init()
 		strokeRect:		native_ctx_strokeRect,
 		fillText:		native_ctx_fillText,
 		measureText:	native_ctx_measureText,
-		drawImage:		native_ctx_drawImage 
+		drawImage:		native_ctx_drawImage,
+		nativeClip:		native_ctx_nativeClip,
+		restore:		native_ctx_restore
 	};
 
 	// create a dummy 'window' object
 
+print("Native screen size:", Native.screen_w, Native.screen_h);
+
 	global.window =
 	{
 		// window size is set by the native player
-		innerWidth:  Native.width,
-		innerHeight: Native.height,
+		innerWidth:  Native.screen_w,
+		innerHeight: Native.screen_h,
 
 		addEventListener: native_window_addListener
 	};
