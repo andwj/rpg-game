@@ -49,7 +49,7 @@ Milestone 1
 *  code to draw the text panel and add text to it [DONE]
 *  code to create a single room with player in it [DONE]
 *  code to render this map [DONE]
-*  allow player to move around the room with arrow keys
+*  allow player to move around the room with arrow keys [DONE]
 
 
 Milestone 2
