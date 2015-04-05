@@ -212,7 +212,6 @@ function render_Init()
 		return false;
 	}
 
-
 	// this causes doubled-up images to appear pixelated (instead of blurry)
 	render_SetSmoothing(false);
 
@@ -264,7 +263,7 @@ function render_Progress(count, total)
 	{
 		ctx.font = "20px serif";
 		ctx.fillStyle = "#ccc";
-		ctx.fillText("Loading resources", x, y)
+		ctx.fillText("Loading resources", x, y);
 	}
 
 	y += 30;
