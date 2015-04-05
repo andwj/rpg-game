@@ -276,7 +276,7 @@ function render_Progress(count, total)
 
 	if (count == 0)
 	{
-		ctx.strokeStyle = "#fff";
+		ctx.strokeStyle = "#999";
 		ctx.strokeRect(x, y, w, h);
 	}
 
