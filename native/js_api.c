@@ -236,6 +236,25 @@ static duk_ret_t Native_draw_image_part(duk_context *ctx)
 }
 
 
+static duk_ret_t Native_set_clip(duk_context *ctx)
+{
+	int x = duk_require_int(ctx, 0);
+	int y = duk_require_int(ctx, 1);
+	int w = duk_require_int(ctx, 2);
+	int h = duk_require_int(ctx, 3);
+
+	Screen_SetClip(x, y, w, h);
+	return 0;
+}
+
+
+static duk_ret_t Native_reset_clip(duk_context *ctx)
+{
+	Screen_ResetClip();
+	return 0;
+}
+
+
 //----------------------------------------------------------------------
 
 
@@ -305,10 +324,13 @@ static void JS_SetupNativeObject(void)
 
 	// add callback API
 
-	JS_RegisterFunc("setFont",  &Native_set_font, 2);
-	JS_RegisterFunc("setColor", &Native_set_color, 1);
+	JS_RegisterFunc("setFont",   &Native_set_font,  2);
+	JS_RegisterFunc("setColor",  &Native_set_color, 1);
 
-	JS_RegisterFunc("fillRect",   &Native_fill_rect, 4);
+	JS_RegisterFunc("setClip",   &Native_set_clip, 4);
+	JS_RegisterFunc("resetClip", &Native_reset_clip, 0);
+
+	JS_RegisterFunc("fillRect",   &Native_fill_rect,   4);
 	JS_RegisterFunc("strokeRect", &Native_stroke_rect, 4);
 
 	JS_RegisterFunc("fillText",   &Native_draw_text, 3);

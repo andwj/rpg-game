@@ -55,12 +55,12 @@ function native_ctx_drawImage(img, sx, sy, sw, sh, x, y, w, h)
 
 function native_ctx_setClip(x, y, w, h)
 {
-	print("native_ctx_nativeClip");
+	Native.setClip(x, y, w, h);
 }
 
-function native_ctx_resetClip(x, y, w, h)
+function native_ctx_resetClip()
 {
-	print("native_ctx_restore");
+	Native.resetClip();
 }
 
 
