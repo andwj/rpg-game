@@ -60,7 +60,7 @@ void JS_Close(void)
 }
 
 
-static void JS_RegisterFunc()
+static void JS_RegisterFunc(const char *func_name, int FUNC)
 {
 	// TODO
 }
@@ -70,7 +70,15 @@ static void JS_SetupNativeObject(void)
 {
 	// set Native.active to true
 
-	// FIXME
+	duk_push_global_object(js_ctx);
+
+	if (! duk_get_prop_string(js_ctx, -1 /*index*/, "Native"))
+		Main_FatalError("Failed to setup Native object.\n");
+
+	duk_push_boolean(js_ctx, 1);
+
+	if (! duk_put_prop_string(js_ctx, -2, "active"))
+		Main_FatalError("Failed to setup Native object.\n");
 
 	// add callback API
 
