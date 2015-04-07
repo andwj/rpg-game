@@ -346,14 +346,14 @@ void JS_LoadFile(const char *filename)
 {
 	LogPrintf("Loading JS file: %s\n", filename);
 
-	if (duk_peval_file(js_ctx, filename) != 0)
+	if (duk_pcompile_file(js_ctx, 0 /* flags */, filename) != 0 ||
+		duk_pcall(js_ctx, 0 /* nargs */) != DUK_EXEC_SUCCESS)
 	{
-		Main_FatalError("Failed to load javascript file: %s\n\n%s\n",
+		Main_FatalError("Failed to compile javascript file: %s\n\n%s\n",
 			filename, duk_safe_to_string(js_ctx, -1));
 	}
 
-	// ignore any result
-	duk_pop(js_ctx);
+	duk_set_top(js_ctx, 0);
 }
 
 
