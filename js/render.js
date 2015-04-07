@@ -17,7 +17,6 @@ var CANVAS_MIN_H = 382;
 var INFO_W = 152;
 var INFO_H = 248;
 
-var TEXT_H = 80;
 var BUFFER = 8;
 
 
@@ -54,7 +53,7 @@ function render_Dimensions()
 	Screen.scale = 1;
 
 	if ((window_w >= CANVAS_MIN_W * 2) &&
-			(window_h >= CANVAS_MIN_H * 2))
+		(window_h >= CANVAS_MIN_H * 2))
 	{
 		Screen.scale = 2;
 
@@ -71,15 +70,21 @@ function render_Dimensions()
 	if (window_h < CANVAS_MIN_H)
 		window_h = CANVAS_MIN_H;
 
+	// compute number of text rows (esp. when we have lots of spare vertical room)
+	Screen.text_line_h = 20;
+	if (window_h > 400) Screen.text_line_h += 1;
+	if (window_h > 600) Screen.text_line_h += 1;
+
+	Screen.num_text_rows = Math.floor(4 + (window_h - CANVAS_MIN_H) / 120);
+
+	var text_h = Screen.num_text_rows * Screen.text_line_h;
+
 	Screen.tile_w = (window_w - BUFFER - INFO_W) / 32.0;
-	Screen.tile_h = (window_h - BUFFER - TEXT_H) / 32.0;
+	Screen.tile_h = (window_h - BUFFER - text_h) / 32.0;
 
 	// compute wanted canvas size
-	Screen.width  = Screen.tile_w * 32 + BUFFER + INFO_W;
-	Screen.height = Screen.tile_h * 32 + BUFFER + TEXT_H;
-
-	Screen.width  = Screen.width  * Screen.scale;
-	Screen.height = Screen.height * Screen.scale;
+	Screen.width  = window_w * Screen.scale;
+	Screen.height = window_h * Screen.scale;
 
 	// compute padding for vertical centering
 	Screen.padding_h = Math.floor((window.innerHeight - Screen.height) / 2);
@@ -92,8 +97,9 @@ function render_Dimensions()
 function render_PlacePanels()
 {
 	// positions for each panel
+	var text_h = Screen.num_text_rows * Screen.text_line_h;
 	var mx  = (INFO_W + BUFFER) * Screen.scale;
-	var my  = Screen.height - TEXT_H * Screen.scale;
+	var my  = Screen.height - text_h * Screen.scale;
 	var buf = BUFFER * Screen.scale;
 	var info_h = INFO_H * Screen.scale
 
@@ -129,7 +135,7 @@ function render_PlacePanels()
 		x: mx,
 		y: my,
 		w: Screen.width - mx,
-		h: TEXT_H * Screen.scale,
+		h: text_h * Screen.scale,
 		bg: "#014"
 	};
 }
@@ -702,9 +708,6 @@ function render_Radar()
 
 var MAX_LINES = 400;
 
-var SHOW_LINES = 4;
-var LINE_H = 20;	/* TEXT_H / SHOW_LINES */
-
 
 function render_SetTextFont()
 {
@@ -765,6 +768,9 @@ function render_TextArea()
 {
 	render_BeginPanel(Screen.text_panel);
 	
+	var LINE_H     = Screen.text_line_h;
+	var SHOW_LINES = Screen.num_text_rows;
+
 	var first = 0;
 
 	if (Screen.text_lines.length > SHOW_LINES)
