@@ -148,9 +148,6 @@ function render_Init()
 		// the canvas element
 		canvas_elem: null,
 
-		// spacer element at top
-		spacer_elem: null,
-
 		// size (in pixels) of the canvas bitmap
 		width: 0,
 		height: 0,
@@ -189,22 +186,11 @@ function render_Init()
 	}
 
 
-	Screen.spacer_elem = document.getElementById("spacer");
-
-	if (Screen.spacer_elem === null)
-	{
-		alert("Error: Unable to find spacer element");
-		return false;
-	}
-
-
 	render_Dimensions();
 	render_PlacePanels();
 
 	Screen.canvas_elem.width  = Screen.width;
 	Screen.canvas_elem.height = Screen.height;
-
-	Screen.spacer_elem.style.height = Screen.padding_h + "px";
 
 /* DEBUG
 	   alert("Window size: " + window.innerWidth + " x " + window.innerHeight);

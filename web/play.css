@@ -8,10 +8,6 @@ body {
   color: white;
 }
 
-#spacer {
-  height: 10px;
-}
-
 canvas {
   margin-top: 40px;
   display: block;
