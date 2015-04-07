@@ -403,23 +403,35 @@ void Screen_DrawImage(int id, int x, int y, int w, int h)
 //    INPUT HANDLING
 //----------------------------------------------------------------------
 
-static void Event_KeyDown(ALLEGRO_EVENT *ev)
+static const char * TranslateKeyCode(int code, int unichar)
 {
-	// TODO
+	if (unichar <= 0)
+		return NULL;
+
+	// FIXME
+
+	return "a";
 }
 
-static void Event_KeyUp(ALLEGRO_EVENT *ev)
+
+static void Handle_Key(ALLEGRO_KEYBOARD_EVENT *ev)
 {
-	// TODO
+	const char *key = TranslateKeyCode(ev->keycode, ev->unichar);
+
+	if (! key)
+		return;
+
+	bool is_shift = (ev->modifiers & ALLEGRO_KEYMOD_SHIFT) ? true : false;
+	bool is_ctrl  = (ev->modifiers & ALLEGRO_KEYMOD_CTRL)  ? true : false;
+	bool is_alt   = (ev->modifiers & (ALLEGRO_KEYMOD_ALT | ALLEGRO_KEYMOD_ALTGR)) ? true : false;
+	bool is_meta  = (ev->modifiers & (ALLEGRO_KEYMOD_MENU | ALLEGRO_KEYMOD_COMMAND |
+									  ALLEGRO_KEYMOD_LWIN | ALLEGRO_KEYMOD_RWIN)) ? true : false;
+
+	JS_KeyboardEvent(ev->keycode, key, ev->repeat, is_shift, is_ctrl, is_alt, is_meta);
 }
 
 
-static void Event_MouseDown(ALLEGRO_EVENT *ev)
-{
-	// TODO
-}
-
-static void Event_MouseUp(ALLEGRO_EVENT *ev)
+static void Handle_Click(ALLEGRO_MOUSE_EVENT *ev, _Bool is_up)
 {
 	// TODO
 }
@@ -440,19 +452,21 @@ void Screen_ProcessEvents(void)
 	{
 		switch (ev.type)
 		{
-			case ALLEGRO_EVENT_KEY_DOWN:
-				Event_KeyDown(&ev);
-				break;
-
-			case ALLEGRO_EVENT_KEY_UP:
-				Event_KeyUp(&ev);
+			case ALLEGRO_EVENT_KEY_CHAR:
+				Handle_Key(&ev.keyboard);
 				break;
 
 			case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
-				Event_MouseDown(&ev);
+				Handle_Click(&ev.mouse, false /* is_up */);
+				break;
 
 			case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
-				Event_MouseUp(&ev);
+				Handle_Click(&ev.mouse, true /* is_up */);
+				break;
+
+			case ALLEGRO_EVENT_DISPLAY_CLOSE:
+				want_quit = true;
+				break;
 
 			default:
 				break;

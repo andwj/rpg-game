@@ -502,7 +502,8 @@ void JS_IntervalCallback(void)
 }
 
 
-void JS_KeyboardListener(int code, const char *name, _Bool is_up)
+void JS_KeyboardEvent(int code, const char *key, bool repeat,
+					  bool is_shift, bool is_ctrl, bool is_alt, bool is_meta)
 {
 	// TODO
 }
