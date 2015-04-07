@@ -17,7 +17,7 @@ var CANVAS_MIN_H = 382;
 var INFO_W = 152;
 var INFO_H = 248;
 
-var TEXT_H = 64;
+var TEXT_H = 80;
 var BUFFER = 8;
 
 
@@ -333,10 +333,7 @@ function render_BigPicture(img, back_col, text_dy, text)
 		x = mx;
 		y = my + text_dy * Screen.scale;
 
-		if (Screen.scale > 1)
-			ctx.font = "28px Arial";
-		else
-			ctx.font = "18px Arial";
+		render_SetTextFont();
 
 		ctx.fillStyle = "#ddd";
 
@@ -706,7 +703,7 @@ function render_Radar()
 var MAX_LINES = 400;
 
 var SHOW_LINES = 4;
-var LINE_H = 16;	// i.e. TEXT_H / SHOW_LINES
+var LINE_H = 20;	/* TEXT_H / SHOW_LINES */
 
 
 function render_SetTextFont()
@@ -782,7 +779,7 @@ function render_TextArea()
 		var line = Screen.text_lines[first + i];
 
 		var tx = Screen.text_panel.x + 4;
-		var ty = Screen.text_panel.y + ((i + 1) * LINE_H - 5) * Screen.scale;
+		var ty = Screen.text_panel.y + ((i + 1) * LINE_H - 2) * Screen.scale;
 
 		if (line)
 			ctx.fillText(line, tx, ty);
