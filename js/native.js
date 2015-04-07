@@ -36,9 +36,13 @@ function native_ctx_measureText(str)
 {
 	Native.setFont(this.font);
 
-	print("native_ctx_measureText : ", str);
+	// create the 'size' object here
+	// [ IDEA : re-use a single object to save some memory ]
+	var size = {};
 
-	return { width:64, height:16 };
+	Native.measureText(str, size);
+
+	return size;
 }
 
 function native_ctx_drawImage(img, sx, sy, sw, sh, x, y, w, h)

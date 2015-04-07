@@ -171,6 +171,26 @@ static duk_ret_t Native_draw_text(duk_context *ctx)
 }
 
 
+static duk_ret_t Native_measure_text(duk_context *ctx)
+{
+	const char *str = duk_require_string(ctx, 0);
+
+	/* parameter [1] is the 'size' object passed from JS code */
+
+	int width, height;
+
+	Screen_MeasureText(str, &width, &height);
+
+	duk_push_int(ctx, width);
+	duk_put_prop_string(ctx, 1, "width");
+
+	duk_push_int(ctx, height);
+	duk_put_prop_string(ctx, 1, "height");
+
+	return 0;
+}
+
+
 static duk_ret_t Native_load_image(duk_context *ctx)
 {
 	const char *str = duk_require_string(ctx, 0);
@@ -333,7 +353,8 @@ static void JS_SetupNativeObject(void)
 	JS_RegisterFunc("fillRect",   &Native_fill_rect,   4);
 	JS_RegisterFunc("strokeRect", &Native_stroke_rect, 4);
 
-	JS_RegisterFunc("fillText",   &Native_draw_text, 3);
+	JS_RegisterFunc("fillText",    &Native_draw_text, 3);
+	JS_RegisterFunc("measureText", &Native_measure_text, 2);
 
 	JS_RegisterFunc("loadImage",     &Native_load_image, 1);
 	JS_RegisterFunc("getImageProp",  &Native_get_image_prop, 2);
