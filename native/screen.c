@@ -486,9 +486,42 @@ static const char * TranslateKeyCode(int keycode, int unichar)
 
 	/* second, convert the unicode character */
 
-	// FIXME
+	static char buffer[64];
 
-	return "a";
+	if (unichar < 32)
+		return NULL;
+	
+	if (unichar >= 127 && unichar < 160)
+		return NULL;
+	
+	if (unichar < 128)
+	{
+		// ASCII
+		buffer[0] = (char) unichar;
+		buffer[1] = 0;
+	}
+	else if (unichar <= 0x7ff)
+	{
+		// UTF-8 : two bytes
+		buffer[0] = 0xC0 + (unichar >> 6);
+		buffer[1] = 0x80 + (unichar & 0x3f);
+		buffer[2] = 0;
+	}
+	else if (unichar <= 0xffff)
+	{
+		// UTF-8 : three bytes
+		buffer[0] = 0xE0 + (unichar >> 12);
+		buffer[1] = 0x80 + ((unichar >> 6) & 0x3f);
+		buffer[2] = 0x80 + (unichar & 0x3f);
+		buffer[3] = 0;
+	}
+	else
+	{
+		// not in the BMP
+		return NULL;
+	}
+
+	return buffer;
 }
 
 
