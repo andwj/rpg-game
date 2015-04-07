@@ -304,6 +304,20 @@ void Screen_DrawText(const char *str, int x, int y)
 }
 
 
+void Screen_MeasureText(const char *str, int *w, int *h)
+{
+	int bbx, bby;
+
+	if (! ctx.font)
+	{
+		*w = *h = 0;
+		return;
+	}
+
+	al_get_text_dimensions(ctx.font, str, &bbx, &bby, w, h);
+}
+
+
 //
 //  Image caching
 //
