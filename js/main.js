@@ -103,6 +103,7 @@ function main_BeginGame()
 	player_NewGame();
 
 	render_AddLine("Welcome to Rpg-Game !");
+	render_AddLine("Press '?' for help.");
 
 	render_DirtyAll();
 
