@@ -65,8 +65,7 @@ Player.prototype =
 
 		world_MoveEntity2(this, T.neighbor(dir));
 
-		// FIXME!!!
-		render_RefreshAll();
+		render_DirtyMap();
 	}
 };
 

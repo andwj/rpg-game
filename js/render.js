@@ -392,6 +392,8 @@ function render_PanelFrames()
 
 function render_BeginPanel(panel)
 {
+	panel.dirty = false;
+
 	render_BeginClip(panel.x, panel.y, panel.w, panel.h);
 
 	ctx.fillStyle = panel.bg;
@@ -415,6 +417,55 @@ function render_RefreshAll()
 	render_TextArea();
 	render_InfoArea();
 	render_Radar();
+
+	Screen.all_dirty = false;
+}
+
+
+function render_DirtyMap()
+{
+	Screen. main_panel.dirty = true;
+	Screen.radar_panel.dirty = true;
+}
+
+function render_DirtyText()
+{
+	Screen.text_panel.dirty = true;
+}
+
+function render_DirtyInfo()
+{
+	Screen.info_panel.dirty = true;
+}
+
+function render_DirtyAll()
+{
+	Screen.all_dirty = true;
+}
+
+
+function render_Redraw()
+{
+	// This is called 10 times a second, and redraws the screen (or parts thereof)
+	// which require it (have been marked as "dirty").
+
+	if (Screen.all_dirty)
+	{
+		render_RefreshAll();
+		return;
+	}
+
+	if (Screen.main_panel.dirty)
+		render_WholeMap();
+
+	if (Screen.text_panel.dirty)
+		render_TextArea();
+
+	if (Screen.info_panel.dirty)
+		render_InfoArea();
+
+	if (Screen.radar_panel.dirty)
+		render_Radar();
 }
 
 
@@ -689,7 +740,7 @@ function render_AddLine(line)
 	if (cur_line.length > 0)
 		render_AddLineRaw(cur_line);
 
-	render_TextArea();
+	render_DirtyText();
 }
 
 

@@ -102,9 +102,9 @@ function main_BeginGame()
 	 world_NewGame();
 	player_NewGame();
 
-	render_RefreshAll();
-
 	render_AddLine("Welcome to Rpg-Game !");
+
+	window.setInterval(render_Redraw, 50 /* 20 times per second */);
 }
 
 
