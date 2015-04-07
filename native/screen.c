@@ -403,10 +403,88 @@ void Screen_DrawImage(int id, int x, int y, int w, int h)
 //    INPUT HANDLING
 //----------------------------------------------------------------------
 
-static const char * TranslateKeyCode(int code, int unichar)
+static const char * TranslateKeyCode(int keycode, int unichar)
 {
-	if (unichar <= 0)
-		return NULL;
+//DEBUG:
+//	fprintf(stderr, "TranslateKey : code=%04x  char=%04x\n", keycode, unichar);
+
+	/* first check for special keys */
+
+	switch (keycode)
+	{
+		case ALLEGRO_KEY_UP:		return "Up";
+		case ALLEGRO_KEY_DOWN:		return "Down";
+		case ALLEGRO_KEY_LEFT:		return "Left";
+		case ALLEGRO_KEY_RIGHT:		return "Right";
+
+		case ALLEGRO_KEY_INSERT:	return "Insert";
+		case ALLEGRO_KEY_DELETE:	return "Del";
+		case ALLEGRO_KEY_HOME:		return "Home";
+		case ALLEGRO_KEY_END:		return "End";
+		case ALLEGRO_KEY_PGUP:		return "PageUp";
+		case ALLEGRO_KEY_PGDN:		return "PageDown";
+
+		case ALLEGRO_KEY_BACKSPACE:	return "Backspace";
+		case ALLEGRO_KEY_TAB:		return "Tab";
+		case ALLEGRO_KEY_ENTER:		return "Enter";
+		case ALLEGRO_KEY_PRINTSCREEN: return "PrintScreen";
+		case ALLEGRO_KEY_PAUSE:		return "Pause";
+
+		// numeric keypad
+		case ALLEGRO_KEY_PAD_8:		return "Up";
+		case ALLEGRO_KEY_PAD_2:		return "Down";
+		case ALLEGRO_KEY_PAD_4:		return "Left";
+		case ALLEGRO_KEY_PAD_6:		return "Right";
+
+		case ALLEGRO_KEY_PAD_1:		return "End";
+		case ALLEGRO_KEY_PAD_7:		return "Home";
+		case ALLEGRO_KEY_PAD_3:		return "PageDown";
+		case ALLEGRO_KEY_PAD_9:		return "PageUp";
+
+		case ALLEGRO_KEY_PAD_5:		return "KP5";
+		case ALLEGRO_KEY_PAD_0:		return "Insert";
+
+		case ALLEGRO_KEY_PAD_SLASH:		return "/";
+		case ALLEGRO_KEY_PAD_ASTERISK:	return "*";
+		case ALLEGRO_KEY_PAD_MINUS:		return "-";
+		case ALLEGRO_KEY_PAD_PLUS:		return "+";
+		case ALLEGRO_KEY_PAD_DELETE:	return "Del";
+		case ALLEGRO_KEY_PAD_ENTER:		return "Enter";
+
+		// function keys
+		case ALLEGRO_KEY_F1:		return "F1";
+		case ALLEGRO_KEY_F2:		return "F2";
+		case ALLEGRO_KEY_F3:		return "F3";
+		case ALLEGRO_KEY_F4:		return "F4";
+		case ALLEGRO_KEY_F5:		return "F5";
+		case ALLEGRO_KEY_F6:		return "F6";
+		case ALLEGRO_KEY_F7:		return "F7";
+		case ALLEGRO_KEY_F8:		return "F8";
+		case ALLEGRO_KEY_F9:		return "F9";
+		case ALLEGRO_KEY_F10:		return "F10";
+		case ALLEGRO_KEY_F11:		return "F11";
+		case ALLEGRO_KEY_F12:		return "F12";
+
+		// modifier keys : ignore them
+		case ALLEGRO_KEY_LSHIFT:
+		case ALLEGRO_KEY_RSHIFT:
+		case ALLEGRO_KEY_LCTRL:
+		case ALLEGRO_KEY_RCTRL:
+		case ALLEGRO_KEY_ALT:
+		case ALLEGRO_KEY_ALTGR:
+		case ALLEGRO_KEY_LWIN:
+		case ALLEGRO_KEY_RWIN:
+		case ALLEGRO_KEY_MENU:
+		case ALLEGRO_KEY_COMMAND:
+		case ALLEGRO_KEY_SCROLLLOCK:
+		case ALLEGRO_KEY_NUMLOCK:
+		case ALLEGRO_KEY_CAPSLOCK:
+			return NULL;
+
+		break;
+	}
+
+	/* second, convert the unicode character */
 
 	// FIXME
 
