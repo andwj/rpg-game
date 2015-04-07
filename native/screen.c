@@ -182,7 +182,10 @@ void Screen_Update(void)
 	// go back to drawing on the canvas again
 	al_set_target_bitmap(canvas);
 
-	al_rest(0.005);
+	JS_IntervalCallback();
+
+	// this chosen to be around 20 FPS
+	al_rest(0.04);
 }
 
 

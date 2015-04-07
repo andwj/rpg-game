@@ -31,6 +31,9 @@ void JS_Load(void);
 
 void JS_BeginScript(void);
 
+void JS_IntervalCallback(void);
+void JS_KeyboardListener(int code, const char *name, _Bool is_up);
+
 
 #endif /* __JSFOO_API_H__ */
 

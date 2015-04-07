@@ -28,6 +28,9 @@
 static duk_context * js_ctx;
 
 
+static int interval_delay;
+
+
 static const char * CSS1_color_names[] =
 {
 	"black",	"#000000",
@@ -275,6 +278,15 @@ static duk_ret_t Native_reset_clip(duk_context *ctx)
 }
 
 
+static duk_ret_t Native_set_interval(duk_context *ctx)
+{
+	int delay = duk_require_int(ctx, 0);
+
+	interval_delay = delay;
+	return 0;
+}
+
+
 //----------------------------------------------------------------------
 
 
@@ -349,6 +361,7 @@ static void JS_SetupNativeObject(void)
 
 	JS_RegisterFunc("setClip",   &Native_set_clip, 4);
 	JS_RegisterFunc("resetClip", &Native_reset_clip, 0);
+	JS_RegisterFunc("setInterval", &Native_set_interval, 1);
 
 	JS_RegisterFunc("fillRect",   &Native_fill_rect,   4);
 	JS_RegisterFunc("strokeRect", &Native_stroke_rect, 4);
@@ -360,6 +373,7 @@ static void JS_SetupNativeObject(void)
 	JS_RegisterFunc("getImageProp",  &Native_get_image_prop, 2);
 	JS_RegisterFunc("drawImage",     &Native_draw_image, 5);
 	JS_RegisterFunc("drawImagePart", &Native_draw_image_part, 9);
+
 }
 
 
@@ -464,6 +478,33 @@ void JS_BeginScript(void)
 	}
 
 	duk_set_top(js_ctx, 0);
+}
+
+
+//----------------------------------------------------------------------
+//   CALLBACKS and EVENT LISTENERS
+//----------------------------------------------------------------------
+
+void JS_IntervalCallback(void)
+{
+	if (interval_delay <= 0)
+		return;
+
+	duk_push_global_object(js_ctx);
+	duk_get_prop_string(js_ctx, -1, "Native");
+
+	if (duk_get_prop_string(js_ctx, -1, "interval_func"))
+	{
+		duk_pcall(js_ctx, 0);
+	}
+
+	duk_set_top(js_ctx, 0);
+}
+
+
+void JS_KeyboardListener(int code, const char *name, _Bool is_up)
+{
+	// TODO
 }
 
 //--- editor settings ---

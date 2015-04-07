@@ -450,10 +450,10 @@ function render_DirtyAll()
 }
 
 
-function render_Redraw()
+function render_RedrawCallback()
 {
-	// This is called 10 times a second, and redraws the screen (or parts thereof)
-	// which require it (have been marked as "dirty").
+	// This is called FPS times per second, and redraws the screen (or
+	// parts thereof) which have been marked as "dirty".
 
 	if (Screen.all_dirty)
 	{
@@ -477,7 +477,7 @@ function render_Redraw()
 
 function render_BeginIntervalTimer()
 {
-	Screen.interval_id = window.setInterval(render_Redraw, 1000 / FPS);
+	Screen.interval_id = window.setInterval(render_RedrawCallback, 1000 / FPS);
 }
 
 function render_EndIntervalTimer()

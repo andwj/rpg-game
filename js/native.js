@@ -75,16 +75,14 @@ function native_window_addListener(type, listener, useCapture)
 
 function native_window_setInterval(func, delay)
 {
-	Native.interval_callback = func;
-
-	print("native_window_SetInterval");
+	Native.interval_func = func;
+	Native.setInterval(delay);
 }
 
 function native_window_clearInterval(id)
 {
-	Native.interval_callback = null;
-
-	print("native_window_clearInterval");
+	Native.interval_func = null;
+	Native.setInterval(-1);
 }
 
 
