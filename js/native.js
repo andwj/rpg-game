@@ -88,17 +88,18 @@ function native_window_clearInterval(id)
 
 function native_image_addListener(type, listener)
 {
-	// this actually causes the image to be loaded
-	// [ a little bit hacky, but it works... ]
+	// 'this' is an Image instance.
 
-	// 'this' is an Image instance
+	// Note: calling this actually loads the image
+	// [ a little bit hacky, but it works... ]
 
 	this.id = Native.loadImage(this.src);
 
 	this.width  = Native.getImageProp(this.id, "width");
 	this.height = Native.getImageProp(this.id, "height");
 
-	// FIXME : cannot do the callback right now...
+	// do the callback right now...
+	listener();
 }
 
 
@@ -170,7 +171,7 @@ function native_Init()
 
 	global.Image = function()
 	{
-		// TODO
+		/* nothing needed */
 	};
 
 	global.Image.prototype =

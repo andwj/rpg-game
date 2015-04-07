@@ -27,14 +27,28 @@ function loader_Init()
 }
 
 
+function loader_CheckFinished()
+{
+	// This checks if all resources has loaded.
+	//
+	// Only calls main_FinishLoading() when game_state is "loading"
+	// (i.e. after the "init" phase), to prevent calling it before
+	// all the required images have been registered.
+
+	if (load_count == load_total && game_state == "loading")
+	{
+		main_FinishLoading();
+	}
+}
+
+
 function loader_GotImage()
 {
 	load_count += 1;
 
 	render_Progress(load_count, load_total);
 
-	if (load_count == load_total)
-		main_FinishLoading();
+	loader_CheckFinished();
 }
 
 

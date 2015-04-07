@@ -16,7 +16,7 @@ var  vict_image = null;
 
 function init()
 {
-	game_mode = "loading";
+	game_state = "init";
 
 	native_Init();
 
@@ -32,10 +32,9 @@ function init()
 
 	main_Init();
 
-	// HACK
+	game_state = "loading";
 
-	if (Native.active)
-		main_BeginGame();
+	loader_CheckFinished();
 }
 
 
@@ -81,7 +80,7 @@ function main_FinishLoading()
 {
 	// called by loader once all resources are loaded.
 
-	game_mode = "waiting";
+	game_state = "waiting";
 
 	render_BigPicture(start_image, "#000", 75, "Press SPACE to start");
 
@@ -93,7 +92,7 @@ function main_BeginGame()
 {
 	// user has pressed SPACE to start a new game
 
-	game_mode = "active";
+	game_state = "active";
 
 	render_ClearBackground();
 
@@ -113,7 +112,7 @@ function main_BeginGame()
 
 function main_EndGame()
 {
-	game_mode = "over";
+	game_state = "over";
 
 	event_SetKeyHandler(null);
 
@@ -130,7 +129,7 @@ function main_EndGame()
 
 function main_Victory()
 {
-	game_mode = "over";
+	game_state = "over";
 
 	event_SetKeyHandler(null);
 

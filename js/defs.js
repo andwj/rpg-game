@@ -16,12 +16,13 @@ var VER_X   = "005";
 var global = this;
 
 
-// current game mode, can be:
-//    loading  (the resources)
-//    waiting  (for player to start)
-//    active
-//    over     (all player characters dead, or victory)
-var game_mode = "loading";
+// current game state, can be:
+//    init     : initializing
+//    loading  : loading the resources
+//    waiting  : waiting for player to start game
+//    active   : game in progress
+//    over     : victory or defeat
+var game_state = "init";
 
 
 // the player entities
