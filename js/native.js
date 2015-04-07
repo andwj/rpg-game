@@ -73,6 +73,20 @@ function native_window_addListener(type, listener, useCapture)
 	print("native_window_addListener : ", type);
 }
 
+function native_window_setInterval(func, delay)
+{
+	Native.interval_callback = func;
+
+	print("native_window_SetInterval");
+}
+
+function native_window_clearInterval(id)
+{
+	Native.interval_callback = null;
+
+	print("native_window_clearInterval");
+}
+
 
 function native_image_addListener(type, listener)
 {
@@ -120,7 +134,9 @@ function native_Init()
 		innerWidth:  Native.screen_w,
 		innerHeight: Native.screen_h,
 
-		addEventListener: native_window_addListener
+		addEventListener:	native_window_addListener,
+		setInterval:		native_window_setInterval,
+		clearInterval:		native_window_clearInterval
 	};
 
 	// create a dummy 'document' global

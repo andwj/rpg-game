@@ -10,13 +10,19 @@
 
 
 // minimum size of canvas
-var CANVAS_MIN_W = 632;
-var CANVAS_MIN_H = 472;
+var CANVAS_MIN_W = 512;
+var CANVAS_MIN_H = 382;
 
 // panel sizes (there is an 8 pixel buffer too)
-var INFO_W = 240;
-var TEXT_H = 80;
+var INFO_W = 152;
+var INFO_H = 248;
+
+var TEXT_H = 64;
 var BUFFER = 8;
+
+
+// rate of callbacks for redraws
+var FPS = 20;
 
 
 // the drawing context
@@ -89,7 +95,7 @@ function render_PlacePanels()
 	var mx  = (INFO_W + BUFFER) * Screen.scale;
 	var my  = Screen.height - TEXT_H * Screen.scale;
 	var buf = BUFFER * Screen.scale;
-	var info_h = 320 * Screen.scale
+	var info_h = INFO_H * Screen.scale
 
 	Screen.info_panel =
 	{
@@ -469,6 +475,20 @@ function render_Redraw()
 }
 
 
+function render_BeginIntervalTimer()
+{
+	Screen.interval_id = window.setInterval(render_Redraw, 1000 / FPS);
+}
+
+function render_EndIntervalTimer()
+{
+	if (Screen.interval_id)
+		window.clearInterval(Screen.interval_id);
+	
+	Screen.interval_id = null;
+}
+
+
 //----------------------------------------------------------------------
 //  MAP DRAWING
 //----------------------------------------------------------------------
@@ -686,7 +706,7 @@ function render_Radar()
 var MAX_LINES = 400;
 
 var SHOW_LINES = 4;
-var LINE_H = 20;	// i.e. TEXT_H / SHOW_LINES
+var LINE_H = 16;	// i.e. TEXT_H / SHOW_LINES
 
 
 function render_SetTextFont()

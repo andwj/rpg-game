@@ -106,7 +106,7 @@ function main_BeginGame()
 
 	render_DirtyAll();
 
-	window.setInterval(render_Redraw, 50 /* 20 times per second */);
+	render_BeginIntervalTimer();
 }
 
 
@@ -115,6 +115,8 @@ function main_EndGame()
 	game_mode = "over";
 
 	event_SetKeyHandler(null);
+
+	render_EndIntervalTimer();
 
 	var message = "";
 
@@ -130,6 +132,8 @@ function main_Victory()
 	game_mode = "over";
 
 	event_SetKeyHandler(null);
+
+	render_EndIntervalTimer();
 
 	render_BigPicture(vict_image, "#99ccff");
 }
