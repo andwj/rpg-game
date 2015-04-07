@@ -72,8 +72,9 @@ function render_Dimensions()
 
 	// compute number of text rows (esp. when we have lots of spare vertical room)
 	Screen.text_line_h = 20;
-	if (window_h > 400) Screen.text_line_h += 1;
-	if (window_h > 600) Screen.text_line_h += 1;
+	if (window_h >= 400) Screen.text_line_h += 1;
+	if (window_h >= 500) Screen.text_line_h += 1;
+	if (window_h >= 600) Screen.text_line_h += 1;
 
 	Screen.num_text_rows = Math.floor(4 + (window_h - CANVAS_MIN_H) / 120);
 
