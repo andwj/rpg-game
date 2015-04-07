@@ -55,16 +55,23 @@ Milestone 1
 Milestone 2
 -----------
 
+*  scroll map when needed (radar too)
 *  create larger map (60x60 tiles), multiple rooms, corridors
-*  scroll map when needed
 *  draw some player stats (health, armor, gold, strength, wisdom)
-*  ability to die, show a death screen
 *  create a monster, have it move around
 *  monster can attack player and vice versa, can die
-*  render a minimap, scroll when needed
+*  ability for player to die
+*  decorative entities (drawn on corner of tiles)
 
 
 Milestone 3
 -----------
+
+*  press '/' key to type in a command (e.g. yellow text)
+*  create a simple object, add to map, get it drawn
+*  ability to 'g' get an object
+*  inventory screen, highlight a current object, scrolling
+*  have small menu on inventory : 'd' drop, 'u' use, 'g' give, 't' throw
+   'w' wear, 'o' take off, etc....  [ woah too many! ]
 
 
