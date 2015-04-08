@@ -481,6 +481,28 @@ void JS_BeginScript(void)
 }
 
 
+bool JS_CheckGameActive(void)
+{
+	bool result = false;
+
+	duk_push_global_object(js_ctx);
+
+	if (duk_get_prop_string(js_ctx, -1, "game_state"))
+	{
+		const char *game_state = duk_get_string(js_ctx, -1);
+
+		if (game_state)
+		{
+			if (StringCaseCmp(game_state, "active") == 0)
+				result = true;
+		}
+	}
+
+	duk_set_top(js_ctx, 0);
+	return result;
+}
+
+
 //----------------------------------------------------------------------
 //   CALLBACKS and EVENT LISTENERS
 //----------------------------------------------------------------------

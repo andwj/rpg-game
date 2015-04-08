@@ -31,6 +31,8 @@ void JS_Load(void);
 
 void JS_BeginScript(void);
 
+bool JS_CheckGameActive(void);
+
 void JS_IntervalCallback(void);
 
 void JS_KeyboardEvent(int code, const char *key, bool repeat,
