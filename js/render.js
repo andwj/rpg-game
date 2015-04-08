@@ -15,7 +15,7 @@ var CANVAS_MIN_H = 382;
 
 // panel sizes (there is an 8 pixel buffer too)
 var INFO_W = 152;
-var INFO_H = 248;
+var INFO_H = 256;
 
 var BUFFER = 8;
 
@@ -76,11 +76,12 @@ function render_Dimensions()
 	if (window_h >= 500) Screen.text_line_h += 1;
 	if (window_h >= 600) Screen.text_line_h += 1;
 
-	Screen.num_text_rows = Math.floor(4 + (window_h - CANVAS_MIN_H) / 120);
+	Screen.num_text_rows = 4 + Math.floor((window_h - CANVAS_MIN_H) / 120);
+	Screen.info_w = INFO_W + Math.floor((window_w - CANVAS_MIN_W) / 6);
 
 	var text_h = Screen.num_text_rows * Screen.text_line_h;
 
-	Screen.tile_w = (window_w - BUFFER - INFO_W) / 32.0;
+	Screen.tile_w = (window_w - BUFFER - Screen.info_w) / 32.0;
 	Screen.tile_h = (window_h - BUFFER - text_h) / 32.0;
 
 	// compute wanted canvas size
@@ -99,7 +100,7 @@ function render_PlacePanels()
 {
 	// positions for each panel
 	var text_h = Screen.num_text_rows * Screen.text_line_h;
-	var mx  = (INFO_W + BUFFER) * Screen.scale;
+	var mx  = (Screen.info_w + BUFFER) * Screen.scale;
 	var my  = Screen.height - text_h * Screen.scale;
 	var buf = BUFFER * Screen.scale;
 	var info_h = INFO_H * Screen.scale
@@ -699,9 +700,9 @@ var MAX_LINES = 400;
 function render_SetTextFont()
 {
 	if (Screen.scale > 1)
-		ctx.font = "28px Arial";
+		ctx.font = "28px Sans";
 	else
-		ctx.font = "16px Arial";
+		ctx.font = "16px Sans";
 }
 
 
@@ -786,11 +787,63 @@ function render_TextArea()
 //   PLAYER INFO AREA
 //----------------------------------------------------------------------
 
+
+function render_PlayerInfo(idx, pl)
+{
+	if (! pl)
+		return;
+
+	// TODO
+}
+
+
 function render_InfoArea()
 {
 	render_BeginPanel(Screen.info_panel);
 
-	// TODO
+	/* draw the common stuff : mode, time, gold */
+
+	if (Screen.scale > 1)
+		ctx.font = "28px Monospace";
+	else
+		ctx.font = "16px Monospace";
+
+	var dx = 60 * Screen.scale;
+	var dy = 20 * Screen.scale;
+
+	var x = Screen.info_panel.x + 6 * Screen.scale;
+	var y = Screen.info_panel.y + 0 * Screen.scale + dy;
+
+	ctx.fillStyle = "#aaa";
+
+	ctx.fillText("Time:", x, y + dy * 0);
+	ctx.fillText("Gold:", x, y + dy * 1);
+	ctx.fillText("Mode:", x, y + dy * 2);
+
+	ctx.fillStyle = "#eee";
+	ctx.fillText("0000000", x + dx, y + dy * 0);
+
+	ctx.fillStyle = "#ff0";
+	ctx.fillText("$175", x + dx, y + dy * 1);
+		
+	if (World.mode == "battle")
+	{
+		ctx.fillStyle = "#f00";
+		ctx.fillText("BATTLE", x + dx, y + dy * 2);
+	}
+	else
+	{
+		ctx.fillStyle = "#0c0";
+		ctx.fillText("EXPLORE", x + dx, y + dy * 2);
+	}
+
+
+	/* draw a sub-panel for each player */
+
+	for (var idx = 0 ; idx < 4 ; idx++)
+	{
+		render_PlayerInfo(idx, Players[idx]);
+	}
 
 	render_EndPanel();
 }
