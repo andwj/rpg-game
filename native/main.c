@@ -178,6 +178,23 @@ void Main_FatalError(const char *msg, ...)
 }
 
 
+bool Main_ConfirmQuit(void)
+{
+	// no need to ask if a game is not currently active
+	if (! JS_CheckGameActive())
+		return true;
+
+	int res = al_show_native_message_box(NULL, PROG_TITLE " : Confirm Quit",
+				"Really quit?",
+				"There is a current game in progress."
+				"Are you sure you want to discard it without saving?",
+				"Cancel|Quit",
+				ALLEGRO_MESSAGEBOX_YES_NO | ALLEGRO_MESSAGEBOX_QUESTION);
+
+	return (res == 2);
+}
+
+
 /* ----- Main Program ----------------------------- */
 
 
@@ -244,9 +261,17 @@ int main(int argc, char **argv)
 	LogPrintf("\nStartup successful.\n\n");
 
 
-	while (! want_quit)
+	while (true)
 	{
 		Screen_Update();
+
+		if (want_quit)
+		{
+			if (Main_ConfirmQuit())
+				break;
+
+			want_quit = false;
+		}
 	}
 
 	Main_Shutdown();
