@@ -186,7 +186,7 @@ bool Main_ConfirmQuit(void)
 
 	int res = al_show_native_message_box(NULL, PROG_TITLE " : Confirm Quit",
 				"Really quit?",
-				"There is a current game in progress."
+				"There is a current game in progress. "
 				"Are you sure you want to discard it without saving?",
 				"Cancel|Quit",
 				ALLEGRO_MESSAGEBOX_YES_NO | ALLEGRO_MESSAGEBOX_QUESTION);

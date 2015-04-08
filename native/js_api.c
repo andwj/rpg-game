@@ -527,7 +527,24 @@ void JS_IntervalCallback(void)
 void JS_KeyboardEvent(int code, const char *key, bool repeat,
 					  bool is_shift, bool is_ctrl, bool is_alt, bool is_meta)
 {
-	// TODO
+	duk_push_global_object(js_ctx);
+	duk_get_prop_string(js_ctx, -1, "Native");
+
+	if (duk_get_prop_string(js_ctx, -1, "keyboard_func"))
+	{
+		duk_push_int    (js_ctx, code);
+		duk_push_string (js_ctx, key);
+		duk_push_boolean(js_ctx, repeat);
+
+		duk_push_boolean(js_ctx, is_shift);
+		duk_push_boolean(js_ctx, is_ctrl);
+		duk_push_boolean(js_ctx, is_alt);
+		duk_push_boolean(js_ctx, is_meta);
+
+		duk_pcall(js_ctx, 7);
+	}
+
+	duk_set_top(js_ctx, 0);
 }
 
 //--- editor settings ---

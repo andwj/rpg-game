@@ -70,7 +70,9 @@ function native_ctx_resetClip()
 
 function native_window_addListener(type, listener, useCapture)
 {
-	print("native_window_addListener : ", type);
+	var name = type + "_listener";
+
+	Native[name] = listener;
 }
 
 function native_window_setInterval(func, delay)
@@ -103,6 +105,30 @@ function native_image_addListener(type, listener)
 }
 
 
+function native_event_keyPress(code, key, repeat, is_shift, is_ctrl, is_alt, is_meta)
+{
+	// Called by the C code when a key-press occurs.
+
+	// if there is no key listener, do nothing
+	if (! Native.keydown_listener)
+		return;
+
+	// construct an Event object
+	var ev = new Event;
+
+	ev.code = code;
+	ev.key  = key;
+	ev.repeat = repeat;
+
+	ev.shiftKey = is_shift;
+	ev.ctrlKey  = is_ctrl;
+	ev.altKey   = is_alt;
+	ev.metaKey  = is_meta;
+
+	Native.keydown_listener(ev);
+}
+
+
 //_______________________________________________
 
 
@@ -111,6 +137,8 @@ function native_Init()
 	// check if running on native binary
 	if (! Native.active)
 		return;
+
+	Native.keyboard_func = native_event_keyPress;
 
 	// create a rendering context
 
@@ -177,6 +205,18 @@ function native_Init()
 	global.Image.prototype =
 	{
 		addEventListener: native_image_addListener
+	};
+
+	// create our own Event class
+
+	global.Event = function()
+	{
+		/* nothing needed */
+	};
+
+	global.Event.prototype =
+	{
+		preventDefault: function() {}
 	};
 }
 
