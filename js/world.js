@@ -238,13 +238,20 @@ function world_NewGame()
 {
 	World =
 	{
+		// all the tiles in the world
+		// two-dimensional array, access by: tiles[X][Y]
 		tiles: [],
 
-		areas: [],
-
+		// all the entities in the world, including monsters and items,
+		// excluding players
 		entities: [],
 
-		rescued: 0
+		// areas control visibility, when a player reaches (borders) a new
+		// area then all tiles in the area become visible.
+		areas: [],
+
+		// the active player of the team (must be alive!)
+		player: null
 	};
 
 

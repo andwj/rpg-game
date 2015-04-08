@@ -120,9 +120,6 @@ function main_EndGame()
 
 	var message = "";
 
-	if (World.rescued > 0)
-		message = "Rescued " + World.rescued + " Rabbits";
-
 	render_BigPicture(death_image, "#000", 70, message);
 }
 
