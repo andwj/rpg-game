@@ -50,7 +50,7 @@ function main_waiting_HandleKey(ev)
 {
 	if (ev.key == " " || ev.key == "Space")
 	{
-		main_BeginGame();
+		main_NewGame();
 		return;
 	}
 }
@@ -88,7 +88,7 @@ function main_FinishLoading()
 }
 
 
-function main_BeginGame()
+function main_NewGame()
 {
 	// user has pressed SPACE to start a new game
 
@@ -110,7 +110,7 @@ function main_BeginGame()
 }
 
 
-function main_EndGame()
+function main_Die()
 {
 	game_state = "over";
 

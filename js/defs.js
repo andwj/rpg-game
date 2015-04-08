@@ -22,11 +22,13 @@ var global = this;
 //    waiting  : waiting for player to start game
 //    active   : game in progress
 //    over     : victory or defeat
+//    saved	   : game was saved (no longer playing)
 var game_state = "init";
 
 
 // the player entities
 var Players;
+
 
 // the whole world (all the rooms, monsters, items, etc...)
 var World;
