@@ -22,7 +22,7 @@ OBJ_DIR=obj_linux
 
 OPTIMISE=-O0 -g3 -fstrict-aliasing
 
-DEBUG=-DDUK_OPT_DEBUG -DDUK_OPT_ASSERTIONS
+DEBUG=  #-DDUK_OPT_DEBUG -DDUK_OPT_ASSERTIONS
 
 # operating system choices: UNIX WIN32
 OS=UNIX
