@@ -173,6 +173,8 @@ void Screen_Update(void)
 	Screen_ResetClip();
 	Screen_ProcessEvents();
 
+	JS_IntervalCallback();
+
 	// copy the canvas bitmap to the back-buffer
 	al_set_target_backbuffer(display);
 	al_draw_bitmap(canvas, 0, 0, 0 /* flags */);
@@ -181,8 +183,6 @@ void Screen_Update(void)
 
 	// go back to drawing on the canvas again
 	al_set_target_bitmap(canvas);
-
-	JS_IntervalCallback();
 
 	// this chosen to be around 20 FPS
 	al_rest(0.04);
