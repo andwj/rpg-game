@@ -180,6 +180,10 @@ void Main_FatalError(const char *msg, ...)
 
 bool Main_ConfirmQuit(void)
 {
+	// in developer mode, no need to ask
+	if (aj_arg_Exists(0, "dev"))
+		return true;
+
 	// no need to ask if a game is not currently active
 	if (! JS_CheckGameActive())
 		return true;
