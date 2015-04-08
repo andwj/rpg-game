@@ -141,7 +141,7 @@ return;
 
 void Main_Shutdown(void)
 {
-	static _Bool shutting_down = false;
+	static bool shutting_down = false;
 
 	if (shutting_down)
 		return;

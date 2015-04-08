@@ -272,7 +272,7 @@ void Screen_ResetClip(void)
 }
 
 
-void Screen_DrawRect(int x, int y, int w, int h, _Bool filled)
+void Screen_DrawRect(int x, int y, int w, int h, bool filled)
 {
 	if (filled)
 	{
@@ -549,7 +549,7 @@ static void Handle_Key(ALLEGRO_KEYBOARD_EVENT *ev)
 }
 
 
-static void Handle_Click(ALLEGRO_MOUSE_EVENT *ev, _Bool is_up)
+static void Handle_Click(ALLEGRO_MOUSE_EVENT *ev, bool is_up)
 {
 	// TODO
 }

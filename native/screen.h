@@ -41,7 +41,7 @@ void Screen_SetFont (int size, int face);
 void Screen_SetClip  (int x, int y, int w, int h);
 void Screen_ResetClip(void);
 
-void Screen_DrawRect(int x, int y, int w, int h, _Bool filled);
+void Screen_DrawRect(int x, int y, int w, int h, bool filled);
 void Screen_DrawLine(int x1, int y1, int x2, int y2);
 void Screen_DrawText(const char *str, int x, int y);
 
