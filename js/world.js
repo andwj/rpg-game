@@ -242,8 +242,7 @@ function world_NewGame()
 		// two-dimensional array, access by: tiles[X][Y]
 		tiles: [],
 
-		// all the entities in the world, including monsters and items,
-		// excluding players
+		// all the entities in the world, including players, monsters and items
 		entities: [],
 
 		// areas control visibility, when a player reaches (borders) a new

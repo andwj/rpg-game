@@ -501,9 +501,6 @@ function render_TileRaw(x, y, id)
 {
 	var W = 32 * Screen.scale;
 
-	x = x + Screen.main_panel.x;
-	y = y + Screen.main_panel.y;
-
 	// Convert id string to position in tileset.
 	// The id string is always <uppercase letter><digit>, e.g. "A3" or "M0".
 	// The letter is the row, the digit is the column (1,2,3...8,9,0).
@@ -539,6 +536,9 @@ function render_Tile(tx, ty, id)
 	// skip if not visible
 	if (x < -W || x > Screen.main_panel.w) return;
 	if (y < -W || y > Screen.main_panel.h) return;
+
+	x = x + Screen.main_panel.x;
+	y = y + Screen.main_panel.y;
 
 	render_TileRaw(x, y, id);
 }
@@ -610,9 +610,6 @@ function render_MiniTileRaw(x, y, id)
 {
 	var W = 4 * Screen.scale;
 
-	x = x + Screen.radar_panel.x;
-	y = y + Screen.radar_panel.y;
-
 	// convert id string to position in tileset (see render_TileRaw)
 
 	var row = id.charCodeAt(0);
@@ -641,6 +638,9 @@ function render_MiniTile(tx, ty, id)
 	// skip if not visible
 	if (x < -W || x > Screen.radar_panel.w) return;
 	if (y < -W || y > Screen.radar_panel.h) return;
+
+	x = x + Screen.radar_panel.x;
+	y = y + Screen.radar_panel.y;
 
 	render_MiniTileRaw(x, y, id);
 }
@@ -793,7 +793,24 @@ function render_PlayerInfo(idx, pl)
 	if (! pl)
 		return;
 
-	// TODO
+	var x = Screen.info_panel.x;
+	var y = Screen.info_panel.y + (64 + idx * 64) * Screen.scale;
+	var w = Screen.info_panel.w;
+	var h = 64 * Screen.scale;
+
+	var bg = "#444";
+
+	if (idx == 0) //!!!! pl == World.player)
+		bg = "#357";
+	else if (idx != 1)
+		bg = "#555";
+
+	ctx.fillStyle = bg;
+	ctx.fillRect(x, y, w, h);
+
+	render_TileRaw(x + 4, y + 8, pl.info.tile);
+
+	// TODO : health (etc)
 }
 
 
@@ -812,7 +829,7 @@ function render_InfoArea()
 	var dy = 20 * Screen.scale;
 
 	var x = Screen.info_panel.x + 6 * Screen.scale;
-	var y = Screen.info_panel.y + 0 * Screen.scale + dy;
+	var y = Screen.info_panel.y - 2 * Screen.scale + dy;
 
 	ctx.fillStyle = "#aaa";
 
@@ -840,9 +857,9 @@ function render_InfoArea()
 
 	/* draw a sub-panel for each player */
 
-	for (var idx = 0 ; idx < 4 ; idx++)
+	for (var idx = 0 ; idx < 3 ; idx++)
 	{
-		render_PlayerInfo(idx, Players[idx]);
+		render_PlayerInfo(idx, Players[1]);
 	}
 
 	render_EndPanel();
