@@ -527,6 +527,13 @@ static const char * TranslateKeyCode(int keycode, int unichar)
 
 static void Handle_Key(ALLEGRO_KEYBOARD_EVENT *ev)
 {
+	// ESCAPE key is hard-coded to quit
+	if (ev->keycode == ALLEGRO_KEY_ESCAPE)
+	{
+		want_quit = true;
+		return;
+	}
+
 	const char *key = TranslateKeyCode(ev->keycode, ev->unichar);
 
 	if (! key)
@@ -554,10 +561,6 @@ void Screen_ProcessEvents(void)
 
 	al_get_mouse_state(&mouse_state);
 	al_get_keyboard_state(&kbd_state);
-
-	// TODO : use event system
-	if (al_key_down(&kbd_state, ALLEGRO_KEY_ESCAPE))
-		want_quit = true;
 
 	while (al_get_next_event(queue, &ev))
 	{
