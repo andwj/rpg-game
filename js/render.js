@@ -31,6 +31,9 @@ var ctx = null;
 var Screen = {};
 
 
+//________________________________________________
+
+
 function render_SetSmoothing(enable)
 {
 	ctx.imageSmoothingEnabled = enable;

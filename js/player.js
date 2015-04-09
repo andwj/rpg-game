@@ -134,9 +134,31 @@ function player_NewGame()
 }
 
 
+function player_SelectPlayer(idx)
+{
+	var pl = Players[idx];
+
+	if (! pl)
+		return;
+
+	// player has had their turn
+	if (pl.has_moved)
+		return;
+
+	world_FocusPlayer(pl);	
+}
+
+
 function player_HandleKey(ev)
 {
-	var pl = Players[0];
+	// digit keys select a new player to control
+	if (ev.key == "1" || ev.key == "2" || ev.key == "3" || ev.key == "4")
+	{
+		player_SelectPlayer((+ ev.key) - 1);
+		return;
+	}
+
+	var pl = World.player;
 
 	if (ev.key == "Up")
 		pl.moveStep(8);

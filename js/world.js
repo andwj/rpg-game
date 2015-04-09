@@ -180,10 +180,15 @@ function world_RemoveEntity(ent)
 
 function world_FocusPlayer(pl)
 {
+	if (pl == World.player)
+		return;
+
 	World.player = pl;
 
 	render_ScrollTo(pl.tx, pl.ty);
 	render_RadarScrollTo(pl.tx, pl.ty);
+
+	render_DirtyInfo();
 }
 
 
