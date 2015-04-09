@@ -36,7 +36,7 @@ function render_SetSmoothing(enable)
 	ctx.imageSmoothingEnabled = enable;
 	ctx.webkitImageSmoothingEnabled = enable;
 	ctx.mozImageSmoothingEnabled = enable;
-	ctx.oImageSmoothingEnabled = enable;  
+	ctx.oImageSmoothingEnabled = enable;
 }
 
 
@@ -105,6 +105,35 @@ function render_PlacePanels()
 	var buf = BUFFER * Screen.scale;
 	var info_h = INFO_H * Screen.scale
 
+	Screen.main_panel =
+	{
+		x: mx,
+		y: 0,
+		w: Screen.width - mx,
+		h: my - buf,
+		bg: "#000",
+
+		// current scroll position of main map, in TILE coords
+		// Note that tile Y coords go UPWARDS (0 = bottom-most)
+		// So: draw x = main_panel.x + (tx - scroll_x) * 32
+		//     draw y = main_panel.y + main_panel.h - (ty + 1 - scroll_y) * 32
+		scroll_x: 0,
+		scroll_y: 0,
+
+		// buffer (in tiles) to use when scrolling main map
+		buffer_x: Math.ceil(Screen.tile_w / 5),
+		buffer_y: Math.ceil(Screen.tile_h / 5)
+	};
+
+	Screen.text_panel =
+	{
+		x: mx,
+		y: my,
+		w: Screen.width - mx,
+		h: text_h * Screen.scale,
+		bg: "#014"
+	};
+
 	Screen.info_panel =
 	{
 		x: 0,
@@ -125,29 +154,6 @@ function render_PlacePanels()
 		scroll_y: 0
 	};
 
-	Screen.main_panel =
-	{
-		x: mx,
-		y: 0,
-		w: Screen.width - mx,
-		h: my - buf,
-		bg: "#000",
-	};
-
-	Screen.text_panel =
-	{
-		x: mx,
-		y: my,
-		w: Screen.width - mx,
-		h: text_h * Screen.scale,
-		bg: "#014"
-	};
-
-	// buffer to use when scrolling main map
-
-	Screen.main_panel.buffer_x = Math.ceil(Screen.tile_w / 5);
-	Screen.main_panel.buffer_y = Math.ceil(Screen.tile_h / 5);
-	
 	// radar stuff
 
 	Screen.radar_panel.tile_w = Screen.radar_panel.w / 4 / Screen.scale
@@ -175,13 +181,6 @@ function render_Init()
 
 		// padding needed above the canvas
 		padding_h: 0,
-
-		// current scroll position of main map, in TILE coords
-		// Note that tile Y coords go UPWARDS (0 = bottom-most)
-		// So: draw x = main_panel.x + (tx - scroll_x) * 32
-		//     draw y = main_panel.y + main_panel.h - (ty + 1 - scroll_y) * 32
-		scroll_x: 0,
-		scroll_y: 0,
 
 		// lines of text shown in text area (only last 4 or 5 are shown)
 		text_lines: []
@@ -292,14 +291,14 @@ function render_Progress(count, total)
 	x += 1; y += 1;
 	w -= 2; h -= 2;
 
-	ctx.fillStyle = "#000"; 
+	ctx.fillStyle = "#000";
 	ctx.fillRect(x, y, w, h);
 
 	w = w * count / total;
 
 	if (w > 0)
 	{
-		ctx.fillStyle = "#06c"; 
+		ctx.fillStyle = "#06c";
 		ctx.fillRect(x, y, w, h);
 	}
 }
@@ -484,7 +483,7 @@ function render_EndIntervalTimer()
 {
 	if (Screen.interval_id)
 		window.clearInterval(Screen.interval_id);
-	
+
 	Screen.interval_id = null;
 }
 
@@ -496,13 +495,13 @@ function render_EndIntervalTimer()
 function render_CalcTileX(tx)
 {
 	// relative to left edge of main panel
-	return (tx - Screen.scroll_x) * 32 * Screen.scale;
+	return (tx - Screen.main_panel.scroll_x) * 32 * Screen.scale;
 }
 
 function render_CalcTileY(ty)
 {
 	// relative to top of main panel
-	return Screen.main_panel.h - (ty + 1 - Screen.scroll_y) * 32 * Screen.scale;
+	return Screen.main_panel.h - (ty + 1 - Screen.main_panel.scroll_y) * 32 * Screen.scale;
 }
 
 
@@ -557,25 +556,24 @@ function render_WholeMap()
 {
 	// whenever the map scrolls, must call this
 
-	render_BeginPanel(Screen.main_panel);
+	var panel = Screen.main_panel;
+
+	render_BeginPanel(panel);
 
 	// figure out what range of tiles we need to draw
 	var tx1, ty1, tx2, ty2;
 
-	tx1 = Math.floor(Screen.scroll_x);
-	ty1 = Math.floor(Screen.scroll_y);
+	tx1 = Math.floor(panel.scroll_x);
+	ty1 = Math.floor(panel.scroll_y);
 
-	tx2 = Math.ceil(Screen.scroll_x + Screen.tile_w);
-	ty2 = Math.ceil(Screen.scroll_y + Screen.tile_h);
+	tx2 = Math.ceil(panel.scroll_x + Screen.tile_w);
+	ty2 = Math.ceil(panel.scroll_y + Screen.tile_h);
 
 	if (tx1 < 0) tx1 = 0;
 	if (ty1 < 0) ty1 = 0;
 
-	if (tx2 > Screen.tile_w - 1)
-		tx2 = Screen.tile_w - 1;
-
-	if (ty2 > Screen.tile_h - 1)
-		ty2 = Screen.tile_h - 1;
+	if (tx2 > World.tw - 1) tx2 = World.tw - 1;
+	if (ty2 > World.th - 1) ty2 = World.th - 1;
 
 //console.log("render_WholeMap : (" + tx1 + " " + tx2 + ") .. (" + ty1 + " " + ty2 + ")");
 
@@ -596,6 +594,74 @@ function render_WholeMap()
 
 	render_EndPanel();
 }
+
+
+function render_ScrollTo(tx, ty)
+{
+	// Possibly scroll main map so that the given tile is near center
+	// (not off-screen, or in the buffer zone).
+
+	var panel = Screen.main_panel;
+
+	var size = 32 * Screen.scale;
+
+	var x1 = panel.buffer_x * size;
+	var y1 = panel.buffer_y * size;
+
+	var x2 = panel.w - x1;
+	var y2 = panel.h - y1;
+
+	var mx = render_CalcTileX(tx) + size / 2;
+	var my = render_CalcTileY(ty) + size / 2;
+
+	// handle X and Y separately
+
+	if (mx < x1 || mx > x2)
+	{
+		var new_scroll_x = panel.scroll_x;
+
+		if (mx > x2)
+			new_scroll_x += Math.ceil((mx - x2) / size);
+		else
+			new_scroll_x -= Math.ceil((x1 - mx) / size);
+
+		if (new_scroll_x > World.tw - Screen.tile_w)
+			new_scroll_x = World.tw - Screen.tile_w;
+
+		if (new_scroll_x < 0)
+			new_scroll_x = 0;
+
+		if (panel.scroll_x != new_scroll_x)
+		{
+			panel.scroll_x = new_scroll_x;
+			panel.dirty = true;
+		}
+	}
+
+	if (my < y1 || my > y2)
+	{
+		var new_scroll_y = panel.scroll_y;
+
+		if (my > y2)
+			new_scroll_y -= Math.ceil((my - y2) / size);
+		else
+			new_scroll_y += Math.ceil((y1 - my) / size);
+
+		if (new_scroll_y > World.th - Screen.tile_h)
+			new_scroll_y = World.th - Screen.tile_h;
+
+		if (new_scroll_y < 0)
+			new_scroll_y = 0;
+
+		if (panel.scroll_y != new_scroll_y)
+		{
+			panel.scroll_y = new_scroll_y;
+			panel.dirty = true;
+		}
+	}
+}
+
+
 
 
 //----------------------------------------------------------------------
@@ -667,19 +733,16 @@ function render_Radar()
 	var tx1, ty1, tx2, ty2;
 
 	tx1 = Math.floor(panel.scroll_x);
-	tx2 = Math.ceil (panel.scroll_x + panel.tile_w);
-
 	ty1 = Math.floor(panel.scroll_y);
+
+	tx2 = Math.ceil (panel.scroll_x + panel.tile_w);
 	ty2 = Math.ceil (panel.scroll_y + panel.tile_h);
 
 	if (tx1 < 0) tx1 = 0;
 	if (ty1 < 0) ty1 = 0;
 
-	if (tx2 > World.tw - 1)
-		tx2 = World.tw - 1;
-
-	if (ty2 > World.th - 1)
-		ty2 = World.th - 1;
+	if (tx2 > World.tw - 1) tx2 = World.tw - 1;
+	if (ty2 > World.th - 1) ty2 = World.th - 1;
 
 //console.log("render_Radar : (" + tx1 + " " + tx2 + ") .. (" + ty1 + " " + ty2 + ")");
 
@@ -709,8 +772,6 @@ function render_RadarScrollTo(tx, ty)
 	// center as we can) -- different from how the main map scrolls.
 
 	var panel = Screen.radar_panel;
-
-	var size = 4 * Screen.scale;
 
 	// coordinates in pixels, used only for testing
 	var mx = panel.w / 2;
@@ -780,7 +841,7 @@ function render_AddLineRaw(line)
 {
 	if (Screen.text_lines.length >= MAX_LINES)
 		Screen.text_lines.shift();
-	
+
 	Screen.text_lines.push(line);
 }
 
@@ -825,7 +886,7 @@ function render_AddLine(line)
 function render_TextArea()
 {
 	render_BeginPanel(Screen.text_panel);
-	
+
 	var LINE_H     = Screen.text_line_h;
 	var SHOW_LINES = Screen.num_text_rows;
 
@@ -912,7 +973,7 @@ function render_InfoArea()
 
 	ctx.fillStyle = "#ff0";
 	ctx.fillText("$175", x + dx, y + dy * 1);
-		
+
 	if (World.mode == "battle")
 	{
 		ctx.fillStyle = "#f00";

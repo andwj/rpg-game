@@ -182,12 +182,14 @@ function world_FocusPlayer(pl)
 {
 	World.player = pl;
 
+	render_ScrollTo(pl.tx, pl.ty);
 	render_RadarScrollTo(pl.tx, pl.ty);
 }
 
 
 function world_MovedPlayer(pl)
 {
+	render_ScrollTo(pl.tx, pl.ty);
 	render_RadarScrollTo(pl.tx, pl.ty);
 }
 
