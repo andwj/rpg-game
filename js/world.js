@@ -280,7 +280,16 @@ function world_NewGame()
 		areas: [],
 
 		// the active player of the team (must be alive!)
-		player: null
+		player: null,
+
+		// current team mode, either "explore" or "battle"
+		mode: "explore",
+
+		// number of turns the team has made
+		time: 0,
+
+		// amount of money the team has
+		gold: 200
 	};
 
 
@@ -297,6 +306,27 @@ function world_NewGame()
 
 
 	world_CreateRoom(1, 1, 54, 49);
+}
+
+
+function world_MakeTurn()
+{
+	// move the monsters and NPCs (etc)
+
+	World.time += 1;
+
+	render_DirtyInfo();
+
+	// reset has_moved flags of the players
+	for (var i = 0 ; i < 4 ; i++)
+	{
+		if (Players[i])
+			Players[i].has_moved = false;
+	}
+
+	// TEST CRUD:
+
+	render_AddLine("The bat attacks Gooblompi!");
 }
 
 

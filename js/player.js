@@ -102,11 +102,13 @@ Player.prototype =
 		var T = this.getTile();
 
 		if (! T.canMove(dir, this))
-			return false;
+			return;
 
 		world_MoveEntity2(this, T.neighbor(dir));
 
 		render_DirtyMap();
+
+		this.has_moved = true;
 	}
 };
 
@@ -173,6 +175,63 @@ function player_HandleKey(ev)
 		pl.moveStep(6);
 }
 
+
+function player_CheckEndOfTurn()
+{
+	// in EXPLORE mode, only one player can make a "real" turn.
+	// in BATTLE mode, each player can make _one_ real turn.
+
+	if (! World.player.has_moved)
+		return false;
+
+	if (World.mode == "explore")
+	{
+		// other players use AI to move
+		for (var i = 0 ; i < 4 ; i++)
+		{
+			player_AI(Players[i]);
+		}
+
+		return true;
+	}
+
+
+	// try to select a player who has not moved yet
+
+	var new_idx = -1;
+
+	for (var i = 0 ; i < 4 ; i++)
+	{
+		var pl = Players[i];
+
+		if (pl && ! pl.has_moved)
+		{
+			new_idx = i;
+			break;
+		}
+	}
+
+	if (new_idx < 0)
+		return true;
+
+	player_SelectPlayer(new_idx);
+	return false;
+}
+
+
+//________________________________________________
+
+
+function player_AI(pl)
+{
+	if (! pl)
+		return;
+	
+	if (pl.has_moved)
+		return;
+
+	pl.moveStep(8);
+}
 
 //--- editor settings ---
 // vi:ts=4:sw=4:noexpandtab

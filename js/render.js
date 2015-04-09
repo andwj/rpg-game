@@ -971,10 +971,10 @@ function render_InfoArea()
 	ctx.fillText("Mode:", x, y + dy * 2);
 
 	ctx.fillStyle = "#eee";
-	ctx.fillText("0000000", x + dx, y + dy * 0);
+	ctx.fillText("" + World.time, x + dx, y + dy * 0);
 
 	ctx.fillStyle = "#ff0";
-	ctx.fillText("$175", x + dx, y + dy * 1);
+	ctx.fillText("$" + World.gold, x + dx, y + dy * 1);
 
 	if (World.mode == "battle")
 	{

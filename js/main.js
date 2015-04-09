@@ -70,9 +70,10 @@ function main_active_HandleKey(ev)
 
 	player_HandleKey(ev);
 
-	// FIXME #1 : if (made_a_turn) MOVE_MONSTERS
-
-	// FIXME #2 : if (render stuff dirty) refresh...
+	if (player_CheckEndOfTurn())
+	{
+		world_MakeTurn();
+	}
 }
 
 
