@@ -84,6 +84,8 @@ function player_NewGame()
 	var ty = 5;
 
 	world_AddEntity(Players[1], tx, ty);
+
+	world_FocusPlayer(Players[1]);
 }
 
 

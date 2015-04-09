@@ -178,6 +178,14 @@ function world_RemoveEntity(ent)
 }
 
 
+function world_FocusPlayer(pl)
+{
+	World.player = pl;
+
+	render_RadarScrollTo(pl.tx, pl.ty);
+}
+
+
 function world_MovedPlayer(pl)
 {
 	render_RadarScrollTo(pl.tx, pl.ty);
