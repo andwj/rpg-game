@@ -178,10 +178,19 @@ function world_RemoveEntity(ent)
 }
 
 
+function world_MovedPlayer(pl)
+{
+	render_RadarScrollTo(pl.tx, pl.ty);
+}
+
+
 function world_MoveEntity(ent, tx, ty)
 {
 	world_RemoveEntity(ent);
 	world_AddEntity(ent, tx, ty);
+
+	if (ent == World.player)
+		world_MovedPlayer(ent);
 }
 
 
@@ -189,6 +198,9 @@ function world_MoveEntity2(ent, T)
 {
 	world_RemoveEntity(ent);
 	world_AddEntity(ent, T.tx, T.ty);
+
+	if (ent == World.player)
+		world_MovedPlayer(ent);
 }
 
 
@@ -204,6 +216,9 @@ function world_SwapActors(ent1, ent2)
 
 	tmp = ent1.tx; ent1.tx = ent2.tx; ent2.tx = tmp;
 	tmp = ent1.ty; ent1.ty = ent2.ty; ent2.ty = tmp;
+
+	if (ent1 == World.player) world_MovedPlayer(ent1);
+	if (ent2 == World.player) world_MovedPlayer(ent2);
 }
 
 
