@@ -120,7 +120,9 @@ function render_PlacePanels()
 		y: info_h + buf,
 		w: mx - buf,
 		h: Screen.height - info_h - buf,
-		bg: "#000"
+		bg: "#000",
+		scroll_x: 0,
+		scroll_y: 0
 	};
 
 	Screen.main_panel =
@@ -129,7 +131,7 @@ function render_PlacePanels()
 		y: 0,
 		w: Screen.width - mx,
 		h: my - buf,
-		bg: "#000"
+		bg: "#000",
 	};
 
 	Screen.text_panel =
@@ -140,6 +142,16 @@ function render_PlacePanels()
 		h: text_h * Screen.scale,
 		bg: "#014"
 	};
+
+	// buffer to use when scrolling main map
+
+	Screen.main_panel.buffer_x = Math.ceil(Screen.tile_w / 5);
+	Screen.main_panel.buffer_y = Math.ceil(Screen.tile_h / 5);
+	
+	// radar stuff
+
+	Screen.radar_panel.tile_w = Screen.radar_panel.w / 4 / Screen.scale
+	Screen.radar_panel.tile_h = Screen.radar_panel.h / 4 / Screen.scale
 }
 
 
@@ -170,9 +182,6 @@ function render_Init()
 		//     draw y = main_panel.y + main_panel.h - (ty + 1 - scroll_y) * 32
 		scroll_x: 0,
 		scroll_y: 0,
-
-		// scroll position of radar (do not need an X pos here)
-		radar_y: 0,
 
 		// lines of text shown in text area (only last 4 or 5 are shown)
 		text_lines: []
@@ -492,7 +501,7 @@ function render_CalcDrawX(tx)
 
 function render_CalcDrawY(ty)
 {
-	// relative to bottom of main panel
+	// relative to top of main panel
 	return Screen.main_panel.h - (ty + 1 - Screen.scroll_y) * 32 * Screen.scale;
 }
 
@@ -595,14 +604,14 @@ function render_WholeMap()
 
 function render_CalcMiniX(tx)
 {
-	// relative to left edge of main panel
-	return tx * 4 * Screen.scale;
+	// relative to left edge of radar panel
+	return (tx - Screen.radar_panel.scroll_x) * 4 * Screen.scale;
 }
 
 function render_CalcMiniY(ty)
 {
-	// relative to bottom of main panel
-	return Screen.radar_panel.h - (ty + 1 - Screen.radar_y) * 4 * Screen.scale;
+	// relative to top of radar panel
+	return Screen.radar_panel.h - (ty + 1 - Screen.radar_panel.scroll_y) * 4 * Screen.scale;
 }
 
 
@@ -650,16 +659,18 @@ function render_Radar()
 {
 	// whenever the mini-map scrolls, must call this
 
-	render_BeginPanel(Screen.radar_panel);
+	var panel = Screen.radar_panel;
+
+	render_BeginPanel(panel);
 
 	// determine range of tiles we need to draw
 	var tx1, ty1, tx2, ty2;
 
-	tx1 = 0;
-	tx2 = 59;
+	tx1 = Math.floor(panel.scroll_x);
+	tx2 = Math.ceil (panel.scroll_x + panel.tile_w);
 
-	ty1 = Math.floor(Screen.radar_y);
-	ty2 = Math.ceil (Screen.radar_y + Screen.radar_panel.h / 4);
+	ty1 = Math.floor(panel.scroll_y);
+	ty2 = Math.ceil (panel.scroll_y + panel.tile_h);
 
 	if (tx1 < 0) tx1 = 0;
 	if (ty1 < 0) ty1 = 0;
@@ -687,6 +698,66 @@ function render_Radar()
 	}
 
 	render_EndPanel();
+}
+
+
+function render_RadarScrollTo(tx, ty)
+{
+	// Possibly scroll radar so that the given tile is near center.
+	//
+	// When we scroll, we move that tile to center of radar (or as close to
+	// center as we can) -- different from how the main map scrolls.
+
+	var panel = Screen.radar_panel;
+
+	var mx = panel.x + panel.w / 2;
+	var my = panel.y + panel.h / 2;
+
+	var buf_x = panel.w / 6;
+	var buf_y = panel.h / 6;
+
+	var x = render_CalcMiniX(tx) + 2 * Screen.scale;
+	var y = render_CalcMiniY(ty) + 2 * Screen.scale;
+
+	// handle X and Y separately
+
+	if (x < mx - buf_x || x > mx + buf_x)
+	{
+		var new_scroll_x = Math.floor(panel.scroll_x + mx - x);
+
+		var ph_width = panel.tile_w * 2 * Screen_scale;
+
+		if (new_scroll_x + ph_width > panel.w)
+			new_scroll_x = panel.w - ph_width;
+
+		if (new_scroll_x - ph_width < 0)
+			new_scroll_x = ph_width;
+
+		if (panel.scroll_x != new_scroll_x)
+		{
+			panel.scroll_x = new_scroll_x;
+			panel.dirty = true;
+		}
+	}
+
+	if (y < my - buf_y || y > my + buf_y)
+	{
+		var new_scroll_y = Math.floor(panel.scroll_y + my - y);
+
+		var ph_height = panel.tile_h * 2 * Screen_scale;
+
+		if (new_scroll_y + ph_height > panel.h)
+			new_scroll_y = panel.h - ph_height;
+
+		if (new_scroll_y - ph_height < 0)
+			new_scroll_y = ph_height;
+
+		if (panel.scroll_y != new_scroll_y)
+		{
+			panel.scroll_y = new_scroll_y;
+			panel.dirty = true;
+		}
+	}
 }
 
 
