@@ -493,13 +493,13 @@ function render_EndIntervalTimer()
 //  MAP DRAWING
 //----------------------------------------------------------------------
 
-function render_CalcDrawX(tx)
+function render_CalcTileX(tx)
 {
 	// relative to left edge of main panel
 	return (tx - Screen.scroll_x) * 32 * Screen.scale;
 }
 
-function render_CalcDrawY(ty)
+function render_CalcTileY(ty)
 {
 	// relative to top of main panel
 	return Screen.main_panel.h - (ty + 1 - Screen.scroll_y) * 32 * Screen.scale;
@@ -539,8 +539,8 @@ function render_Tile(tx, ty, id)
 	var W = 32 * Screen.scale;
 
 	// get coordinate in main panel (for top-left corner)
-	var x = render_CalcDrawX(tx);
-	var y = render_CalcDrawY(ty);
+	var x = render_CalcTileX(tx);
+	var y = render_CalcTileY(ty);
 
 	// skip if not visible
 	if (x < -W || x > Screen.main_panel.w) return;
@@ -602,13 +602,13 @@ function render_WholeMap()
 //  RADAR
 //----------------------------------------------------------------------
 
-function render_CalcMiniX(tx)
+function render_CalcRadarX(tx)
 {
 	// relative to left edge of radar panel
 	return (tx - Screen.radar_panel.scroll_x) * 4 * Screen.scale;
 }
 
-function render_CalcMiniY(ty)
+function render_CalcRadarY(ty)
 {
 	// relative to top of radar panel
 	return Screen.radar_panel.h - (ty + 1 - Screen.radar_panel.scroll_y) * 4 * Screen.scale;
@@ -641,8 +641,8 @@ function render_MiniTile(tx, ty, id)
 	var W = 4 * Screen.scale;
 
 	// get coordinate in main panel (for top-left corner)
-	var x = render_CalcMiniX(tx);
-	var y = render_CalcMiniY(ty);
+	var x = render_CalcRadarX(tx);
+	var y = render_CalcRadarY(ty);
 
 	// skip if not visible
 	if (x < -W || x > Screen.radar_panel.w) return;
@@ -710,28 +710,29 @@ function render_RadarScrollTo(tx, ty)
 
 	var panel = Screen.radar_panel;
 
-	var mx = panel.x + panel.w / 2;
-	var my = panel.y + panel.h / 2;
+	var size = 4 * Screen.scale;
 
-	var buf_x = panel.w / 6;
-	var buf_y = panel.h / 6;
+	// coordinates in pixels, used only for testing
+	var mx = panel.w / 2;
+	var my = panel.h / 2;
 
-	var x = render_CalcMiniX(tx) + 2 * Screen.scale;
-	var y = render_CalcMiniY(ty) + 2 * Screen.scale;
+	var buf_x = panel.w / 4;
+	var buf_y = panel.h / 4;
+
+	var x = render_CalcRadarX(tx) + 2 * Screen.scale;
+	var y = render_CalcRadarY(ty) + 2 * Screen.scale;
 
 	// handle X and Y separately
 
 	if (x < mx - buf_x || x > mx + buf_x)
 	{
-		var new_scroll_x = Math.floor(panel.scroll_x + mx - x);
+		var new_scroll_x = tx - Math.floor(panel.tile_w / 2);
 
-		var ph_width = panel.tile_w * 2 * Screen_scale;
+		if (new_scroll_x > World.tw - panel.tile_w)
+			new_scroll_x = World.tw - panel.tile_w;
 
-		if (new_scroll_x + ph_width > panel.w)
-			new_scroll_x = panel.w - ph_width;
-
-		if (new_scroll_x - ph_width < 0)
-			new_scroll_x = ph_width;
+		if (new_scroll_x < 0)
+			new_scroll_x = 0;
 
 		if (panel.scroll_x != new_scroll_x)
 		{
@@ -742,15 +743,13 @@ function render_RadarScrollTo(tx, ty)
 
 	if (y < my - buf_y || y > my + buf_y)
 	{
-		var new_scroll_y = Math.floor(panel.scroll_y + my - y);
+		var new_scroll_y = ty - Math.floor(panel.tile_h / 2);
 
-		var ph_height = panel.tile_h * 2 * Screen_scale;
+		if (new_scroll_y > World.th - panel.tile_h)
+			new_scroll_y = World.th - panel.tile_h;
 
-		if (new_scroll_y + ph_height > panel.h)
-			new_scroll_y = panel.h - ph_height;
-
-		if (new_scroll_y - ph_height < 0)
-			new_scroll_y = ph_height;
+		if (new_scroll_y < 0)
+			new_scroll_y = 0;
 
 		if (panel.scroll_y != new_scroll_y)
 		{
