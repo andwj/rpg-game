@@ -75,23 +75,23 @@ Player.prototype =
 
 function player_NewGame()
 {
-	Players = [ null ];
+	Players = [ null, null, null ];
 
-	Players[1] = new Player(all_players.barbarian);
+	Players[0] = new Player(all_players.barbarian);
 
 	// FIXME : spawn spot
 	var tx = 10;
 	var ty = 5;
 
-	world_AddEntity(Players[1], tx, ty);
+	world_AddEntity(Players[0], tx, ty);
 
-	world_FocusPlayer(Players[1]);
+	world_FocusPlayer(Players[0]);
 }
 
 
 function player_HandleKey(ev)
 {
-	var pl = Players[1];
+	var pl = Players[0];
 
 	if (ev.key == "Up")
 		pl.moveStep(8);

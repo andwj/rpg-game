@@ -663,7 +663,6 @@ function render_ScrollTo(tx, ty)
 
 
 
-
 //----------------------------------------------------------------------
 //  RADAR
 //----------------------------------------------------------------------
@@ -921,9 +920,6 @@ function render_TextArea()
 
 function render_PlayerInfo(idx, pl)
 {
-	if (! pl)
-		return;
-
 	var x = Screen.info_panel.x;
 	var y = Screen.info_panel.y + (64 + idx * 64) * Screen.scale;
 	var w = Screen.info_panel.w;
@@ -931,13 +927,16 @@ function render_PlayerInfo(idx, pl)
 
 	var bg = "#444";
 
-	if (idx == 0) //!!!! pl == World.player)
+	if (pl && pl == World.player)
 		bg = "#357";
 	else if (idx != 1)
 		bg = "#555";
 
 	ctx.fillStyle = bg;
 	ctx.fillRect(x, y, w, h);
+
+	if (! pl)
+		return;
 
 	render_TileRaw(x + 4, y + 8, pl.info.tile);
 
@@ -990,7 +989,7 @@ function render_InfoArea()
 
 	for (var idx = 0 ; idx < 3 ; idx++)
 	{
-		render_PlayerInfo(idx, Players[1]);
+		render_PlayerInfo(idx, Players[idx]);
 	}
 
 	render_EndPanel();
