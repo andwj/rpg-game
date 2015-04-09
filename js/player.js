@@ -9,30 +9,71 @@
 "use strict";
 
 
-var all_players =
+var PLAYER_CLASSES =
 {
-	barbarian:
+	Miner:	// hmmm
 	{
-		species: "Barbarian",
+		class_: "Miner",
+		health: 90,
+		strength: 7,
+		tile: "G2"
+	},
+
+	Brute:
+	{
+		class_: "Brute",
 		health: 125,
+		strength: 10,
 		tile: "G3"
 	},
 
-	knight:
+	Scout:
 	{
-		species: "Knight",
+		class_: "Scout",
+		health: 75,
+		strength: 3,
+		tile: "G4"
+	},
+
+	Archer:
+	{
+		class_: "Archer",
+		health: 85,
+		strength: 5,
+		tile: "G5"
+	},
+
+	Knight:
+	{
+		class_: "Knight",
 		health: 100,
+		strength: 8,
 		tile: "G6"
+	},
+
+	Wizard:
+	{
+		class_: "Wizard",
+		health: 60,
+		strength: 3,
+		tile: "G7"
+	},
+
+	Enchanter:
+	{
+		class_: "Enchanter",
+		health: 60,
+		strength: 3,
+		tile: "G8"
 	}
 };
 
 
 // Player class : extends Entity
 
-var Player = function(info)
+var Player = function(class_)
 {
-	// The 'info' parameter must be looked up in all_players[].
-	// For example: x = new Player(all_players.barbarian)
+	var info = PLAYER_CLASSES[class_];
 
 	this.kind     = "player";
 	this.is_actor = true;
@@ -48,7 +89,7 @@ Player.prototype =
 {
 	sayHello: function()
 	{
-		render_AddLine(this.info.species + " says hello!");
+		render_AddLine(this.info.class_ + " says hello!");
 	},
 
 	getTile: function()
@@ -77,13 +118,17 @@ function player_NewGame()
 {
 	Players = [ null, null, null ];
 
-	Players[0] = new Player(all_players.barbarian);
+	Players[0] = new Player("Miner");
+	Players[1] = new Player("Wizard");
+	Players[2] = new Player("Scout");
 
 	// FIXME : spawn spot
-	var tx = 10;
+	var tx = 8;
 	var ty = 5;
 
 	world_AddEntity(Players[0], tx, ty);
+	world_AddEntity(Players[1], tx + 1, ty);
+	world_AddEntity(Players[2], tx, ty - 1);
 
 	world_FocusPlayer(Players[0]);
 }
