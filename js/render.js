@@ -932,7 +932,7 @@ function render_PlayerInfo(idx, pl)
 
 	if (pl && pl == World.player)
 		bg = "#357";
-	else if (idx != 1)
+	else if (idx == 0 || idx == 2)
 		bg = "#555";
 
 	ctx.fillStyle = bg;

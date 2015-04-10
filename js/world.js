@@ -283,7 +283,7 @@ function world_NewGame()
 		player: null,
 
 		// current team mode, either "explore" or "battle"
-		mode: "explore",
+		mode: "battle",
 
 		// number of turns the team has made
 		time: 0,
@@ -316,13 +316,6 @@ function world_MakeTurn()
 	World.time += 1;
 
 	render_DirtyInfo();
-
-	// reset has_moved flags of the players
-	for (var i = 0 ; i < 4 ; i++)
-	{
-		if (Players[i])
-			Players[i].has_moved = false;
-	}
 
 	// TEST CRUD:
 

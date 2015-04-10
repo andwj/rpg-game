@@ -156,6 +156,10 @@ function player_HandleKey(ev)
 	// digit keys select a new player to control
 	if (ev.key == "1" || ev.key == "2" || ev.key == "3" || ev.key == "4")
 	{
+		// not allowed in battle mode
+		if (World.mode == "battle")
+			return;
+
 		player_SelectPlayer((+ ev.key) - 1);
 		return;
 	}
@@ -176,6 +180,22 @@ function player_HandleKey(ev)
 }
 
 
+function player_NewTurn()
+{
+	// reset has_moved flags of the players
+	for (var i = 0 ; i < 4 ; i++)
+	{
+		if (Players[i])
+			Players[i].has_moved = false;
+	}
+
+	if (World.mode == "battle")
+	{
+		player_SelectPlayer(0);
+	}
+}
+
+
 function player_CheckEndOfTurn()
 {
 	// in EXPLORE mode, only one player can make a "real" turn.
@@ -187,16 +207,12 @@ function player_CheckEndOfTurn()
 	if (World.mode == "explore")
 	{
 		// other players use AI to move
-		for (var i = 0 ; i < 4 ; i++)
-		{
-			player_AI(Players[i]);
-		}
-
+		player_AI_all();
 		return true;
 	}
 
 
-	// try to select a player who has not moved yet
+	// select the next player (who has not moved yet)
 
 	var new_idx = -1;
 
@@ -212,10 +228,42 @@ function player_CheckEndOfTurn()
 	}
 
 	if (new_idx < 0)
+	{
 		return true;
+	}
 
 	player_SelectPlayer(new_idx);
 	return false;
+}
+
+
+function player_ChangeMode(new_mode)
+{
+	if (new_mode == "toggle")
+	{
+		new_mode = (World.mode == "explore") ? "battle" : "explore";
+	}
+
+	if (World.mode == new_mode)
+		return;
+
+	if (World.mode == "battle")
+	{
+		// if one or more players made a move, need to complete the turn
+		if (Players[0].has_moved)
+		{
+			player_AI_all();
+		}
+	}
+	else
+	{
+		// enter BATTLE mode, where first player always moves first
+		player_SelectPlayer(0);
+	}
+
+	World.mode = new_mode;
+
+	render_DirtyInfo();
 }
 
 
@@ -232,6 +280,16 @@ function player_AI(pl)
 
 	pl.moveStep(8);
 }
+
+
+function player_AI_all()
+{
+	for (var i = 0 ; i < 4 ; i++)
+	{
+		player_AI(Players[i]);
+	}
+}
+
 
 //--- editor settings ---
 // vi:ts=4:sw=4:noexpandtab

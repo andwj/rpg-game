@@ -73,6 +73,8 @@ function main_active_HandleKey(ev)
 	if (player_CheckEndOfTurn())
 	{
 		world_MakeTurn();
+
+		player_NewTurn();
 	}
 }
 
