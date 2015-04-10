@@ -168,7 +168,7 @@ function player_HandleKey(ev)
 	}
 
 	// alphabetical characters begin a new command line
-	if (ev.key.search(/^\w$/) >= 0)
+	if (ev.key.search(/^[a-zA-Z]$/) >= 0)
 	{
 		render_BeginCommandLine();
 		render_CommandLineKey(ev);
