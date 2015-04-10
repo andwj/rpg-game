@@ -928,6 +928,48 @@ function render_Text()
 }
 
 
+function render_BeginCommandLine()
+{
+print("render_BeginCommandLine...");
+
+	Screen.cmd_line = "";
+
+	// TODO
+
+	render_DirtyText();
+}
+
+
+function render_FinishCommandLine()
+{
+	// returns the string
+
+	var result = Screen.cmd_line;
+
+	Screen.cmd_line = null;
+
+	render_DirtyText();
+
+	return result;
+}
+
+
+function render_CommandLineKey(ev)
+{
+	// if user presses ENTER, returns the command line string,
+	// otherwise returns null.
+
+	if (ev.key == "Enter")
+	{
+		return render_FinishCommandLine();	
+	}
+
+	// TODO
+
+	return null;
+}
+
+
 //----------------------------------------------------------------------
 //   PLAYER INFO AREA
 //----------------------------------------------------------------------

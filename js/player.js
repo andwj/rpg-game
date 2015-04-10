@@ -167,6 +167,14 @@ function player_HandleKey(ev)
 		return;
 	}
 
+	// alphabetical characters begin a new command line
+	if (ev.key.search(/^\w$/) >= 0)
+	{
+		render_BeginCommandLine();
+		render_CommandLineKey(ev);
+		return;
+	}
+
 	if (ev.key == "F1")
 		player_ChangeMode("explore");
 
@@ -273,6 +281,14 @@ function player_ChangeMode(new_mode)
 	World.mode = new_mode;
 
 	render_DirtyInfo();
+}
+
+
+function player_HandleCommand(cmd)
+{
+	// TODO
+
+	print("player_HandleCommand:", cmd);
 }
 
 

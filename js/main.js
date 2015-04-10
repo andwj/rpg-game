@@ -60,6 +60,16 @@ function main_active_HandleKey(ev)
 {
 	/* handle pop-up dialogs, inventory screen, etc.. */
 
+	var cmd;
+
+	if (Screen.cmd_line != null)
+	{
+		cmd = render_CommandLineKey(ev);
+
+		if (! cmd)
+			return;
+	}
+
 	//....
 
 	/* handle "global" keys, e.g. shortcut to save game */
@@ -68,12 +78,14 @@ function main_active_HandleKey(ev)
 
 	/* everything else will be a command for the player */
 
-	player_HandleKey(ev);
+	if (cmd)
+		player_HandleCommand(cmd);
+	else
+		player_HandleKey(ev);
 
 	if (player_CheckEndOfTurn())
 	{
 		world_MakeTurn();
-
 		player_NewTurn();
 	}
 }
