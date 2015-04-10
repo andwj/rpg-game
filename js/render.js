@@ -978,11 +978,11 @@ function render_PlayerInfo(idx, pl)
 	
 	y = y + 36 * Screen.scale;
 
-	var hp_x1 = x + 56 * Screen.scale;
-	var hp_x2 = x + 80 * Screen.scale;
+	var hp_x1 = x + 54 * Screen.scale;
+	var hp_x2 = x + 78 * Screen.scale;
 
-	var ar_x1 = x + 114 * Screen.scale;
-	var ar_x2 = x + 138 * Screen.scale;
+	var ar_x1 = x + 112 * Screen.scale;
+	var ar_x2 = x + 136 * Screen.scale;
 
 	
 	ctx.fillStyle = "#aaa";
