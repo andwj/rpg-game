@@ -310,6 +310,15 @@ function render_Progress(count, total)
 }
 
 
+function render_Font(size, size2, face)
+{
+	if (Screen.scale > 1)
+		ctx.font = size2 + "px " + face;
+	else
+		ctx.font = size  + "px " + face;
+}
+
+
 //
 // The picture uses the whole canvas area.
 // Area around the picture is cleared to the 'back_col' color.
@@ -906,22 +915,40 @@ function render_Text()
 
 	var first = 0;
 
-	if (Screen.text_lines.length > SHOW_LINES)
+	if (Screen.text_lines.length >= SHOW_LINES)
+	{
 		first = Screen.text_lines.length - SHOW_LINES;
+
+		if (Screen.cmd_line)
+			first = first + 1;
+	}
 
 	render_SetTextFont();
 
 	ctx.fillStyle = "#bdf";
 
+	var tx = Screen.text_panel.x + 4;
+
 	for (var i = 0 ; i < SHOW_LINES ; i++)
 	{
 		var line = Screen.text_lines[first + i];
 
-		var tx = Screen.text_panel.x + 4;
 		var ty = Screen.text_panel.y + ((i + 1) * LINE_H - 2) * Screen.scale;
 
 		if (line)
 			ctx.fillText(line, tx, ty);
+	}
+
+	if (Screen.cmd_line)
+	{
+		ctx.fillStyle = "#ff4";
+
+		render_Font(16, 26, "monospace");
+
+		var ty = Screen.text_panel.y + Screen.text_panel.h - 4 * Screen.scale;
+		
+		ctx.fillText(">", tx, ty);
+		ctx.fillText(Screen.cmd_line, tx + 14 * Screen.scale, ty);
 	}
 
 	render_EndPanel();
@@ -993,7 +1020,7 @@ function render_CommandLineKey(ev)
 		key = " ";
 
 	// normal key?
-	if (! key.search(/^.$/))
+	if (key.search(/^.$/) < 0)
 	{
 		// all other special keys are ignored
 		return null;
@@ -1056,9 +1083,9 @@ function render_PlayerInfo(idx, pl)
 	// health and ammo
 
 	if (Screen.scale > 1)
-		ctx.font = "24px Monospace";
+		ctx.font = "24px monospace";
 	else
-		ctx.font = "14px Monospace";
+		ctx.font = "14px monospace";
 	
 	y = y + 36 * Screen.scale;
 
@@ -1087,9 +1114,9 @@ function render_CommonInfo()
 	// draw the common stuff : mode, time, gold
 
 	if (Screen.scale > 1)
-		ctx.font = "28px Monospace";
+		ctx.font = "28px monospace";
 	else
-		ctx.font = "16px Monospace";
+		ctx.font = "16px monospace";
 
 	var dx = 60 * Screen.scale;
 	var dy = 20 * Screen.scale;
