@@ -930,11 +930,7 @@ function render_Text()
 
 function render_BeginCommandLine()
 {
-print("render_BeginCommandLine...");
-
 	Screen.cmd_line = "";
-
-	// TODO
 
 	render_DirtyText();
 }
@@ -959,12 +955,55 @@ function render_CommandLineKey(ev)
 	// if user presses ENTER, returns the command line string,
 	// otherwise returns null.
 
-	if (ev.key == "Enter")
+	var key = ev.key;
+
+	if (key == "Enter")
 	{
 		return render_FinishCommandLine();	
 	}
 
-	// TODO
+	// backspacing the last character cancels the command line
+
+	if (key == "Backspace" || key == "Del" || key == "Delete")
+	{
+		if (Screen.cmd_line == "")
+		{
+			render_FinishCommandLine();
+		}
+		else
+		{
+			// remove last character
+			Screen.cmd_line = Screen.cmd_line.slice(0, -1);
+			render_DirtyText();
+		}
+
+		return null;
+	}
+
+	// the END key also cancels the command line
+
+	if (key == "End")
+	{
+		render_FinishCommandLine();
+		return null;
+	}
+
+	// compatibility
+	if (key == "Space")
+		key = " ";
+
+	// normal key?
+	if (! key.search(/^.$/))
+	{
+		// all other special keys are ignored
+		return null;
+	}
+
+	// TODO : impose a length limit??
+
+	Screen.cmd_line += key;
+
+	render_DirtyText();
 
 	return null;
 }
