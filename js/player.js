@@ -120,9 +120,9 @@ function player_NewGame()
 {
 	Players = [ null, null, null ];
 
-	Players[0] = new Player("Miner");
-	Players[1] = new Player("Wizard");
-	Players[2] = new Player("Scout");
+	Players[0] = new Player("Knight");
+	Players[1] = new Player("Enchanter");
+	Players[2] = new Player("Brute");
 
 	// FIXME : spawn spot
 	var tx = 8;

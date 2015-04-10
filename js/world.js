@@ -189,6 +189,9 @@ function world_FocusPlayer(pl)
 	render_RadarScrollTo(pl.tx, pl.ty);
 
 	render_DirtyInfo();
+
+	// oh lordy, this needed due to current player indicator
+	render_DirtyMap();
 }
 
 

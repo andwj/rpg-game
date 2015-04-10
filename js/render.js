@@ -536,7 +536,7 @@ function render_TileRaw(x, y, id)
 }
 
 
-function render_Tile(tx, ty, id)
+function render_Tile(tx, ty, id, delta_x, delta_y)
 {
 	var W = 32 * Screen.scale;
 
@@ -548,8 +548,11 @@ function render_Tile(tx, ty, id)
 	if (x < -W || x > Screen.main_panel.w) return;
 	if (y < -W || y > Screen.main_panel.h) return;
 
-	x = x + Screen.main_panel.x;
-	y = y + Screen.main_panel.y;
+	if (delta_x) x += delta_x * Screen.scale;
+	if (delta_y) y += delta_y * Screen.scale;
+
+	x += Screen.main_panel.x;
+	y += Screen.main_panel.y;
 
 	render_TileRaw(x, y, id);
 }
@@ -593,6 +596,12 @@ function render_WholeMap()
 
 		if (id1) render_Tile(tx, ty, id1);
 		if (id2) render_Tile(tx, ty, id2);
+	}
+
+	if (World.player)
+	{
+		render_Tile(World.player.tx, World.player.ty, "Z1");
+		render_Tile(World.player.tx, World.player.ty, World.player.info.tile);
 	}
 
 	render_EndPanel();
