@@ -92,7 +92,7 @@ Player.prototype =
 {
 	sayHello: function()
 	{
-		render_AddLine(this.info.class_ + " says hello!");
+		render_Print(this.name + " says hello!");
 	},
 
 	getTile: function()

@@ -186,7 +186,10 @@ function render_Init()
 		padding_h: 0,
 
 		// lines of text shown in text area (only last 4 or 5 are shown)
-		text_lines: []
+		text_lines: [],
+
+		// if not null, user is typing a command line
+		cmd_line: null
 	};
 
 
@@ -421,8 +424,8 @@ function render_RefreshAll()
 
 	render_PanelFrames();
 
-	render_WholeMap();
-	render_TextArea();
+	render_Map();
+	render_Text();
 	render_Info();
 	render_Radar();
 
@@ -464,10 +467,10 @@ function render_RedrawCallback()
 	}
 
 	if (Screen.main_panel.dirty)
-		render_WholeMap();
+		render_Map();
 
 	if (Screen.text_panel.dirty)
-		render_TextArea();
+		render_Text();
 
 	if (Screen.info_panel.dirty)
 		render_Info();
@@ -558,7 +561,7 @@ function render_Tile(tx, ty, id, delta_x, delta_y)
 }
 
 
-function render_WholeMap()
+function render_Map()
 {
 	// whenever the map scrolls, must call this
 
@@ -581,7 +584,7 @@ function render_WholeMap()
 	if (tx2 > World.tw - 1) tx2 = World.tw - 1;
 	if (ty2 > World.th - 1) ty2 = World.th - 1;
 
-//console.log("render_WholeMap : (" + tx1 + " " + tx2 + ") .. (" + ty1 + " " + ty2 + ")");
+//console.log("render_Map : (" + tx1 + " " + tx2 + ") .. (" + ty1 + " " + ty2 + ")");
 
 	for (var tx = tx1 ; tx <= tx2 ; tx++)
 	for (var ty = ty1 ; ty <= ty2 ; ty++)
@@ -857,7 +860,7 @@ function render_AddLineRaw(line)
 }
 
 
-function render_AddLine(line)
+function render_Print(line)
 {
 	// split lines which are too long to display
 
@@ -894,7 +897,7 @@ function render_AddLine(line)
 }
 
 
-function render_TextArea()
+function render_Text()
 {
 	render_BeginPanel(Screen.text_panel);
 

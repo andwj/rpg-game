@@ -322,7 +322,7 @@ function world_MakeTurn()
 
 	// TEST CRUD:
 
-	render_AddLine("The bat attacks Gooblompi!");
+	render_Print("The bat attacks Gooblompi!");
 }
 
 

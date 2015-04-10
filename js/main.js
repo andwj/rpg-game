@@ -104,8 +104,8 @@ function main_NewGame()
 	 world_NewGame();
 	player_NewGame();
 
-	render_AddLine("Welcome to Rpg-Game !");
-	render_AddLine("Press '?' for help.");
+	render_Print("Welcome to Rpg-Game !");
+	render_Print("Press '?' for help.");
 
 	render_DirtyAll();
 
