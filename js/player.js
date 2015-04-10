@@ -164,6 +164,12 @@ function player_HandleKey(ev)
 		return;
 	}
 
+	if (ev.key == "F1")
+		player_ChangeMode("explore");
+
+	if (ev.key == "F2")
+		player_ChangeMode("battle");
+
 	var pl = World.player;
 
 	if (ev.key == "Up")
@@ -249,11 +255,11 @@ function player_ChangeMode(new_mode)
 
 	if (World.mode == "battle")
 	{
-		// if one or more players made a move, need to complete the turn
-		if (Players[0].has_moved)
-		{
-			player_AI_all();
-		}
+		// leaving BATTLE mode.
+		// some players may have moved already, some not.
+		// ones who have moved cannot move again (player cannot select them, and
+		// the AI will skip them).
+		// so it is completely OK to do nothing here.
 	}
 	else
 	{
