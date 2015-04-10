@@ -286,7 +286,7 @@ function world_NewGame()
 		player: null,
 
 		// current team mode, either "explore" or "battle"
-		mode: "battle",
+		mode: "explore",
 
 		// number of turns the team has made
 		time: 0,

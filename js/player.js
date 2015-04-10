@@ -80,6 +80,9 @@ var Player = function(class_)
 
 	this.info	= info;
 	this.health = info.health;
+	this.armor  = 4;  // FIXME : TEST
+
+	this.name = "Aravil"; // FIXME
 
 	// TODO : inventory items
 };

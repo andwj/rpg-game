@@ -423,7 +423,7 @@ function render_RefreshAll()
 
 	render_WholeMap();
 	render_TextArea();
-	render_InfoArea();
+	render_Info();
 	render_Radar();
 
 	Screen.all_dirty = false;
@@ -470,7 +470,7 @@ function render_RedrawCallback()
 		render_TextArea();
 
 	if (Screen.info_panel.dirty)
-		render_InfoArea();
+		render_Info();
 
 	if (Screen.radar_panel.dirty)
 		render_Radar();
@@ -937,6 +937,8 @@ function render_PlayerInfo(idx, pl)
 	var w = Screen.info_panel.w;
 	var h = 64 * Screen.scale;
 
+	// background (drawn whether the player exists or not)
+
 	var bg = "#444";
 
 	if (pl && pl == World.player)
@@ -950,17 +952,55 @@ function render_PlayerInfo(idx, pl)
 	if (! pl)
 		return;
 
-	render_TileRaw(x + 4, y + 8, pl.info.tile);
 
-	// TODO : health (etc)
+	// player picture and name
+
+	var x2 = x + 4 * Screen.scale;
+
+	render_TileRaw(x2, y + 8 * Screen.scale, pl.info.tile);
+
+	if (Screen.scale > 1)
+		ctx.font = "26px Sans";
+	else
+		ctx.font = "14px Sans";
+
+	ctx.fillStyle = "#ccc";
+
+	ctx.fillText(pl.name, x2, y + 54 * Screen.scale);
+
+
+	// health and ammo
+
+	if (Screen.scale > 1)
+		ctx.font = "24px Monospace";
+	else
+		ctx.font = "14px Monospace";
+	
+	y = y + 36 * Screen.scale;
+
+	var hp_x1 = x + 56 * Screen.scale;
+	var hp_x2 = x + 80 * Screen.scale;
+
+	var ar_x1 = x + 114 * Screen.scale;
+	var ar_x2 = x + 138 * Screen.scale;
+
+	
+	ctx.fillStyle = "#aaa";
+	ctx.fillText("Hp:", hp_x1, y);
+
+	ctx.fillStyle = (pl.health < 20) ? "#f44" : "#ddd";
+	ctx.fillText("" + pl.health, hp_x2, y);
+
+
+	ctx.fillStyle = "#aaa";
+	ctx.fillText("Ar:", ar_x1, y);
+	ctx.fillText("" + pl.armor, ar_x2, y);
 }
 
 
-function render_InfoArea()
+function render_CommonInfo()
 {
-	render_BeginPanel(Screen.info_panel);
-
-	/* draw the common stuff : mode, time, gold */
+	// draw the common stuff : mode, time, gold
 
 	if (Screen.scale > 1)
 		ctx.font = "28px Monospace";
@@ -987,7 +1027,7 @@ function render_InfoArea()
 
 	if (World.mode == "battle")
 	{
-		ctx.fillStyle = "#f00";
+		ctx.fillStyle = "#e80";
 		ctx.fillText("BATTLE", x + dx, y + dy * 2);
 	}
 	else
@@ -995,7 +1035,14 @@ function render_InfoArea()
 		ctx.fillStyle = "#0c0";
 		ctx.fillText("EXPLORE", x + dx, y + dy * 2);
 	}
+}
 
+
+function render_Info()
+{
+	render_BeginPanel(Screen.info_panel);
+
+	render_CommonInfo();
 
 	/* draw a sub-panel for each player */
 
