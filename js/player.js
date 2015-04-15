@@ -11,9 +11,10 @@
 
 var PLAYER_CLASSES =
 {
-	Miner:	// hmmm
+	Miner:	// hmmm, want a better name
 	{
 		class_: "Miner",
+		race: "dwarf",
 		health: 90,
 		strength: 7,
 		tile: "G2"
@@ -22,6 +23,7 @@ var PLAYER_CLASSES =
 	Brute:
 	{
 		class_: "Brute",
+		race: "human",
 		health: 125,
 		strength: 10,
 		tile: "G3"
@@ -30,6 +32,7 @@ var PLAYER_CLASSES =
 	Scout:
 	{
 		class_: "Scout",
+		race: "hobbit",
 		health: 75,
 		strength: 3,
 		tile: "G4"
@@ -38,6 +41,7 @@ var PLAYER_CLASSES =
 	Archer:
 	{
 		class_: "Archer",
+		race: "elf",
 		health: 85,
 		strength: 5,
 		tile: "G5"
@@ -46,6 +50,7 @@ var PLAYER_CLASSES =
 	Knight:
 	{
 		class_: "Knight",
+		race: "human",
 		health: 100,
 		strength: 8,
 		tile: "G6"
@@ -54,6 +59,7 @@ var PLAYER_CLASSES =
 	Wizard:
 	{
 		class_: "Wizard",
+		race: "human",
 		health: 60,
 		strength: 3,
 		tile: "G7"
@@ -62,6 +68,7 @@ var PLAYER_CLASSES =
 	Enchanter:
 	{
 		class_: "Enchanter",
+		race: "elf",
 		health: 60,
 		strength: 3,
 		tile: "G8"
