@@ -1,9 +1,10 @@
 js/defs.js
 js/utils.js
 js/native.js
+js/loader.js
 js/event.js
 js/render.js
-js/loader.js
+js/lang.js
 js/entity.js
 js/player.js
 js/monster.js
